@@ -1,12 +1,28 @@
 package de.htwberlin.vocab.export;
 
 public class Vocab {
+    /**
+     * Id (autoincrement)
+     */
     private int vocabId;
+
+    /**
+     * Foreign Key of VocabList
+     */
     private int vocabListId;
+
+    /**
+     * The word in language A
+     */
     private String vocab;
 
-    public Vocab(int vocabId, int vocabListId, String vocab) {
-        this.vocabId = vocabId;
+    /**
+     * Constructor for Vocab
+     * @param vocabListId Foreign Key of VocabList
+     * @param vocab The word in language A
+     */
+    public Vocab(int vocabListId, String vocab) {
+        this.vocabId = 0;
         this.vocabListId = vocabListId;
         this.vocab = vocab;
     }

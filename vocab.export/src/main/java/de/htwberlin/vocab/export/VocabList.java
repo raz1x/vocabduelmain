@@ -1,21 +1,53 @@
 package de.htwberlin.vocab.export;
 
 public class VocabList {
+    /**
+     * Id (autoincrement)
+     */
     private int vocabListId;
-    private int categoryId;
+
+    /**
+     * Foreign Key of User
+     */
     private int userId;
+
+    /**
+     * Foreign Key of Category
+     */
+    private int categoryId;
+
+    /**
+     * Title of the VocabList
+     */
     private String vocabTitle;
+
+    /**
+     * Name of the language A
+     */
     private String languageA;
+
+    /**
+     * Name of the language B
+     */
     private String languageB;
 
-    public VocabList(int vocabListId, int categoryId, int userId, String vocabTitle, String languageA, String languageB) {
-        this.vocabListId = vocabListId;
-        this.categoryId = categoryId;
+    /**
+     * Constructor for VocabList
+     * @param userId Foreign Key of User
+     * @param categoryId Foreign Key of Category
+     * @param vocabTitle Title of the VocabList
+     * @param languageA Name of the language A
+     * @param languageB Name of the language B
+     */
+    public VocabList(int userId, int categoryId, String vocabTitle, String languageA, String languageB) {
+        this.vocabListId = 0;
         this.userId = userId;
+        this.categoryId = categoryId;
         this.vocabTitle = vocabTitle;
         this.languageA = languageA;
         this.languageB = languageB;
     }
+
     public int getVocabListId() {
         return vocabListId;
     }
@@ -24,20 +56,20 @@ public class VocabList {
         this.vocabListId = vocabListId;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public int getUserId() {
         return userId;
     }
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getVocabTitle() {

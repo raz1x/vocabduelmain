@@ -1,15 +1,22 @@
 package de.htwberlin.vocab.export;
 
 public class Category {
-    // the id of the category
+    /**
+     * Id (autoincrement)
+     */
     private int categoryId;
 
-    // the name of the category
+    /**
+     * Name of the category
+     */
     private String categoryName;
 
-
-    public Category(int categoryId, String categoryName) {
-        this.categoryId = categoryId;
+    /**
+     * Constructor for Category
+     * @param categoryName Name of the category
+     */
+    public Category(String categoryName) {
+        this.categoryId = 0;
         this.categoryName = categoryName;
     }
 
@@ -28,5 +35,4 @@ public class Category {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-
 }

@@ -1,15 +1,32 @@
 package de.htwberlin.vocab.export;
 
 public class Translation {
+    /**
+     * Id (autoincrement)
+     */
     private int translationId;
+
+    /**
+     * Foreign Key of Vocab
+     */
     private int vocabId;
+
+    /**
+     * The word in Language B
+     */
     private String translation;
 
-    public Translation(int translationId, int vocabId, String translation) {
-        this.translationId = translationId;
+    /**
+     * Constructor for Translation
+     * @param vocabId Foreign Key of Vocab
+     * @param translation The word in Language B
+     */
+    public Translation (int vocabId, String translation) {
+        this.translationId = 0;
         this.vocabId = vocabId;
         this.translation = translation;
     }
+
     public int getTranslationId() {
         return translationId;
     }
