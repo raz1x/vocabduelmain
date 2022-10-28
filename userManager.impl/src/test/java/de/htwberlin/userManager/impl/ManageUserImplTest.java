@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class ManageUserImplTest {
+public class ManageUserImplTest {
     private static ManageUserImpl manageUser;
 
     @BeforeAll
-    static void init() {
+    public static void init() {
         manageUser = new ManageUserImpl();
     }
 
@@ -30,7 +30,7 @@ class ManageUserImplTest {
     }
 
     @Test
-    void testLogoutUser() throws UserNotFoundException {
+    public void testLogoutUser() throws UserNotFoundException {
         // Arrange + Act
         manageUser.logoutUser(1);
         // Assert
@@ -38,29 +38,29 @@ class ManageUserImplTest {
     }
 
     @Test
-    void testDeleteUser() throws UserNotFoundException {
+    public void testDeleteUser() throws UserNotFoundException {
         manageUser.deleteUser(1);
     }
 
     @Test
-    void testUpdateUserName() {
+    public void testUpdateUserName() {
         Assertions.assertThrowsExactly(UserAlreadyExistsException.class, () -> manageUser.updateUserName(1, "test"));
     }
 
     @Test
-    void testUpdatePassword() throws UserNotFoundException {
+    public void testUpdatePassword() throws UserNotFoundException {
         Assertions.assertEquals("newPass", manageUser.updatePassword(1, "newPass").getPassword());
     }
 
     @Test
-    void testGetById() throws UserNotFoundException {
+    public void testGetById() throws UserNotFoundException {
         User testUser = manageUser.getById(1);
         Assertions.assertEquals("MaxMuster", testUser.getUserName());
         Assertions.assertEquals("test", testUser.getPassword());
     }
 
     @Test
-    void userExists() {
+    public void userExists() {
         Assertions.assertTrue(manageUser.userExists("MaxMuster"));
     }
 }

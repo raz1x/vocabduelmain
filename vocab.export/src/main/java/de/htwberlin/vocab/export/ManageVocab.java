@@ -22,14 +22,14 @@ public interface ManageVocab {
     /**
      * Updates an existing VocabList
      * @param vocabListId ID of the VocabList
-     * @param vocabListName Name of the VocabList
+     * @param vocabTitle Name of the VocabList
      * @param categoryId Foreign Key of Category
      * @param userId Foreign Key of User
      * @param languageA Name of the language A
      * @param languageB Name of the language B
      * @return Returns the object of the new VocabList
      */
-    public VocabList updateVocabList(int vocabListId, String vocabListName, int categoryId, int userId, String languageA, String languageB) throws VocabListNotFoundException;
+    public VocabList updateVocabList(int vocabListId, String vocabTitle, int categoryId, int userId, String languageA, String languageB) throws VocabListNotFoundException;
 
     /**
      * Removes the VocabList from the database

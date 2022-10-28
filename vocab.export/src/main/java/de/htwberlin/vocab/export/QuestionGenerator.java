@@ -1,11 +1,15 @@
 package de.htwberlin.vocab.export;
 
+import java.util.List;
+
 public interface QuestionGenerator {
     /**
-     * Generates a question for a given vocab list
-     * @param vocabListId Id of the vocab list
+     * Generates questions for a given vocab list
+     * @param vocabListId ID of the vocab list
      * @return Question
      */
-    Question generateQuestion(int vocabListId);
+    public List<Vocab> generateQuestions(int vocabListId);
+
+    public List<Translation> generateAnswers(int vocabListId);
 }
 
