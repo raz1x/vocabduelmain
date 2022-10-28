@@ -1,17 +1,17 @@
 package de.htwberlin.userManager.export;
 
 public class User {
+    private boolean loggedIn;
+    private int userId;
+    private String userName;
+    private String password;
+
     public User(String userName, String password) {
         this.userId = 0;
         this.userName = userName;
         this.password = password;
+        this.loggedIn = true;
     }
-
-    private int userId;
-
-    private String userName;
-
-    private String password;
 
     public int getUserId() {
         return userId;
@@ -35,5 +35,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 }

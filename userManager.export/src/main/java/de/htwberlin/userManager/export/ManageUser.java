@@ -32,15 +32,17 @@ public interface ManageUser {
      * Updates the username of a user
      * @param userId The id of the user
      * @param userName The new username
+     * @return The user object
      */
-    public void updateUserName(int userId, String userName) throws UserNotFoundException;
+    public User updateUserName(int userId, String userName) throws UserNotFoundException, UserAlreadyExistsException;
 
     /**
      * Updates the password of a user
      * @param userId The id of the user
      * @param newPassword  The new password
+     * @return The user object
      */
-    public void updatePassword(int userId, String newPassword);
+    public User updatePassword(int userId, String newPassword) throws UserNotFoundException;
 
     /**
      * Gets a user by its id
@@ -50,11 +52,10 @@ public interface ManageUser {
     public User getById(int userId) throws UserNotFoundException;
 
     /**
-     * Gets a user by its username
+     * Check if userName already exists
      * @param userName The username of the user
-     * @return The user object
+     * @return true if userName already exists
      */
-    public User getByUserName(String userName) throws UserNotFoundException;
-
+    public boolean userExists(String userName);
 }
 
