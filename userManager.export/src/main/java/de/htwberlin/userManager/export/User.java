@@ -2,15 +2,16 @@ package de.htwberlin.userManager.export;
 
 public class User {
     public User(String userName, String password) {
+        this.userId = 0;
         this.userName = userName;
         this.password = password;
     }
 
-    public int userId;
+    private int userId;
 
-    public String userName;
+    private String userName;
 
-    public String password;
+    private String password;
 
     public int getUserId() {
         return userId;
