@@ -1,25 +1,24 @@
 package de.htwberlin.userManager.impl;
 
-import de.htwberlin.userManager.export.*;
-import org.junit.Test;
+import de.htwberlin.userManager.export.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class ManageUserTest {
     private static ManageUserImpl manageUser;
 
     @BeforeAll
-    public static void init() {
+    public static void setManageUser() {
         manageUser = new ManageUserImpl();
     }
+
     @Test
     public void testRegisterUser() {
         // Arrange + Act
         User newUser = manageUser.registerUser("MaxMuster", "test");
         // Assert
-        assertEquals(newUser.getUserName(),"MaxMuster");
+        Assertions.assertEquals(newUser.getUserName(),"MaxMuster");
     }
 
     @Test
@@ -27,7 +26,7 @@ public class ManageUserTest {
         // Arrange + Act
         User loggedInUser = manageUser.loginUser("MaxMuster", "test");
         // Assert
-        assertEquals(loggedInUser.getUserName(),"MaxMuster");
+        Assertions.assertEquals(loggedInUser.getUserName(),"MaxMuster");
     }
 
     @Test
