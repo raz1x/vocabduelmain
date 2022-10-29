@@ -33,6 +33,11 @@ public interface AccessVocab {
      */
     public VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException;
 
+    /**
+     * Gets the translation of a vocab
+     * @param vocabId ID of the vocab
+     * @return Returns a Translation object
+     */
     public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException;
 }
 
