@@ -1,11 +1,64 @@
 package de.htwberlin.game.export;
 
+import de.htwberlin.vocab.export.CategoryNotFoundException;
+import de.htwberlin.vocab.export.VocabListNotFoundException;
+import de.htwberlin.vocab.export.VocabNotFoundException;
+
+import java.util.List;
+
 public interface ManageGame {
-    public Game createGame(int user1Id, int user2Id);
+    /**
+     * Creates a new game.
+     * @param user1Id The ID of the first user.
+     * @param user2Id The ID of the second user.
+     * @return The Game object.
+     */
+    public Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException;
 
-    public Game continueGame(int gameId);
+    /**
+     * Continues an existing game.
+     * @param gameId The ID of the game.
+     * @return The Game object.
+     */
+    public Game continueGame(int gameId) throws GameDoesNotExistException;
 
-    public Game endGame(int gameId);
+    /**
+     * Finishes a game.
+     * @param gameId The ID of the game.
+     */
+    public void endGame(int gameId) throws GameDoesNotExistException;
 
-    public Round createRound(int gameId, int round, int categoryId);
+    /**
+     * Creates a new round.
+     * @param gameId Foreign key of the game.
+     * @param round The round number of the game.
+     * @param categoryId Foreign Key of the used category.
+     * @return The Round object.
+     */
+    public Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException;
+
+    /**
+     * Creates a new RoundResult.
+     * @param chosenAnswerId Foreign key of the chosen answer.
+     * @param userId Foreign key of the user.
+     * @return The RoundResult object.
+     */
+    public RoundResult createRoundResult(int chosenAnswerId, int userId) throws UserDoesNotExistException;
+
+    /**
+     * Returns a list of generated questions.
+     * @param categoryId Foreign key of the category.
+     * @param gameId Foreign key of the game.
+     * @param round The round number of the game.
+     * @return A list of GameQuestion objects.
+     */
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int round) throws GameDoesNotExistException, CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException;
+
+    /**
+     * Returns a list of generated answers.
+     * @param questionId Foreign key of the GameQuestion.
+     * @return A list of GameAnswer objects.
+     */
+    public List<GameAnswer> generateAnswers(int questionId) throws GameQuestionDoesNotExistException, VocabNotFoundException;
+
 }

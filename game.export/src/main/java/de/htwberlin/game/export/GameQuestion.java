@@ -34,6 +34,7 @@ public class GameQuestion {
      * @param trueAnswerId Foreign key of the true answer.
      */
     public GameQuestion(int gameId, int roundNumber, int vocabId, int trueAnswerId) {
+        this.gameQuestionId = 0;
         this.gameId = gameId;
         this.roundNumber = roundNumber;
         this.vocabId = vocabId;

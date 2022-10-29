@@ -52,4 +52,15 @@ public class AccessVocabImpl implements AccessVocab {
             throw new CategoryNotFoundException("Category not found");
         }
     }
+
+    @Override
+    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException {
+        try {
+            // get Translation for vocabId from database
+            // dummy implementation
+            return new Translation(vocabId, "DummyTranslation");
+        } catch (Exception e) {
+            throw new VocabNotFoundException("Vocab not found");
+        }
+    }
 }

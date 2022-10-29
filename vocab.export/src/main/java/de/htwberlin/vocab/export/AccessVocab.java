@@ -32,5 +32,7 @@ public interface AccessVocab {
      * @return Returns a VocabList object
      */
     public VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException;
+
+    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException;
 }
 

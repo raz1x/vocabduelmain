@@ -22,6 +22,7 @@ public class Game {
      * @param user2Id The ID of the second user.
      */
     public Game(int user1Id, int user2Id) {
+        this.gameId = 0;
         this.user1Id = user1Id;
         this.user2Id = user2Id;
     }

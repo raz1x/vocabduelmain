@@ -22,6 +22,7 @@ public class GameAnswer {
      * @param translationId Foreign key of the translation.
      */
     public GameAnswer(int gameQuestionId, int translationId) {
+        this.gameAnswerId = 0;
         this.gameQuestionId = gameQuestionId;
         this.translationId = translationId;
     }
