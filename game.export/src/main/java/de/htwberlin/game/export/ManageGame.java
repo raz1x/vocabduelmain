@@ -70,6 +70,6 @@ public interface ManageGame {
      */
     public GameQuestion getNextQuestion(int gameId, int round, int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException;
 
-    public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException;
+    public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId, int userId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException;
 
 }

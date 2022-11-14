@@ -110,7 +110,7 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException {
+    public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId, int userId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException {
 
     }
 }
