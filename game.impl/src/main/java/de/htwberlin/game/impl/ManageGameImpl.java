@@ -103,4 +103,14 @@ public class ManageGameImpl implements ManageGame {
         }
         return gameAnswers;
     }
+
+    @Override
+    public GameQuestion getNextQuestion(int gameId, int round, int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException {
+        return null;
+    }
+
+    @Override
+    public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException {
+
+    }
 }

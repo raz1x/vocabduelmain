@@ -17,6 +17,11 @@ public class Game {
     private int user2Id;
 
     /**
+     * The ID of the current user.
+     */
+    private int currentUser;
+
+    /**
      * The Constructor for Game.
      * @param user1Id The ID of the first user.
      * @param user2Id The ID of the second user.
@@ -25,6 +30,7 @@ public class Game {
         this.gameId = 0;
         this.user1Id = user1Id;
         this.user2Id = user2Id;
+        this.currentUser = user1Id;
     }
 
     public int getGameId() {
@@ -49,5 +55,13 @@ public class Game {
 
     public void setUser2Id(int user2Id) {
         this.user2Id = user2Id;
+    }
+
+    public int getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(int currentUser) {
+        this.currentUser = currentUser;
     }
 }
