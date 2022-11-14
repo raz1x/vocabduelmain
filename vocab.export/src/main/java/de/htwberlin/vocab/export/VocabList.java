@@ -14,7 +14,7 @@ public class VocabList {
     /**
      * Foreign Key of Category
      */
-    private int categoryId;
+    private Category category;
 
     /**
      * Title of the VocabList
@@ -39,10 +39,10 @@ public class VocabList {
      * @param languageA Name of the language A
      * @param languageB Name of the language B
      */
-    public VocabList(int userId, int categoryId, String vocabTitle, String languageA, String languageB) {
+    public VocabList(int userId, Category category, String vocabTitle, String languageA, String languageB) {
         this.vocabListId = 0;
         this.userId = userId;
-        this.categoryId = categoryId;
+        this.category = category;
         this.vocabTitle = vocabTitle;
         this.languageA = languageA;
         this.languageB = languageB;
@@ -64,12 +64,12 @@ public class VocabList {
         this.userId = userId;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getVocabTitle() {

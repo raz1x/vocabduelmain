@@ -9,7 +9,7 @@ public class Translation {
     /**
      * Foreign Key of Vocab
      */
-    private int vocabId;
+    private Vocab vocab;
 
     /**
      * The word in Language B
@@ -18,12 +18,12 @@ public class Translation {
 
     /**
      * Constructor for Translation
-     * @param vocabId Foreign Key of Vocab
+     * @param vocab The Vocab object.
      * @param translation The word in Language B
      */
-    public Translation (int vocabId, String translation) {
+    public Translation (Vocab vocab, String translation) {
         this.translationId = 0;
-        this.vocabId = vocabId;
+        this.vocab = vocab;
         this.translation = translation;
     }
 
@@ -35,12 +35,12 @@ public class Translation {
         this.translationId = translationId;
     }
 
-    public int getVocabId() {
-        return vocabId;
+    public Vocab getVocab() {
+        return vocab;
     }
 
-    public void setVocabId(int vocabId) {
-        this.vocabId = vocabId;
+    public void setVocab(Vocab vocab) {
+        this.vocab = vocab;
     }
 
     public String getTranslation() {

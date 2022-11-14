@@ -9,7 +9,7 @@ public class Vocab {
     /**
      * Foreign Key of VocabList
      */
-    private int vocabListId;
+    private VocabList vocabList;
 
     /**
      * The word in language A
@@ -18,12 +18,12 @@ public class Vocab {
 
     /**
      * Constructor for Vocab
-     * @param vocabListId Foreign Key of VocabList
+     * @param vocabList The VocabList object.
      * @param vocab The word in language A
      */
-    public Vocab(int vocabListId, String vocab) {
+    public Vocab(VocabList vocabList, String vocab) {
         this.vocabId = 0;
-        this.vocabListId = vocabListId;
+        this.vocabList = vocabList;
         this.vocab = vocab;
     }
 
@@ -35,12 +35,12 @@ public class Vocab {
         this.vocabId = vocabId;
     }
 
-    public int getVocabListId() {
-        return vocabListId;
+    public VocabList getVocabList() {
+        return vocabList;
     }
 
-    public void setVocabListId(int vocabListId) {
-        this.vocabListId = vocabListId;
+    public void setVocabList(VocabList vocabList) {
+        this.vocabList = vocabList;
     }
 
     public String getVocab() {

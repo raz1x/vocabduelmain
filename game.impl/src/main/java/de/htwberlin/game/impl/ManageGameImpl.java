@@ -42,12 +42,16 @@ public class ManageGameImpl implements ManageGame {
         try {
             // get game data from DB
             // dummy implementation
-            List <GameQuestion> gameQuestions = generateQuestions(categoryId, gameId, round);
+            List <GameQuestion> gameQuestions = generateQuestions(categoryId, gameId);
             for (GameQuestion gameQuestion : gameQuestions) {
                 List <GameAnswer> gameAnswers = generateAnswers(gameQuestion.getGameQuestionId());
                 // save in DB
             }
-            return new Round(gameId, round, categoryId);
+            //get Game from gameId
+            Game game = new Game(0, 0);
+            // get Category from categoryId
+            Category category = new Category("dummy");
+            return new Round(game, round, category);
         } catch (Exception e) {
             throw new GameDoesNotExistException("Game");
         }
@@ -58,7 +62,16 @@ public class ManageGameImpl implements ManageGame {
         try {
             // get user data from DB
             // dummy implementation
-            return new RoundResult(chosenAnswerId, userId);
+            // data from DB
+            Game game = new Game(0,0);
+            Category category = new Category("dummy");
+            Round round = new Round(game, 0, category);
+            VocabList vocabList = new VocabList(1, category, "dummy", "dummy", "dummy");
+            Vocab vocab = new Vocab(vocabList, "dummy");
+            Translation translation = new Translation(vocab, "dummy");
+            GameQuestion gameQuestion = new GameQuestion(game, round, vocab, 1);
+            GameAnswer chosenAnswer = new GameAnswer(gameQuestion, translation);
+            return new RoundResult(chosenAnswer, user);
         } catch (Exception e) {
             throw new UserDoesNotExistException("User does not exist.");
         }
@@ -71,7 +84,11 @@ public class ManageGameImpl implements ManageGame {
         for (int i = 0; i < 3; i++) {
             // Vocab question = accessVocabImpl.getRandomVocabFromVocabList(vocabList.getVocabListId());
             // Translation trueAnswer = accessVocabImpl.getTranslationFromVocabId(question.getVocabId());
-            gameQuestions.add(new GameQuestion(gameId, round, 0, 0));
+            Game game = new Game(0, 0);
+            Category category = new Category("dummy");
+            Round round = new Round(game, 0, category);
+
+            gameQuestions.add(new GameQuestion(game, round, 0, 0));
         }
         return gameQuestions;
     }

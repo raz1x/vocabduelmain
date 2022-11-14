@@ -1,5 +1,7 @@
 package de.htwberlin.game.export;
 
+import de.htwberlin.vocab.export.Translation;
+
 public class GameAnswer {
     /**
      * The ID of the answer.
@@ -9,25 +11,25 @@ public class GameAnswer {
     /**
      * Foreign key of the question.
      */
-    private int gameQuestionId;
+    private GameQuestion gameQuestion;
 
     /**
      * Foreign key of the translation.
      */
-    private int translationId;
+    private Translation translation;
 
     /**
      * Constructor for GameAnswer.
-     * @param gameQuestionId Foreign key of the question.
-     * @param translationId Foreign key of the translation.
+     * @param gameQuestion The GameQuestion object.
+     * @param translation The Translation object.
      */
-    public GameAnswer(int gameQuestionId, int translationId) {
+    public GameAnswer(GameQuestion gameQuestion, Translation translation) {
         this.gameAnswerId = 0;
-        this.gameQuestionId = gameQuestionId;
-        this.translationId = translationId;
+        this.gameQuestion = gameQuestion;
+        this.translation = translation;
     }
 
-    public int getGameAnswerId() {
+    public int getGameAnswer() {
         return gameAnswerId;
     }
 
@@ -35,19 +37,19 @@ public class GameAnswer {
         this.gameAnswerId = gameAnswerId;
     }
 
-    public int getGameQuestionId() {
-        return gameQuestionId;
+    public GameQuestion getGameQuestion() {
+        return gameQuestion;
     }
 
-    public void setGameQuestionId(int gameQuestionId) {
-        this.gameQuestionId = gameQuestionId;
+    public void setGameQuestion(GameQuestion gameQuestion) {
+        this.gameQuestion = gameQuestion;
     }
 
-    public int getTranslationId() {
-        return translationId;
+    public Translation getTranslation() {
+        return translation;
     }
 
-    public void setTranslationId(int translationId) {
-        this.translationId = translationId;
+    public void setTranslation(Translation translation) {
+        this.translation = translation;
     }
 }

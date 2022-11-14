@@ -1,10 +1,12 @@
 package de.htwberlin.game.export;
 
+import de.htwberlin.vocab.export.Category;
+
 public class Round {
     /**
      * Foreign key of the game.
      */
-    private int gameId;
+    private Game game;
 
     /**
      * The round number of the game.
@@ -14,26 +16,26 @@ public class Round {
     /**
      * Foreign Key of the used category.
      */
-    private int categoryId;
+    private Category category;
 
     /**
      * The Constructor for Round.
-     * @param gameId Foreign key of the game.
+     * @param game The game object.
      * @param round The round number of the game.
-     * @param categoryId Foreign Key of the used category.
+     * @param category Foreign Key of the used category.
      */
-    public Round(int gameId, int round, int categoryId) {
-        this.gameId = gameId;
+    public Round(Game game, int round, Category category) {
+        this.game = game;
         this.round = round;
-        this.categoryId = categoryId;
+        this.category = category;
     }
 
-    public int getGameId() {
-        return gameId;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public int getRound() {
@@ -44,11 +46,11 @@ public class Round {
         this.round = round;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

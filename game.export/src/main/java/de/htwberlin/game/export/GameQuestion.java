@@ -1,5 +1,7 @@
 package de.htwberlin.game.export;
 
+import de.htwberlin.vocab.export.Vocab;
+
 public class GameQuestion {
     /**
      * ID of the question.
@@ -9,17 +11,17 @@ public class GameQuestion {
     /**
      * Foreign key of the game.
      */
-    private int gameId;
+    private Game game;
 
     /**
      * Number of the round.
      */
-    private int roundNumber;
+    private Round round;
 
     /**
      * Foreign key of the used vocab.
      */
-    private int vocabId;
+    private Vocab vocab;
 
     /**
      * Foreign key of the true answer.
@@ -28,16 +30,16 @@ public class GameQuestion {
 
     /**
      * Constructor for GameQuestion.
-     * @param gameId Foreign key of the game.
-     * @param roundNumber Number of the round.
-     * @param vocabId Foreign key of the used vocab.
-     * @param trueAnswerId Foreign key of the true answer.
+     * @param game The Game object.
+     * @param round The Round object.
+     * @param vocab The Vocab object.
+     * @param trueAnswerId The foreign key of the true answer.
      */
-    public GameQuestion(int gameId, int roundNumber, int vocabId, int trueAnswerId) {
+    public GameQuestion(Game game, Round round, Vocab vocab, int trueAnswerId) {
         this.gameQuestionId = 0;
-        this.gameId = gameId;
-        this.roundNumber = roundNumber;
-        this.vocabId = vocabId;
+        this.game = game;
+        this.round = round;
+        this.vocab = vocab;
         this.trueAnswerId = trueAnswerId;
     }
 
@@ -49,35 +51,35 @@ public class GameQuestion {
         this.gameQuestionId = gameQuestionId;
     }
 
-    public int getGameId() {
-        return gameId;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
-    public int getRoundNumber() {
-        return roundNumber;
+    public Round getRound() {
+        return round;
     }
 
-    public void setRoundNumber(int roundNumber) {
-        this.roundNumber = roundNumber;
+    public void setRound(Round round) {
+        this.round = round;
     }
 
-    public int getVocabId() {
-        return vocabId;
+    public Vocab getVocab() {
+        return vocab;
     }
 
-    public void setVocabId(int vocabId) {
-        this.vocabId = vocabId;
+    public void setVocab(Vocab vocab) {
+        this.vocab = vocab;
     }
 
     public int getTrueAnswerId() {
         return trueAnswerId;
     }
 
-    public void setTrueAnswerId(int trueAnswerId) {
+    public void setTrueAnswerId(int trueAnswer) {
         this.trueAnswerId = trueAnswerId;
     }
 }
