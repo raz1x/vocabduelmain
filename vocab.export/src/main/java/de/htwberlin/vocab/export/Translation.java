@@ -1,19 +1,28 @@
 package de.htwberlin.vocab.export;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Translation")
 public class Translation {
     /**
-     * Id (autoincrement)
+     * Id of the translation.
      */
+    @Id @GeneratedValue
+    @Column(name = "translationId")
     private int translationId;
 
     /**
      * Foreign Key of Vocab
      */
+    @ManyToOne
+    @JoinColumn(name = "vocabId")
     private Vocab vocab;
 
     /**
      * The word in Language B
      */
+    @Column(name = "translation")
     private String translation;
 
     /**

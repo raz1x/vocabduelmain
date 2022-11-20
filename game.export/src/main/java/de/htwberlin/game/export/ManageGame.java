@@ -35,7 +35,7 @@ public interface ManageGame {
      * @param categoryId Foreign Key of the used category.
      * @return The Round object.
      */
-    public Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException;
+    public Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException;
 
     /**
      * Creates a new RoundResult.
@@ -52,7 +52,7 @@ public interface ManageGame {
      * @param round The round number of the game.
      * @return A list of GameQuestion objects.
      */
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int round) throws GameDoesNotExistException, CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException;
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int roundNumber) throws GameDoesNotExistException, CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException;
 
     /**
      * Returns a list of generated answers.

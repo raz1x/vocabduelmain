@@ -1,19 +1,28 @@
 package de.htwberlin.vocab.export;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Vocab")
 public class Vocab {
     /**
-     * Id (autoincrement)
+     * Id of the vocab.
      */
+    @Id @GeneratedValue
+    @Column(name = "vocabId")
     private int vocabId;
 
     /**
      * Foreign Key of VocabList
      */
+    @ManyToOne
+    @JoinColumn(name = "vocabListId")
     private VocabList vocabList;
 
     /**
      * The word in language A
      */
+    @Column(name = "vocab")
     private String vocab;
 
     /**

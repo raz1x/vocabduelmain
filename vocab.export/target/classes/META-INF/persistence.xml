@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="default"
+                      transaction-type="RESOURCE_LOCAL">
+
+        <class>de.htwberlin.vocab.export.Category</class>
+        <class>de.htwberlin.vocab.export.Translation</class>
+        <class>de.htwberlin.vocab.export.Vocab</class>
+        <class>de.htwberlin.vocab.export.VocabList</class>
+
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://eu-central.connect.psdb.cloud/vocabdueldb?sslMode=VERIFY_IDENTITY" />
+            <property name="hibernate.connection.driver_class"
+                      value="com.mysql.cj.jdbc.Driver" />
+            <property name="hibernate.connection.user" value="0p6lz6mc12j0v9muibjq" />
+            <property name="hibernate.connection.password"
+                      value="pscale_pw_lwCutts99JNheeKaBFqiWd4I8d5eFymPfwcQKONNPhD" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <!-- clean, update, clean-drop -->
+        </properties>
+    </persistence-unit>
+
+</persistence>

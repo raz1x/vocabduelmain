@@ -1,25 +1,40 @@
 package de.htwberlin.game.export;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Game")
 public class Game {
     /**
      * The ID of the game.
      */
+    @Id @GeneratedValue
+    @Column(name = "gameId")
     private int gameId;
 
     /**
      * The ID of the first user.
      */
+    @Column(name = "user1Id")
     private int user1Id;
 
     /**
      * The ID of the second user.
      */
+    @Column(name = "user2Id")
     private int user2Id;
 
     /**
      * The ID of the current user.
      */
+    @Column(name = "currentUser")
     private int currentUser;
+
+    /**
+     * If the game is finished.
+     */
+    @Column(name = "isOngoing")
+    private boolean isOngoing;
 
     /**
      * The Constructor for Game.
@@ -31,6 +46,7 @@ public class Game {
         this.user1Id = user1Id;
         this.user2Id = user2Id;
         this.currentUser = user1Id;
+        this.isOngoing = true;
     }
 
     public int getGameId() {
@@ -63,5 +79,13 @@ public class Game {
 
     public void setCurrentUser(int currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public boolean getIsOngoing() {
+        return isOngoing;
+    }
+
+    public void setIsOngoing(boolean isOngoing) {
+        this.isOngoing = isOngoing;
     }
 }

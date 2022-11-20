@@ -1,13 +1,42 @@
 package de.htwberlin.userManager.export;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "User")
 public class User {
-    private boolean loggedIn;
+    /**
+     * Id of the user.
+     */
+    @Id @GeneratedValue
+    @Column(name = "userId")
     private int userId;
+
+    /**
+     * Username of the user.
+     */
+    @Column(name = "username")
     private String userName;
+
+    /**
+     * Password of the user.
+     */
+    @Column(name = "password")
     private String password;
 
+    /**
+     * Shows if the user is logged in.
+     */
+    @Column(name = "loggedIn")
+    private boolean loggedIn;
+
+
+    /**
+     * Constructor for User.
+     * @param userName Username of the user.
+     * @param password Password of the user.
+     */
     public User(String userName, String password) {
-        this.userId = 0;
         this.userName = userName;
         this.password = password;
         this.loggedIn = true;

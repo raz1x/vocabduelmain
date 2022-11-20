@@ -1,21 +1,30 @@
 package de.htwberlin.game.export;
 
 import de.htwberlin.vocab.export.Translation;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "GameAnswer")
 public class GameAnswer {
     /**
      * The ID of the answer.
      */
+    @Id @GeneratedValue
+    @Column(name = "gameAnswerId")
     private int gameAnswerId;
 
     /**
      * Foreign key of the question.
      */
+    @ManyToOne
+    @JoinColumn(name = "gameQuestionId")
     private GameQuestion gameQuestion;
 
     /**
      * Foreign key of the translation.
      */
+    @ManyToOne
+    @JoinColumn(name = "translationId")
     private Translation translation;
 
     /**

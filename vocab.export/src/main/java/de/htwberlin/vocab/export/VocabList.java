@@ -1,47 +1,51 @@
 package de.htwberlin.vocab.export;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "VocabList")
 public class VocabList {
     /**
-     * Id (autoincrement)
+     * Id of the vocabList.
      */
+    @Id @GeneratedValue
+    @Column(name = "vocabListId")
     private int vocabListId;
-
-    /**
-     * Foreign Key of User
-     */
-    private int userId;
 
     /**
      * Foreign Key of Category
      */
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
     private Category category;
 
     /**
      * Title of the VocabList
      */
+    @Column(name = "vocabTitle")
     private String vocabTitle;
 
     /**
      * Name of the language A
      */
+    @Column(name = "languageA")
     private String languageA;
 
     /**
      * Name of the language B
      */
+    @Column(name = "languageB")
     private String languageB;
 
     /**
      * Constructor for VocabList
-     * @param userId Foreign Key of User
-     * @param categoryId Foreign Key of Category
+     * @param category Foreign Key of Category
      * @param vocabTitle Title of the VocabList
      * @param languageA Name of the language A
      * @param languageB Name of the language B
      */
-    public VocabList(int userId, Category category, String vocabTitle, String languageA, String languageB) {
+    public VocabList(Category category, String vocabTitle, String languageA, String languageB) {
         this.vocabListId = 0;
-        this.userId = userId;
         this.category = category;
         this.vocabTitle = vocabTitle;
         this.languageA = languageA;
@@ -54,14 +58,6 @@ public class VocabList {
 
     public void setVocabListId(int vocabListId) {
         this.vocabListId = vocabListId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public Category getCategory() {

@@ -1,46 +1,60 @@
 package de.htwberlin.game.export;
 
+import de.htwberlin.vocab.export.Translation;
 import de.htwberlin.vocab.export.Vocab;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "GameQuestion")
 public class GameQuestion {
     /**
      * ID of the question.
      */
+    @Id @GeneratedValue
+    @Column(name = "gameQuestionId")
     private int gameQuestionId;
 
     /**
      * Foreign key of the game.
      */
+    @ManyToOne
+    @JoinColumn(name = "gameId")
     private Game game;
 
     /**
      * Number of the round.
      */
+    @ManyToOne
+    @JoinColumn(name = "round")
     private Round round;
 
     /**
      * Foreign key of the used vocab.
      */
+    @ManyToOne
+    @JoinColumn(name = "vocabId")
     private Vocab vocab;
 
     /**
      * Foreign key of the true answer.
      */
-    private int trueAnswerId;
+    @ManyToOne(targetEntity = de.htwberlin.vocab.export.Translation.class)
+    @JoinColumn(name = "trueAnswerId")
+    private Translation trueAnswer;
 
     /**
      * Constructor for GameQuestion.
      * @param game The Game object.
      * @param round The Round object.
      * @param vocab The Vocab object.
-     * @param trueAnswerId The foreign key of the true answer.
+     * @param trueAnswer The foreign key of the true answer.
      */
-    public GameQuestion(Game game, Round round, Vocab vocab, int trueAnswerId) {
+    public GameQuestion(Game game, Round round, Vocab vocab, Translation trueAnswer) {
         this.gameQuestionId = 0;
         this.game = game;
         this.round = round;
         this.vocab = vocab;
-        this.trueAnswerId = trueAnswerId;
+        this.trueAnswer = trueAnswer;
     }
 
     public int getGameQuestionId() {
@@ -75,11 +89,11 @@ public class GameQuestion {
         this.vocab = vocab;
     }
 
-    public int getTrueAnswerId() {
-        return trueAnswerId;
+    public Translation getTrueAnswerId() {
+        return trueAnswer;
     }
 
-    public void setTrueAnswerId(int trueAnswer) {
-        this.trueAnswerId = trueAnswerId;
+    public void setTrueAnswerId(Translation trueAnswer) {
+        this.trueAnswer = trueAnswer;
     }
 }

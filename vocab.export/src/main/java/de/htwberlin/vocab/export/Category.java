@@ -1,14 +1,21 @@
 package de.htwberlin.vocab.export;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Category")
 public class Category {
     /**
-     * Id (autoincrement)
+     * Id of the category.
      */
+    @Id @GeneratedValue
+    @Column(name = "categoryId")
     private int categoryId;
 
     /**
      * Name of the category
      */
+    @Column(name = "categoryName")
     private String categoryName;
 
     /**
