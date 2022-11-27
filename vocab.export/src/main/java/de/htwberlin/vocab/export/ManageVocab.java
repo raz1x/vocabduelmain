@@ -10,7 +10,7 @@ public interface ManageVocab {
      * @param languageB Name of the language B
      * @return Returns the object of the new VocabList
      */
-    public VocabList addVocabList(String vocabListName, int categoryId, int userId, String languageA, String languageB);
+    public VocabList addVocabList(String vocabListName, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException;
 
     /**
      * Get a VocabList by its id
@@ -29,7 +29,7 @@ public interface ManageVocab {
      * @param languageB Name of the language B
      * @return Returns the object of the new VocabList
      */
-    public VocabList updateVocabList(int vocabListId, String vocabTitle, int categoryId, int userId, String languageA, String languageB) throws VocabListNotFoundException;
+    public VocabList updateVocabList(int vocabListId, String vocabTitle, int categoryId, String languageA, String languageB) throws VocabListNotFoundException, CategoryNotFoundException;
 
     /**
      * Removes the VocabList from the database
@@ -43,7 +43,7 @@ public interface ManageVocab {
      * @param vocab The word in language A
      * @return Returns the object of the new Vocab
      */
-    public Vocab addVocab(int vocabListId, String vocab);
+    public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException;
 
     /**
      * Get a Vocab by its id
@@ -72,7 +72,7 @@ public interface ManageVocab {
      * @param translation The word in language B
      * @return Returns the object of the new Translation
      */
-    public Translation addTranslation(int vocabId, String translation);
+    public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException;
 
     /**
      * Get a Translation by its id
@@ -87,7 +87,7 @@ public interface ManageVocab {
      * @param translation The word in language B
      * @return Returns the object of the new Translation
      */
-    public Translation updateTranslation(int translationId, int vocabId, String translation) throws TranslationNotFoundException;
+    public Translation updateTranslation(int translationId, int vocabId, String translation) throws TranslationNotFoundException, VocabNotFoundException;
 
     /**
      * Removes the Translation from the database
