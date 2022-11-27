@@ -1,57 +1,91 @@
 package de.htwberlin.vocab.impl;
 
 import de.htwberlin.vocab.export.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
+@Service
+@Transactional
 public class ManageVocabImpl implements ManageVocab {
 
+    @PersistenceContext
+    EntityManager entityManager;
+
     @Override
-    public VocabList addVocabList(String vocabTitle, int categoryId, int userId, String languageA, String languageB) {
-        // save to database
-        return new VocabList(userId, categoryId, vocabTitle, languageA, languageB);
+    public VocabList addVocabList(String vocabTitle, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException {
+        Category category;
+        try {
+            category = entityManager.find(Category.class, categoryId);
+        } catch (Exception e) {
+            throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
+        }
+        VocabList vocabList = new VocabList(category,  vocabTitle, languageA, languageB);
+        entityManager.persist(vocabList);
+        return vocabList;
     }
 
     @Override
     public VocabList getVocabList(int vocabListId) throws VocabListNotFoundException {
         try {
-            // get VocabList from database
-            return new VocabList(0, 0, "DummyList", "English", "German");
+            return entityManager.find(VocabList.class, vocabListId);
         } catch (Exception e) {
-            throw new VocabListNotFoundException("VocabList not found");
+            throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
         }
     }
 
     @Override
-    public VocabList updateVocabList(int vocabListId, String vocabListName, int categoryId, int userId, String languageA, String languageB) throws VocabListNotFoundException {
+    public VocabList updateVocabList(int vocabListId, String vocabListTitle, int categoryId, String languageA, String languageB) throws VocabListNotFoundException, CategoryNotFoundException {
+        VocabList vocabList;
+        Category category;
         try {
-            // update VocabList in database by id
-            return new VocabList(userId, categoryId, vocabListName, languageA, languageB);
+            vocabList = entityManager.find(VocabList.class, vocabListId);
         } catch (Exception e) {
-            throw new VocabListNotFoundException("VocabList not found");
+            throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
         }
+        try {
+            category = entityManager.find(Category.class, categoryId);
+        } catch (Exception e) {
+            throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
+        }
+        vocabList.setVocabTitle(vocabListTitle);
+        vocabList.setLanguageA(languageA);
+        vocabList.setLanguageB(languageB);
+        vocabList.setCategory(category);
+        entityManager.persist(vocabList);
+        return vocabList;
+
     }
 
     @Override
     public void removeVocabList(int vocabListId) throws VocabListNotFoundException {
+        VocabList vocabList;
         try {
-            // remove VocabList from database by id
-            System.out.println("VocabList removed");
+            vocabList = entityManager.find(VocabList.class, vocabListId);
         } catch (Exception e) {
-            throw new VocabListNotFoundException("VocabList not found");
+            throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
         }
-        // remove VocabList from database by id
+        entityManager.remove(vocabList);
     }
 
     @Override
-    public Vocab addVocab(int vocabListId, String vocab) {
-        // save to database
-        return new Vocab(vocabListId, vocab);
+    public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException {
+        VocabList vocabList;
+        try {
+            vocabList = entityManager.find(VocabList.class, vocabListId);
+        } catch (Exception e) {
+            throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
+        }
+        Vocab newVocab = new Vocab(vocabList, vocab);
+        entityManager.persist(newVocab);
+        return newVocab;
     }
 
     @Override
     public Vocab getVocab(int vocabId) throws VocabNotFoundException {
         try {
-            // get Vocab from database
-            return new Vocab(0, "DummyVocab");
+            return entityManager.find(Vocab.class, vocabId);
         } catch (Exception e) {
             throw new VocabNotFoundException("Vocab not found");
         }
@@ -59,93 +93,127 @@ public class ManageVocabImpl implements ManageVocab {
 
     @Override
     public Vocab updateVocab(int vocabId, int vocabListId, String vocab) throws VocabNotFoundException {
+        Vocab vocabToUpdate;
+        VocabList vocabList;
         try {
-            // update Vocab in database by id
-            return new Vocab(vocabListId, vocab);
+            vocabToUpdate = entityManager.find(Vocab.class, vocabId);
         } catch (Exception e) {
             throw new VocabNotFoundException("Vocab not found");
         }
+        try {
+            vocabList = entityManager.find(VocabList.class, vocabListId);
+        } catch (Exception e) {
+            throw new VocabNotFoundException("VocabList not found");
+        }
+        vocabToUpdate.setVocabList(vocabList);
+        vocabToUpdate.setVocab(vocab);
+        entityManager.persist(vocabToUpdate);
+        return vocabToUpdate;
     }
 
     @Override
     public void removeVocab(int vocabId) throws VocabNotFoundException{
+        Vocab vocab;
         try {
-            // remove Vocab from database by id
-            System.out.println("Vocab removed");
+            vocab = entityManager.find(Vocab.class, vocabId);
         } catch (Exception e) {
             throw new VocabNotFoundException("Vocab not found");
         }
+        entityManager.remove(vocab);
     }
 
     @Override
-    public Translation addTranslation(int vocabId, String translation) {
-        // save to database
-        return new Translation(vocabId, translation);
+    public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException {
+        Vocab vocab;
+        try {
+            vocab = entityManager.find(Vocab.class, vocabId);
+        } catch (Exception e) {
+            throw new VocabNotFoundException("Vocab not found");
+        }
+        Translation newTranslation = new Translation(vocab, translation);
+        entityManager.persist(newTranslation);
+        return newTranslation;
     }
 
     @Override
     public Translation getTranslation(int translationId) throws TranslationNotFoundException {
         try {
-            // get Translation from database
-            return new Translation(0, "DummyTranslation");
+            return entityManager.find(Translation.class, translationId);
         } catch (Exception e) {
             throw new TranslationNotFoundException("Translation not found");
         }
     }
 
     @Override
-    public Translation updateTranslation(int translationId, int vocabId, String translation) throws TranslationNotFoundException {
+    public Translation updateTranslation(int translationId, int vocabId, String translation) throws TranslationNotFoundException, VocabNotFoundException {
+        Translation translationToUpdate;
+        Vocab vocab;
         try {
-            // update Translation in database by id
-            return new Translation(vocabId, translation);
+            translationToUpdate = entityManager.find(Translation.class, translationId);
         } catch (Exception e) {
             throw new TranslationNotFoundException("Translation not found");
         }
+        try {
+            vocab = entityManager.find(Vocab.class, vocabId);
+        } catch (Exception e) {
+            throw new VocabNotFoundException("Vocab not found");
+        }
+        translationToUpdate.setVocab(vocab);
+        translationToUpdate.setTranslation(translation);
+        entityManager.persist(translationToUpdate);
+        return translationToUpdate;
     }
 
     @Override
     public void removeTranslation(int translationId) throws TranslationNotFoundException {
+        Translation translation;
         try {
-            // remove Translation from database by id
-            System.out.println("Translation removed");
+            translation = entityManager.find(Translation.class, translationId);
         } catch (Exception e) {
             throw new TranslationNotFoundException("Translation not found");
         }
+        entityManager.remove(translation);
     }
 
     @Override
     public Category addCategory(String categoryName) {
-        // save to database
-        return new Category(categoryName);
+        Category newCategory = new Category(categoryName);
+        entityManager.persist(newCategory);
+        return newCategory;
     }
 
     @Override
     public Category getCategory(int categoryId) throws CategoryNotFoundException {
+        Category category;
         try {
-            // get Category from database by id
-            return new Category("DummyCategory");
+            category = entityManager.find(Category.class, categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category not found");
         }
+        return category;
     }
 
     @Override
     public Category updateCategory(int categoryId, String categoryName) throws CategoryNotFoundException {
+        Category category;
         try {
-            // update Category in database by id
-            return new Category(categoryName);
+            category = entityManager.find(Category.class, categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category not found");
         }
+        category.setCategoryName(categoryName);
+        entityManager.persist(category);
+        return category;
     }
 
     @Override
     public void removeCategory(int categoryId) throws CategoryNotFoundException {
+        Category category;
         try {
-            // remove Category from database by id
-            System.out.println("Category removed");
+            category = entityManager.find(Category.class, categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category not found");
         }
+        entityManager.remove(category);
     }
 }
