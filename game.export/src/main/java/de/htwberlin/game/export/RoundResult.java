@@ -1,7 +1,7 @@
 package de.htwberlin.game.export;
 
 import de.htwberlin.userManager.export.User;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "RoundResult")

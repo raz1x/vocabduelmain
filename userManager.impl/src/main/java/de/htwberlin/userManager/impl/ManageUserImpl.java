@@ -5,12 +5,28 @@ import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserAlreadyExistsException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+@Component
+@Transactional
 public class ManageUserImpl implements ManageUser {
+
+    @PersistenceContext
+    EntityManager entityManager;
+
     @Override
     public User registerUser(String userName, String password) throws UserAlreadyExistsException {
+        User user;
         if(!userExists(userName)) {
-            // set user in DB
-            return new User(userName, password);
+            user = new User(userName, password);
+            System.out.println("User " + userName + " registered");
+            entityManager.persist(user);
+            return user;
         } else {
             throw new UserAlreadyExistsException("User already exists");
         }
@@ -73,8 +89,9 @@ public class ManageUserImpl implements ManageUser {
 
     @Override
     public boolean userExists(String userName) {
+        User user;
         try{
-            // get user from DB
+            entityManager.find(User.class, userName);
             return true;
         } catch (Exception e) {
             return false;

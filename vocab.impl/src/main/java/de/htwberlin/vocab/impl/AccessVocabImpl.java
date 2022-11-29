@@ -1,17 +1,18 @@
 package de.htwberlin.vocab.impl;
 
 import de.htwberlin.vocab.export.*;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-@Service
+@Component
 @Transactional
 public class AccessVocabImpl implements AccessVocab {
 

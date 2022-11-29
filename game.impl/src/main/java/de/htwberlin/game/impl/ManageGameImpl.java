@@ -3,20 +3,24 @@ package de.htwberlin.game.impl;
 import de.htwberlin.game.export.*;
 import de.htwberlin.userManager.export.User;
 import de.htwberlin.vocab.export.*;
-import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
+import javax.persistence.*;
+
 import org.hibernate.HibernateError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@Transactional
+@Component
+@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {HibernateError.class, UserDoesNotExistException.class, VocabListNotFoundException.class, VocabNotFoundException.class, GameDoesNotExistException.class, CategoryNotFoundException.class})
 public class ManageGameImpl implements ManageGame {
 
-    @Autowired
+    @PersistenceContext
     EntityManager entityManager;
 
     @Autowired

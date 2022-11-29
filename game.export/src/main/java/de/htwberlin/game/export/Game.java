@@ -1,6 +1,6 @@
 package de.htwberlin.game.export;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Game")
@@ -36,6 +36,12 @@ public class Game {
     @Column(name = "isOngoing")
     private boolean isOngoing;
 
+    /**
+     * Default constructor for Game.
+     */
+    public Game() {
+
+    }
     /**
      * The Constructor for Game.
      * @param user1Id The ID of the first user.

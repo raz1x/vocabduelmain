@@ -2,7 +2,7 @@ package de.htwberlin.game.export;
 
 import de.htwberlin.vocab.export.Translation;
 import de.htwberlin.vocab.export.Vocab;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "GameQuestion")

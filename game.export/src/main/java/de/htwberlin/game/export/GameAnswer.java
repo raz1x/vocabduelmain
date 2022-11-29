@@ -1,7 +1,7 @@
 package de.htwberlin.game.export;
 
 import de.htwberlin.vocab.export.Translation;
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "GameAnswer")

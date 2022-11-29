@@ -1,6 +1,6 @@
 package de.htwberlin.userManager.export;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "User")
@@ -30,6 +30,11 @@ public class User {
     @Column(name = "loggedIn")
     private boolean loggedIn;
 
+    /**
+     * Default constructor for User.
+     */
+    public User() {
+    }
 
     /**
      * Constructor for User.
