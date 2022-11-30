@@ -6,7 +6,6 @@ import de.htwberlin.userManager.export.UserAlreadyExistsException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;

@@ -5,7 +5,6 @@ import de.htwberlin.userManager.export.User;
 import de.htwberlin.vocab.export.*;
 import javax.persistence.*;
 
-import org.hibernate.HibernateError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {HibernateError.class, UserDoesNotExistException.class, VocabListNotFoundException.class, VocabNotFoundException.class, GameDoesNotExistException.class, CategoryNotFoundException.class})
+@Transactional
 public class ManageGameImpl implements ManageGame {
 
     @PersistenceContext
@@ -78,8 +77,8 @@ public class ManageGameImpl implements ManageGame {
             Round round = new Round(game, roundNumber, category);
             entityManager.persist(round);
             return round;
-        } catch (HibernateError e) {
-            throw new HibernateError("Could not create round with following Ids: .");
+        } catch (EntityExistsException e) {
+            throw new EntityExistsException("Could not create round with following Ids: .");
         }
     }
 
