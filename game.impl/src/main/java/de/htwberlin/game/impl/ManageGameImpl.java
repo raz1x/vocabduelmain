@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Transactional
 public class ManageGameImpl implements ManageGame {
 
     @PersistenceContext

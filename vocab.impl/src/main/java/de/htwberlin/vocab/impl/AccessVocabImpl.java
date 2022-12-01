@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@Transactional
 public class AccessVocabImpl implements AccessVocab {
 
     @PersistenceContext

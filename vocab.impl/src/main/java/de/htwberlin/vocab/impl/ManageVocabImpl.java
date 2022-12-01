@@ -8,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Component
-@Transactional
 public class ManageVocabImpl implements ManageVocab {
 
     @PersistenceContext
