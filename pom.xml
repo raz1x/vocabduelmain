@@ -13,8 +13,8 @@
         <module>game.impl</module>
         <module>userManager.export</module>
         <module>userManager.impl</module>
-        <module>UI.export</module>
-        <module>UI.impl</module>
+        <module>vocabUI.export</module>
+        <module>vocabUI.impl</module>
         <module>vocab.export</module>
         <module>vocab.impl</module>
         <module>configuration</module>

@@ -6,21 +6,23 @@ import de.htwberlin.userManager.export.UserAlreadyExistsException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+
+import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
-
 @Component
+@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageUserImpl implements ManageUser {
 
-    @Autowired
-    @Qualifier(value = "entityManager")
-    EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
+
 
     @Override
     public User registerUser(String userName, String password) throws UserAlreadyExistsException {
@@ -93,11 +95,16 @@ public class ManageUserImpl implements ManageUser {
     @Override
     public boolean userExists(String userName) {
         User user;
-        try{
-            em.find(User.class, userName);
+        try {
+            user = em.createQuery("SELECT u FROM User u WHERE u.userName = :userName", User.class)
+                    .setParameter("userName", userName)
+                    .getSingleResult();
             return true;
-        } catch (Exception e) {
+        } catch(NoResultException e) {
             return false;
         }
+
+
+
     }
 }

@@ -2,12 +2,13 @@ package de.htwberlin.vocab.impl;
 
 import de.htwberlin.vocab.export.*;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.*;
 
 @Component
+@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageVocabImpl implements ManageVocab {
 
     @PersistenceContext

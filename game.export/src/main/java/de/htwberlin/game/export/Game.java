@@ -1,6 +1,6 @@
 package de.htwberlin.game.export;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Game")

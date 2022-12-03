@@ -1,6 +1,6 @@
 package de.htwberlin.userManager.export;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "User")

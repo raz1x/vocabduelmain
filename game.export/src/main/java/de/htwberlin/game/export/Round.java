@@ -1,7 +1,7 @@
 package de.htwberlin.game.export;
 
 import de.htwberlin.vocab.export.Category;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Round")

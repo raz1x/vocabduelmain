@@ -1,6 +1,6 @@
 package de.htwberlin.vocab.export;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Vocab")

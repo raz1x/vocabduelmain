@@ -3,7 +3,7 @@ package de.htwberlin.game.impl;
 import de.htwberlin.game.export.*;
 import de.htwberlin.userManager.export.User;
 import de.htwberlin.vocab.export.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageGameImpl implements ManageGame {
 
     @PersistenceContext
