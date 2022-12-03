@@ -16,7 +16,7 @@ public class User {
      * Username of the user.
      */
     @Column(name = "username")
-    private String userName;
+    private String username;
 
     /**
      * Password of the user.
@@ -42,7 +42,7 @@ public class User {
      * @param password Password of the user.
      */
     public User(String userName, String password) {
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.loggedIn = true;
     }
@@ -56,11 +56,11 @@ public class User {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public String getPassword() {

@@ -1,13 +1,14 @@
 package de.htwberlin.vocab.impl;
 
 import de.htwberlin.vocab.export.*;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManageVocabImplTest {
+
+
 
     private static ManageVocabImpl manageVocab;
 
@@ -19,7 +20,6 @@ public class ManageVocabImplTest {
     public void testAddVocabList() {
         VocabList vocabList = manageVocab.addVocabList("testVocabList", 1, 0, "German", "English");
         assertEquals("testVocabList", vocabList.getVocabTitle());
-        assertEquals(1, vocabList.getCategoryId());
         assertEquals("German", vocabList.getLanguageA());
         assertEquals("English", vocabList.getLanguageB());
     }

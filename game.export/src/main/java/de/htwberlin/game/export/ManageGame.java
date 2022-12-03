@@ -49,17 +49,17 @@ public interface ManageGame {
      * Returns a list of generated questions.
      * @param categoryId Foreign key of the category.
      * @param gameId Foreign key of the game.
-     * @param round The round number of the game.
+     * @param roundNumber The round number of the game.
      * @return A list of GameQuestion objects.
      */
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int roundNumber) throws GameDoesNotExistException, CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException;
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int roundNumber) throws GameDoesNotExistException, CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, RoundDoesNotExistException;
 
     /**
      * Returns a list of generated answers.
-     * @param questionId Foreign key of the GameQuestion.
+     * @param gameQuestionId Foreign key of the GameQuestion.
      * @return A list of GameAnswer objects.
      */
-    public List<GameAnswer> generateAnswers(int questionId) throws GameQuestionDoesNotExistException, VocabNotFoundException;
+    public List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException;
 
     /**
      * Returns the next Question.
@@ -70,6 +70,17 @@ public interface ManageGame {
      */
     public GameQuestion getNextQuestion(int gameId, int round, int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException;
 
+    /**
+     * Locks in an answer.
+     * @param gameId Foreign key of the game.
+     * @param round The round number of the game.
+     * @param gameQuestionId Foreign key of the GameQuestion.
+     * @param gameAnswerId Foreign key of the GameAnswer.
+     * @param userId Foreign key of the user.
+     * @throws GameDoesNotExistException If the game does not exist.
+     * @throws GameQuestionDoesNotExistException If the game question does not exist.
+     * @throws GameAnswerDoesNotExistException If the game answer does not exist.
+     */
     public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId, int userId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException;
 
 }

@@ -13,18 +13,10 @@ public interface ManageVocab {
     public VocabList addVocabList(String vocabListName, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException;
 
     /**
-     * Get a VocabList by its id
-     * @param vocabListId ID of the VocabList
-     * @return Returns the object of the VocabList
-     */
-    public VocabList getVocabList(int vocabListId) throws VocabListNotFoundException;
-
-    /**
      * Updates an existing VocabList
      * @param vocabListId ID of the VocabList
      * @param vocabTitle Name of the VocabList
      * @param categoryId Foreign Key of Category
-     * @param userId Foreign Key of User
      * @param languageA Name of the language A
      * @param languageB Name of the language B
      * @return Returns the object of the new VocabList
@@ -45,12 +37,6 @@ public interface ManageVocab {
      */
     public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException;
 
-    /**
-     * Get a Vocab by its id
-     * @param vocabId ID of the Vocab
-     * @return Returns the object of the Vocab
-     */
-    public Vocab getVocab(int vocabId) throws VocabNotFoundException;
     /**
      * Updates an existing Vocab
      * @param vocabId ID of the Vocab
@@ -75,12 +61,6 @@ public interface ManageVocab {
     public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException;
 
     /**
-     * Get a Translation by its id
-     * @param translationId ID of the Translation
-     * @return Returns the object of the Translation
-     */
-    public Translation getTranslation(int translationId) throws TranslationNotFoundException;
-    /**
      * Updates an existing Translation
      * @param translationId ID of the Translation
      * @param vocabId Foreign Key of Vocab
@@ -103,12 +83,6 @@ public interface ManageVocab {
     public Category addCategory(String categoryName) throws CategoryAlreadyExistsException;
 
     /**
-     * Get a Category by its id
-     * @param categoryId ID of the Category
-     * @return Returns the object of the Category
-     */
-    public Category getCategory(int categoryId) throws CategoryNotFoundException;
-    /**
      * Updates an existing Category
      * @param categoryId ID of the Category
      * @param categoryName Name of the Category
@@ -121,5 +95,12 @@ public interface ManageVocab {
      * @param categoryId ID of the Category
      */
     public void removeCategory(int categoryId) throws CategoryNotFoundException;
+
+    /**
+     * Parses a text file into a vocab list and saves it to the database
+     * @param path Path to the text file
+     * @throws VocabListAlreadyExistsException If the VocabList already exists
+     */
+    public void parseVocabList(String path) throws VocabListAlreadyExistsException;
 
 }

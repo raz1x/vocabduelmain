@@ -2,13 +2,12 @@ package de.htwberlin.game.impl;
 
 import de.htwberlin.game.export.*;
 import de.htwberlin.userManager.export.User;
+import de.htwberlin.userManager.export.UserDAO;
 import de.htwberlin.vocab.export.*;
 import jakarta.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,20 +18,23 @@ import java.util.List;
 @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageGameImpl implements ManageGame {
 
-    @PersistenceContext
-    EntityManager entityManager;
+    @Autowired
+    private GameDAO gameDAO;
 
     @Autowired
-    public AccessVocab accessVocab;
+    private VocabDAO vocabDAO;
+
+    @Autowired
+    private UserDAO userDAO;
 
     @Override
     public Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException {
         try {
-            User user1 = entityManager.find(User.class, user1Id);
-            User user2 = entityManager.find(User.class, user2Id);
+            User user1 = userDAO.getUser(user1Id);
+            User user2 = userDAO.getUser(user2Id);
 
             Game game = new Game(user1.getUserId(), user2.getUserId());
-            entityManager.persist(game);
+            gameDAO.saveGame(game);
             return game;
         } catch (Exception e) {
             throw new UserDoesNotExistException(e.getMessage());
@@ -42,7 +44,7 @@ public class ManageGameImpl implements ManageGame {
     @Override
     public Game continueGame(int gameId) throws GameDoesNotExistException {
         try {
-            return entityManager.find(Game.class, gameId);
+            return gameDAO.getGame(gameId);
         } catch (Exception e) {
             throw new GameDoesNotExistException("Game " + gameId + " does not exist.");
         }
@@ -51,9 +53,9 @@ public class ManageGameImpl implements ManageGame {
     @Override
     public void endGame(int gameId) throws GameDoesNotExistException{
         try {
-            Game game = entityManager.find(Game.class, gameId);
+            Game game = gameDAO.getGame(gameId);
             game.setIsOngoing(false);
-            entityManager.persist(game);
+            gameDAO.updateGame(game);
         } catch (Exception e) {
             throw new GameDoesNotExistException("Game " + gameId + "does not exist.");
         }
@@ -64,18 +66,18 @@ public class ManageGameImpl implements ManageGame {
         Game game;
         Category category;
         try {
-            game = entityManager.find(Game.class, gameId);
+            game = gameDAO.getGame(gameId);
         } catch (Exception e) {
             throw new GameDoesNotExistException("Game " + gameId + " does not exist.");
         }
         try {
-            category = entityManager.find(Category.class, categoryId);
+            category = vocabDAO.getCategory(categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
         }
         try {
             Round round = new Round(game, roundNumber, category);
-            entityManager.persist(round);
+            gameDAO.saveRound(round);
             return round;
         } catch (EntityExistsException e) {
             throw new EntityExistsException("Could not create round with following Ids: .");
@@ -85,10 +87,10 @@ public class ManageGameImpl implements ManageGame {
     @Override
     public RoundResult createRoundResult(int chosenAnswerId, int userId) throws UserDoesNotExistException {
         try {
-            GameAnswer gameAnswer = entityManager.find(GameAnswer.class, chosenAnswerId);
-            User user = entityManager.find(User.class, userId);
+            GameAnswer gameAnswer = gameDAO.getGameAnswer(chosenAnswerId);
+            User user = userDAO.getUser(userId);
             RoundResult roundResult = new RoundResult(gameAnswer, user);
-            entityManager.persist(roundResult);
+            gameDAO.saveRoundResult(roundResult);
             return roundResult;
         } catch (Exception e) {
             throw new UserDoesNotExistException("User does not exist.");
@@ -96,28 +98,27 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int roundNumber) throws CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException {
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int roundNumber) throws CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, GameDoesNotExistException, RoundDoesNotExistException {
         List<GameQuestion> gameQuestions = new ArrayList<>();
-        VocabList vocabList = accessVocab.getRandomVocabListFromCategory(categoryId);
+        VocabList vocabList = vocabDAO.getRandomVocabListFromCategory(categoryId);
         for (int i = 0; i < 3; i++) {
-            Vocab question = accessVocab.getRandomVocabFromVocabList(vocabList.getVocabListId());
-            Translation trueAnswer = accessVocab.getTranslationFromVocabId(question.getVocabId());
-            Game game = entityManager.find(Game.class, gameId);
-            Category category = entityManager.find(Category.class, categoryId);
-            Round round = entityManager.createQuery("SELECT r FROM Round r WHERE r.gameId = :game AND r.roundNumber = :roundNumber", Round.class)
-                    .setParameter("gameId", game.getGameId())
-                    .setParameter("roundNumber", roundNumber)
-                    .getSingleResult();
-            gameQuestions.add(new GameQuestion(game, round, question, trueAnswer));
+            Vocab question = vocabDAO.getRandomVocabFromVocabList(vocabList.getVocabListId());
+            Translation trueAnswer = vocabDAO.getTranslationFromVocabId(question.getVocabId());
+            Game game = gameDAO.getGame(gameId);
+            Category category = vocabDAO.getCategory(categoryId);
+            Round round = gameDAO.getRound(gameId, roundNumber);
+            GameQuestion gameQuestion = new GameQuestion(game, round, question, trueAnswer);
+            gameDAO.saveGameQuestion(gameQuestion);
+            gameQuestions.add(gameQuestion);
         }
         return gameQuestions;
     }
 
     @Override
-    public List<GameAnswer> generateAnswers(int questionId) throws VocabNotFoundException {
+    public List<GameAnswer> generateAnswers(int gameQuestionId) throws VocabNotFoundException, GameQuestionDoesNotExistException {
         List<GameAnswer> gameAnswers = new ArrayList<>();
-        List<Translation> possibleTranslations = accessVocab.getPossibleTranslationsFromVocabId(1, 3);
-        GameQuestion gameQuestion = entityManager.find(GameQuestion.class, questionId);
+        List<Translation> possibleTranslations = vocabDAO.getPossibleTranslationsFromVocabId(1, 3);
+        GameQuestion gameQuestion = gameDAO.getGameQuestion(gameQuestionId);
         for (int i = 0; i < 3; i++) {
             gameAnswers.add(new GameAnswer(gameQuestion, possibleTranslations.get(i)));
         }

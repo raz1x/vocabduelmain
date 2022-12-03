@@ -43,18 +43,26 @@ public class GameQuestion {
     private Translation trueAnswer;
 
     /**
+     * Index of the game question in the round.
+     */
+    @Column(name = "index")
+    private int index;
+
+    /**
      * Constructor for GameQuestion.
      * @param game The Game object.
      * @param round The Round object.
      * @param vocab The Vocab object.
      * @param trueAnswer The foreign key of the true answer.
+     * @param index The index of the question in the round.
      */
-    public GameQuestion(Game game, Round round, Vocab vocab, Translation trueAnswer) {
+    public GameQuestion(Game game, Round round, Vocab vocab, Translation trueAnswer, int index) {
         this.gameQuestionId = 0;
         this.game = game;
         this.round = round;
         this.vocab = vocab;
         this.trueAnswer = trueAnswer;
+        this.index = index;
     }
 
     public int getGameQuestionId() {
@@ -95,5 +103,13 @@ public class GameQuestion {
 
     public void setTrueAnswerId(Translation trueAnswer) {
         this.trueAnswer = trueAnswer;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

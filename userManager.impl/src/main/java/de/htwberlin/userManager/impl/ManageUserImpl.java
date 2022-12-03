@@ -1,9 +1,6 @@
 package de.htwberlin.userManager.impl;
 
-import de.htwberlin.userManager.export.ManageUser;
-import de.htwberlin.userManager.export.User;
-import de.htwberlin.userManager.export.UserAlreadyExistsException;
-import de.htwberlin.userManager.export.UserNotFoundException;
+import de.htwberlin.userManager.export.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -20,9 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageUserImpl implements ManageUser {
 
-    @PersistenceContext
-    private EntityManager em;
-
+    @Autowired
+    UserDAO userDAO;
 
     @Override
     public User registerUser(String userName, String password) throws UserAlreadyExistsException {
@@ -30,7 +26,7 @@ public class ManageUserImpl implements ManageUser {
         if(!userExists(userName)) {
             user = new User(userName, password);
             System.out.println("User " + userName + " registered");
-            em.persist(user);
+            userDAO.saveUser(user);
             return user;
         } else {
             throw new UserAlreadyExistsException("User already exists");
@@ -96,11 +92,9 @@ public class ManageUserImpl implements ManageUser {
     public boolean userExists(String userName) {
         User user;
         try {
-            user = em.createQuery("SELECT u FROM User u WHERE u.userName = :userName", User.class)
-                    .setParameter("userName", userName)
-                    .getSingleResult();
+            user = userDAO.getUserByName(userName);
             return true;
-        } catch(NoResultException e) {
+        } catch(UserNotFoundException e) {
             return false;
         }
 

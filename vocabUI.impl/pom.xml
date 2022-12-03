@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>de.htwberlin</groupId>
-            <artifactId>UI.export</artifactId>
+            <artifactId>vocabUI.export</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

@@ -21,7 +21,47 @@ public class VocabUIControllerImpl implements VocabUIController {
 
     @Override
     public void run() throws UserAlreadyExistsException {
-        manageUser.registerUser("raz", "12354");
+        manageUser.registerUser("daimox", "12354");
+    }
+
+    @Override
+    public void showLoginMenu() throws UserAlreadyExistsException {
+
+    }
+
+    @Override
+    public void showMainMenu() {
+
+    }
+
+    @Override
+    public void manageUserMenu() throws UserAlreadyExistsException {
+
+    }
+
+    @Override
+    public void manageVocabMenu() {
+
+    }
+
+    @Override
+    public void manageGameMenu() {
+
+    }
+
+    @Override
+    public int readUserSelection() {
+        return 0;
+    }
+
+    @Override
+    public String readUserInput() {
+        return null;
+    }
+
+    @Override
+    public void displayVocabList() {
+
     }
 }
 

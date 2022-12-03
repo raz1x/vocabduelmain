@@ -1,39 +1,31 @@
 package de.htwberlin.vocab.impl;
 
 import de.htwberlin.vocab.export.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.*;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageVocabImpl implements ManageVocab {
 
-    @PersistenceContext
-    EntityManager entityManager;
+    @Autowired
+    VocabDAO vocabDAO;
 
     @Override
     public VocabList addVocabList(String vocabTitle, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException {
         Category category;
         try {
-            category = entityManager.find(Category.class, categoryId);
+            category = vocabDAO.getCategory(categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
         }
         VocabList vocabList = new VocabList(category,  vocabTitle, languageA, languageB);
-        entityManager.persist(vocabList);
+        vocabDAO.saveVocabList(vocabList);
         return vocabList;
-    }
-
-    @Override
-    public VocabList getVocabList(int vocabListId) throws VocabListNotFoundException {
-        try {
-            return entityManager.find(VocabList.class, vocabListId);
-        } catch (Exception e) {
-            throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
-        }
     }
 
     @Override
@@ -41,12 +33,12 @@ public class ManageVocabImpl implements ManageVocab {
         VocabList vocabList;
         Category category;
         try {
-            vocabList = entityManager.find(VocabList.class, vocabListId);
+            vocabList = vocabDAO.getVocabList(vocabListId);
         } catch (Exception e) {
             throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
         }
         try {
-            category = entityManager.find(Category.class, categoryId);
+            category = vocabDAO.getCategory(categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
         }
@@ -54,7 +46,7 @@ public class ManageVocabImpl implements ManageVocab {
         vocabList.setLanguageA(languageA);
         vocabList.setLanguageB(languageB);
         vocabList.setCategory(category);
-        entityManager.persist(vocabList);
+        vocabDAO.updateVocabList(vocabList);
         return vocabList;
 
     }
@@ -63,33 +55,24 @@ public class ManageVocabImpl implements ManageVocab {
     public void removeVocabList(int vocabListId) throws VocabListNotFoundException {
         VocabList vocabList;
         try {
-            vocabList = entityManager.find(VocabList.class, vocabListId);
+            vocabList = vocabDAO.getVocabList(vocabListId);
         } catch (Exception e) {
             throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
         }
-        entityManager.remove(vocabList);
+        vocabDAO.deleteVocabList(vocabList);
     }
 
     @Override
     public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException {
         VocabList vocabList;
         try {
-            vocabList = entityManager.find(VocabList.class, vocabListId);
+            vocabList = vocabDAO.getVocabList(vocabListId);
         } catch (Exception e) {
             throw new VocabListNotFoundException("VocabList " + vocabListId + " not found.");
         }
         Vocab newVocab = new Vocab(vocabList, vocab);
-        entityManager.persist(newVocab);
+        vocabDAO.saveVocab(newVocab);
         return newVocab;
-    }
-
-    @Override
-    public Vocab getVocab(int vocabId) throws VocabNotFoundException {
-        try {
-            return entityManager.find(Vocab.class, vocabId);
-        } catch (Exception e) {
-            throw new VocabNotFoundException("Vocab not found");
-        }
     }
 
     @Override
@@ -97,18 +80,18 @@ public class ManageVocabImpl implements ManageVocab {
         Vocab vocabToUpdate;
         VocabList vocabList;
         try {
-            vocabToUpdate = entityManager.find(Vocab.class, vocabId);
+            vocabToUpdate = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
             throw new VocabNotFoundException("Vocab not found");
         }
         try {
-            vocabList = entityManager.find(VocabList.class, vocabListId);
+            vocabList = vocabDAO.getVocabList(vocabListId);
         } catch (Exception e) {
             throw new VocabNotFoundException("VocabList not found");
         }
         vocabToUpdate.setVocabList(vocabList);
         vocabToUpdate.setVocab(vocab);
-        entityManager.persist(vocabToUpdate);
+        vocabDAO.updateVocab(vocabToUpdate);
         return vocabToUpdate;
     }
 
@@ -116,33 +99,24 @@ public class ManageVocabImpl implements ManageVocab {
     public void removeVocab(int vocabId) throws VocabNotFoundException{
         Vocab vocab;
         try {
-            vocab = entityManager.find(Vocab.class, vocabId);
+            vocab = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
             throw new VocabNotFoundException("Vocab not found");
         }
-        entityManager.remove(vocab);
+        vocabDAO.deleteVocab(vocab);
     }
 
     @Override
     public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException {
         Vocab vocab;
         try {
-            vocab = entityManager.find(Vocab.class, vocabId);
+            vocab = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
             throw new VocabNotFoundException("Vocab not found");
         }
         Translation newTranslation = new Translation(vocab, translation);
-        entityManager.persist(newTranslation);
+        vocabDAO.saveTranslation(newTranslation);
         return newTranslation;
-    }
-
-    @Override
-    public Translation getTranslation(int translationId) throws TranslationNotFoundException {
-        try {
-            return entityManager.find(Translation.class, translationId);
-        } catch (Exception e) {
-            throw new TranslationNotFoundException("Translation not found");
-        }
     }
 
     @Override
@@ -150,18 +124,18 @@ public class ManageVocabImpl implements ManageVocab {
         Translation translationToUpdate;
         Vocab vocab;
         try {
-            translationToUpdate = entityManager.find(Translation.class, translationId);
+            translationToUpdate = vocabDAO.getTranslation(translationId);
         } catch (Exception e) {
             throw new TranslationNotFoundException("Translation not found");
         }
         try {
-            vocab = entityManager.find(Vocab.class, vocabId);
+            vocab = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
             throw new VocabNotFoundException("Vocab not found");
         }
         translationToUpdate.setVocab(vocab);
         translationToUpdate.setTranslation(translation);
-        entityManager.persist(translationToUpdate);
+        vocabDAO.updateTranslation(translationToUpdate);
         return translationToUpdate;
     }
 
@@ -169,41 +143,34 @@ public class ManageVocabImpl implements ManageVocab {
     public void removeTranslation(int translationId) throws TranslationNotFoundException {
         Translation translation;
         try {
-            translation = entityManager.find(Translation.class, translationId);
+            translation = vocabDAO.getTranslation(translationId);
         } catch (Exception e) {
             throw new TranslationNotFoundException("Translation not found");
         }
-        entityManager.remove(translation);
+        vocabDAO.deleteTranslation(translation);
     }
 
     @Override
-    public Category addCategory(String categoryName) {
+    public Category addCategory(String categoryName) throws CategoryAlreadyExistsException {
         Category newCategory = new Category(categoryName);
-        entityManager.persist(newCategory);
-        return newCategory;
-    }
-
-    @Override
-    public Category getCategory(int categoryId) throws CategoryNotFoundException {
-        Category category;
         try {
-            category = entityManager.find(Category.class, categoryId);
+            vocabDAO.saveCategory(newCategory);
         } catch (Exception e) {
-            throw new CategoryNotFoundException("Category not found");
+            throw new CategoryAlreadyExistsException("Category already exists");
         }
-        return category;
+        return newCategory;
     }
 
     @Override
     public Category updateCategory(int categoryId, String categoryName) throws CategoryNotFoundException {
         Category category;
         try {
-            category = entityManager.find(Category.class, categoryId);
+            category = vocabDAO.getCategory(categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category not found");
         }
         category.setCategoryName(categoryName);
-        entityManager.persist(category);
+        vocabDAO.updateCategory(category);
         return category;
     }
 
@@ -211,10 +178,15 @@ public class ManageVocabImpl implements ManageVocab {
     public void removeCategory(int categoryId) throws CategoryNotFoundException {
         Category category;
         try {
-            category = entityManager.find(Category.class, categoryId);
+            category = vocabDAO.getCategory(categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Category not found");
         }
-        entityManager.remove(category);
+        vocabDAO.deleteCategory(category);
+    }
+
+    @Override
+    public void parseVocabList(String path) throws VocabListAlreadyExistsException {
+
     }
 }
