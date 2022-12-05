@@ -9,7 +9,7 @@ public class Round {
     /**
      * ID of the round.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "roundId")
     private int roundId;
     /**
@@ -26,12 +26,24 @@ public class Round {
     private int roundNumber;
 
     /**
+     * If the round is ongoing.
+     */
+    @Column(name = "isOngoing")
+    private boolean isOnGoing;
+
+    /**
      * Foreign Key of the used category.
      */
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
 
+    /**
+     * Default constructor for Round.
+     */
+    public Round() {
+
+    }
     /**
      * The Constructor for Round.
      * @param game The game object.
@@ -41,6 +53,7 @@ public class Round {
     public Round(Game game, int roundNumber, Category category) {
         this.game = game;
         this.roundNumber = roundNumber;
+        this.isOnGoing = true;
         this.category = category;
     }
 
@@ -74,5 +87,13 @@ public class Round {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public boolean isOnGoing() {
+        return isOnGoing;
+    }
+
+    public void setOnGoing(boolean isOnGoing) {
+        this.isOnGoing = isOnGoing;
     }
 }

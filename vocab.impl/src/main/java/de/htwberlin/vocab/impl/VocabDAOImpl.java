@@ -1,15 +1,10 @@
 package de.htwberlin.vocab.impl;
 
 import de.htwberlin.vocab.export.*;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
+import jakarta.persistence.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Repository
 public class VocabDAOImpl implements VocabDAO {
@@ -55,26 +50,20 @@ public class VocabDAOImpl implements VocabDAO {
     }
 
     @Override
-    public List<Vocab> getVocabsFromListId(int vocabListId, int numberOfVocabs) throws VocabListNotFoundException {
-        List<Vocab> vocabs = new ArrayList<>();
-        for(int i = 0; i < numberOfVocabs; i++) {
-            vocabs.add(getRandomVocabFromVocabList(vocabListId));
-        }
-        return vocabs;
-    }
-
-    @Override
-    public Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException {
+    public Vocab getRandomVocabFromVocabList(int vocabListId) throws Exception {
         Random random = new Random();
         List<Vocab> vocabs;
+        VocabList vocabList = em.find(VocabList.class, vocabListId);
+        if (vocabList == null) {
+            throw new VocabListNotFoundException("Could not find vocab list with id " + vocabListId);
+        }
         try {
-            VocabList vocabList = em.find(VocabList.class, vocabListId);
-            vocabs = em.createQuery("SELECT v FROM Vocab v WHERE v.vocabListId = :vocabListId", Vocab.class)
-                    .setParameter("vocabListId", vocabListId)
+            vocabs = em.createQuery("SELECT v FROM Vocab v WHERE v.vocabList = :vocabList", Vocab.class)
+                    .setParameter("vocabList", vocabList)
                     .getResultList();
             return vocabs.get(random.nextInt(vocabs.size()));
         } catch (Exception e) {
-            throw new VocabListNotFoundException("VocabList not found");
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -117,14 +106,16 @@ public class VocabDAOImpl implements VocabDAO {
 
     @Override
     public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException {
+        System.out.println(vocabId);
         Vocab vocab = getVocab(vocabId);
+        Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations;
         try {
-            translations = em.createQuery("SELECT t FROM Translation t JOIN WHERE t.vocabId != :vocabId", Translation.class)
-                .setParameter("vocabId", vocab.getVocabId())
+            translations = em.createQuery("SELECT t FROM Translation t WHERE t != :translation", Translation.class)
+                .setParameter("translation", vocabTranslations)
                 .getResultList();
         } catch (Exception e) {
-            throw new VocabNotFoundException("Vocab not found");
+            throw new VocabNotFoundException("Vocab not found with id " + vocabId);
         }
         Collections.shuffle(translations);
         List<Translation> result = new ArrayList<>();
@@ -138,11 +129,9 @@ public class VocabDAOImpl implements VocabDAO {
     public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException {
         try {
             Vocab vocab = em.find(Vocab.class, vocabId);
-            return em.createQuery("SELECT t FROM Translation t WHERE t.vocabId = :vocabId", Translation.class)
-                    .setParameter("vocabId", vocabId)
-                    .getSingleResult();
+            return vocab.getTranslations().iterator().next();
         } catch (Exception e) {
-            throw new VocabNotFoundException("Vocab not found");
+            throw new VocabNotFoundException("Vocab not found with id " + vocabId);
         }
     }
 
@@ -186,15 +175,19 @@ public class VocabDAOImpl implements VocabDAO {
     @Override
     public VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException {
         Random random = new Random();
-        List<VocabList> vocabLists;
         try {
             Category category = em.find(Category.class, categoryId);
-            vocabLists = em.createQuery("SELECT vl FROM VocabList vl WHERE vl.categoryId = :categoryId", VocabList.class)
-                    .setParameter("categoryId", categoryId)
-                    .getResultList();
+            if(category == null) {
+                throw new CategoryNotFoundException("Category with id " + categoryId + " not found");
+            }
+            String query = "SELECT v FROM VocabList v WHERE v.category = :category";
+            TypedQuery<VocabList> typedQuery = em.createQuery(query, VocabList.class);
+            typedQuery.setParameter("category", category);
+            List<VocabList> vocabLists = typedQuery.getResultList();
             return vocabLists.get(random.nextInt(vocabLists.size()));
         } catch (Exception e) {
-            throw new CategoryNotFoundException("Category not found");
+            System.out.println(e.getMessage());
+            throw new CategoryNotFoundException("Category not found with id " + categoryId);
         }
     }
 
@@ -232,6 +225,17 @@ public class VocabDAOImpl implements VocabDAO {
             return em.find(Category.class, categoryId);
         } catch (Exception e) {
             throw new CategoryNotFoundException("Could not find category with id " + categoryId);
+        }
+    }
+
+    @Override
+    public Category getCategoryByName(String categoryName) throws CategoryNotFoundException {
+        try {
+            return em.createQuery("SELECT c FROM Category c WHERE c.categoryName = :categoryName", Category.class)
+                    .setParameter("categoryName", categoryName)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new CategoryNotFoundException("Could not find category with name " + categoryName);
         }
     }
 }

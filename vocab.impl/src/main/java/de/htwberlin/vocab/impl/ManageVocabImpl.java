@@ -8,6 +8,17 @@ import jakarta.persistence.*;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageVocabImpl implements ManageVocab {
@@ -82,7 +93,7 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             vocabToUpdate = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
-            throw new VocabNotFoundException("Vocab not found");
+            throw new VocabNotFoundException("Vocab not found with id " + vocabId);
         }
         try {
             vocabList = vocabDAO.getVocabList(vocabListId);
@@ -101,7 +112,7 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             vocab = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
-            throw new VocabNotFoundException("Vocab not found");
+            throw new VocabNotFoundException("Vocab not found with id " + vocabId);
         }
         vocabDAO.deleteVocab(vocab);
     }
@@ -112,9 +123,9 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             vocab = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
-            throw new VocabNotFoundException("Vocab not found");
+            throw new VocabNotFoundException("Vocab not found with id " + vocabId);
         }
-        Translation newTranslation = new Translation(vocab, translation);
+        Translation newTranslation = new Translation(translation);
         vocabDAO.saveTranslation(newTranslation);
         return newTranslation;
     }
@@ -131,9 +142,8 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             vocab = vocabDAO.getVocab(vocabId);
         } catch (Exception e) {
-            throw new VocabNotFoundException("Vocab not found");
+            throw new VocabNotFoundException("Vocab not found with id " + vocabId);
         }
-        translationToUpdate.setVocab(vocab);
         translationToUpdate.setTranslation(translation);
         vocabDAO.updateTranslation(translationToUpdate);
         return translationToUpdate;
@@ -186,7 +196,63 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void parseVocabList(String path) throws VocabListAlreadyExistsException {
+    public void parseVocabList(File file) throws IOException {
+        final String TITLE_REGEX = "[{]{3}(.*?)[}]{3}";
+        final String WORD_REGEX = "[{]{1}(.*?)[}]{1}";
 
+        String textFile = Files.readString(Path.of(file.getAbsolutePath()));
+        String[] lines = textFile.split("\n");
+        String titleLine = lines[0];
+        Pattern titlePattern = Pattern.compile(TITLE_REGEX);
+        Matcher titleMatcher = titlePattern.matcher(titleLine);
+        List<String> titleMatches = new ArrayList<>();
+        while (titleMatcher.find()) {
+            titleMatches.add(titleMatcher.group(1));
+        }
+        String title = titleMatches.get(0);
+        String languageA = titleMatches.get(1);
+        String languageB = titleMatches.get(2);
+        String categoryName = titleMatches.get(3);
+
+        Category category;
+        try {
+            category = vocabDAO.getCategoryByName(categoryName);
+        } catch (Exception e) {
+            category = vocabDAO.saveCategory(new Category(categoryName));
+        }
+        VocabList newVocabList = new VocabList(category, title, languageA, languageB);
+        VocabList savedVocabList = vocabDAO.saveVocabList(newVocabList);
+        for (int i = 1; i < lines.length; i++) {
+            String line = lines[i];
+            String[] words = line.split(":");
+            Pattern wordPattern = Pattern.compile(WORD_REGEX);
+            Matcher vocabMatcher = wordPattern.matcher(words[0]);
+            Matcher translationMatcher = wordPattern.matcher(words[1]);
+            List<String> vocabMatches = new ArrayList<>();
+            List<String> translationMatches = new ArrayList<>();
+            while (vocabMatcher.find()) {
+                vocabMatches.add(vocabMatcher.group(1));
+            }
+            while (translationMatcher.find()) {
+                translationMatches.add(translationMatcher.group(1));
+            }
+            Set<Translation> translations = new HashSet<>();
+            for (String translation : translationMatches) {
+                Translation newTranslation = new Translation(translation);
+                translations.add(newTranslation);
+            }
+            Set<Vocab> vocabs = new HashSet<>();
+            for (String vocab : vocabMatches) {
+                Vocab newVocab = new Vocab(savedVocabList, vocab);
+                newVocab.setTranslations(translations);
+                vocabs.add(newVocab);
+            }
+            for (Translation translation : translations) {
+                vocabDAO.saveTranslation(translation);
+            }
+            for (Vocab vocab : vocabs) {
+                vocabDAO.saveVocab(vocab);
+            }
+        }
     }
 }

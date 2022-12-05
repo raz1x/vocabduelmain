@@ -1,5 +1,8 @@
 package de.htwberlin.vocab.export;
 
+import java.io.File;
+import java.io.IOException;
+
 public interface ManageVocab {
     /**
      * Adds a new VocabList to the database
@@ -98,9 +101,9 @@ public interface ManageVocab {
 
     /**
      * Parses a text file into a vocab list and saves it to the database
-     * @param path Path to the text file
+     * @param file The text file.
      * @throws VocabListAlreadyExistsException If the VocabList already exists
      */
-    public void parseVocabList(String path) throws VocabListAlreadyExistsException;
+    public void parseVocabList(File file) throws IOException;
 
 }

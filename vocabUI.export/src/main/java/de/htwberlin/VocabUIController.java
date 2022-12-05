@@ -1,6 +1,14 @@
 package de.htwberlin;
 
+import de.htwberlin.game.export.GameDoesNotExistException;
+import de.htwberlin.game.export.RoundDoesNotExistException;
+import de.htwberlin.game.export.UserDoesNotExistException;
 import de.htwberlin.userManager.export.UserAlreadyExistsException;
+import de.htwberlin.vocab.export.CategoryNotFoundException;
+import de.htwberlin.vocab.export.VocabListNotFoundException;
+import de.htwberlin.vocab.export.VocabNotFoundException;
+
+import java.io.IOException;
 
 public interface VocabUIController {
 
@@ -8,7 +16,7 @@ public interface VocabUIController {
     /**
      * Starts the application.
      */
-    public void run() throws UserAlreadyExistsException;
+    public void run() throws Exception;
 
     /**
      * Shows the login menu.

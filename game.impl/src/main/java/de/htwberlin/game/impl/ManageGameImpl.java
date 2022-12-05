@@ -62,7 +62,7 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public Round createRound(int gameId, int roundNumber, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException {
+    public Round createRound(int gameId, int roundNumber, int categoryId) throws Exception {
         Game game;
         Category category;
         try {
@@ -78,9 +78,13 @@ public class ManageGameImpl implements ManageGame {
         try {
             Round round = new Round(game, roundNumber, category);
             gameDAO.saveRound(round);
+            List <GameQuestion> gameQuestions = generateQuestions(category.getCategoryId(), game.getGameId(), round);
+            for (GameQuestion gameQuestion : gameQuestions) {
+                generateAnswers(gameQuestion.getGameQuestionId());
+            }
             return round;
-        } catch (EntityExistsException e) {
-            throw new EntityExistsException("Could not create round with following Ids: .");
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -98,40 +102,64 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int roundNumber) throws CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, GameDoesNotExistException, RoundDoesNotExistException {
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws Exception {
         List<GameQuestion> gameQuestions = new ArrayList<>();
         VocabList vocabList = vocabDAO.getRandomVocabListFromCategory(categoryId);
         for (int i = 0; i < 3; i++) {
-            Vocab question = vocabDAO.getRandomVocabFromVocabList(vocabList.getVocabListId());
-            Translation trueAnswer = vocabDAO.getTranslationFromVocabId(question.getVocabId());
-            Game game = gameDAO.getGame(gameId);
-            Category category = vocabDAO.getCategory(categoryId);
-            Round round = gameDAO.getRound(gameId, roundNumber);
-            GameQuestion gameQuestion = new GameQuestion(game, round, question, trueAnswer);
-            gameDAO.saveGameQuestion(gameQuestion);
-            gameQuestions.add(gameQuestion);
+            try {
+                Vocab question = vocabDAO.getRandomVocabFromVocabList(vocabList.getVocabListId());
+                Translation trueAnswer = vocabDAO.getTranslationFromVocabId(question.getVocabId());
+                Game game = gameDAO.getGame(gameId);
+                Category category = vocabDAO.getCategory(categoryId);
+                GameQuestion gameQuestion = new GameQuestion(game, round, question, trueAnswer, i);
+                gameDAO.saveGameQuestion(gameQuestion);
+                //save the true answer
+                GameAnswer gameAnswer = new GameAnswer(gameQuestion, trueAnswer);
+                gameDAO.saveGameAnswer(gameAnswer);
+                gameQuestions.add(gameQuestion);
+            } catch (Exception e) {
+                throw new Exception(e.getMessage());
+            }
         }
         return gameQuestions;
     }
 
     @Override
     public List<GameAnswer> generateAnswers(int gameQuestionId) throws VocabNotFoundException, GameQuestionDoesNotExistException {
-        List<GameAnswer> gameAnswers = new ArrayList<>();
-        List<Translation> possibleTranslations = vocabDAO.getPossibleTranslationsFromVocabId(1, 3);
         GameQuestion gameQuestion = gameDAO.getGameQuestion(gameQuestionId);
+        List<GameAnswer> gameAnswers = new ArrayList<>();
+        List<Translation> possibleTranslations = vocabDAO.getPossibleTranslationsFromVocabId(gameQuestion.getVocab().getVocabId(), 3);
         for (int i = 0; i < 3; i++) {
-            gameAnswers.add(new GameAnswer(gameQuestion, possibleTranslations.get(i)));
+            GameAnswer gameAnswer = new GameAnswer(gameQuestion, possibleTranslations.get(i));
+            gameDAO.saveGameAnswer(gameAnswer);
+            gameAnswers.add(gameAnswer);
         }
         return gameAnswers;
     }
 
     @Override
-    public GameQuestion getNextQuestion(int gameId, int round, int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException {
+    public GameQuestion getNextQuestion(int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, RoundDoesNotExistException {
+        GameQuestion previousGameQuestion = gameDAO.getGameQuestion(previousGameQuestionId);
+        Game game = gameDAO.getGame(previousGameQuestion.getGame().getGameId());
+        Round round = gameDAO.getRound(game.getGameId(), previousGameQuestion.getRound().getRoundNumber());
+        List<GameQuestion> gameQuestions = gameDAO.getGameQuestionsForRound(game.getGameId(), round.getRoundNumber());
+        for (int i = 0; i < gameQuestions.size(); i++) {
+            if (gameQuestions.get(i).getGameQuestionId() == previousGameQuestionId) {
+                return gameQuestions.get(i + 1);
+            }
+        }
         return null;
     }
 
     @Override
-    public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId, int userId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException {
-
+    public void lockInAnswer(int gameAnswerId, int userId) throws GameAnswerDoesNotExistException, UserDoesNotExistException {
+        try {
+            GameAnswer gameAnswer = gameDAO.getGameAnswer(gameAnswerId);
+            User user = userDAO.getUser(userId);
+            RoundResult roundResult = new RoundResult(gameAnswer, user);
+            gameDAO.saveRoundResult(roundResult);
+        } catch (Exception e) {
+            throw new GameAnswerDoesNotExistException("Game answer does not exist.");
+        }
     }
 }

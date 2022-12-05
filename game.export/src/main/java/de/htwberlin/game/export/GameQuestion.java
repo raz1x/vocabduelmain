@@ -10,7 +10,7 @@ public class GameQuestion {
     /**
      * ID of the question.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "gameQuestionId")
     private int gameQuestionId;
 
@@ -45,24 +45,30 @@ public class GameQuestion {
     /**
      * Index of the game question in the round.
      */
-    @Column(name = "index")
-    private int index;
+    @Column(name = "questionNumber")
+    private int questionNumber;
 
+    /**
+     * Default constructor for GameQuestion.
+     */
+    public GameQuestion() {
+
+    }
     /**
      * Constructor for GameQuestion.
      * @param game The Game object.
      * @param round The Round object.
      * @param vocab The Vocab object.
      * @param trueAnswer The foreign key of the true answer.
-     * @param index The index of the question in the round.
+     * @param questionNumber The index of the question in the round.
      */
-    public GameQuestion(Game game, Round round, Vocab vocab, Translation trueAnswer, int index) {
+    public GameQuestion(Game game, Round round, Vocab vocab, Translation trueAnswer, int questionNumber) {
         this.gameQuestionId = 0;
         this.game = game;
         this.round = round;
         this.vocab = vocab;
         this.trueAnswer = trueAnswer;
-        this.index = index;
+        this.questionNumber = questionNumber;
     }
 
     public int getGameQuestionId() {
@@ -105,11 +111,11 @@ public class GameQuestion {
         this.trueAnswer = trueAnswer;
     }
 
-    public int getIndex() {
-        return index;
+    public int getQuestionNumber() {
+        return questionNumber;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setQuestionNumber(int index) {
+        this.questionNumber = index;
     }
 }

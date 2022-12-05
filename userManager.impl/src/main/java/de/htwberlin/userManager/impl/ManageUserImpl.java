@@ -82,7 +82,16 @@ public class ManageUserImpl implements ManageUser {
     public User getById(int userId) throws UserNotFoundException {
         try {
             // get user from DB
-            return new User("MaxMuster", "test");
+            return userDAO.getUser(userId);
+        } catch (Exception e) {
+            throw new UserNotFoundException("User not found");
+        }
+    }
+
+    @Override
+    public User getByName(String userName) throws UserNotFoundException {
+        try {
+            return userDAO.getUserByName(userName);
         } catch (Exception e) {
             throw new UserNotFoundException("User not found");
         }

@@ -9,7 +9,7 @@ public class RoundResult {
     /**
      * The ID of the round result.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "roundResultId")
     private int roundResultId;
     /**
@@ -26,6 +26,12 @@ public class RoundResult {
     @JoinColumn(name = "userId")
     private User user;
 
+    /**
+     * Default constructor for RoundResult.
+     */
+    public RoundResult() {
+
+    }
     /**
      * Constructor for RoundResult.
      * @param chosenAnswer Foreign key of the chosen answer.

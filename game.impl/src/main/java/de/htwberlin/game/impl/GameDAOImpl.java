@@ -6,6 +6,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class GameDAOImpl implements GameDAO {
 
@@ -124,6 +126,31 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
+    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws GameDoesNotExistException, RoundDoesNotExistException {
+        try {
+            Game game = em.find(Game.class, gameId);
+            if (game == null) {
+                throw new GameDoesNotExistException("Could not find game with id " + gameId);
+            }
+            Round round;
+            try {
+                round = em.createQuery("SELECT r FROM Round r WHERE r.gameId = :gameId AND r.roundNumber = :roundNumber", Round.class)
+                        .setParameter("gameId", game.getGameId())
+                        .setParameter("roundNumber", roundNumber)
+                        .getSingleResult();
+            } catch (Exception e) {
+                throw new RoundDoesNotExistException("Could not find round with number " + roundNumber + " for game with id " + gameId);
+            }
+            return em.createQuery("SELECT gq FROM GameQuestion gq WHERE gq.gameId = :gameId AND gq.round = :round", GameQuestion.class)
+                    .setParameter("gameId", game.getGameId())
+                    .setParameter("round", round.getRoundNumber())
+                    .getResultList();
+        } catch (Exception e) {
+            throw new PersistenceException("Could not get game questions for round " + roundNumber + " for game with id " + gameId);
+        }
+    }
+
+    @Override
     public Round saveRound(Round round) {
         try {
             em.persist(round);
@@ -154,8 +181,9 @@ public class GameDAOImpl implements GameDAO {
     @Override
     public Round getRound(int gameId, int roundNumber) throws RoundDoesNotExistException {
         try {
-            return em.createQuery("SELECT r FROM Round r WHERE r.gameId = :game AND r.roundNumber = :roundNumber", Round.class)
-                    .setParameter("gameId", gameId)
+            Game game = em.find(Game.class, gameId);
+            return em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.roundNumber = :roundNumber", Round.class)
+                    .setParameter("gameId", game)
                     .setParameter("roundNumber", roundNumber)
                     .getSingleResult();
         } catch (Exception e) {

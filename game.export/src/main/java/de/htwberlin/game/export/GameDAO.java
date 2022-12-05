@@ -1,5 +1,7 @@
 package de.htwberlin.game.export;
 
+import java.util.List;
+
 public interface GameDAO {
     /**
      * Saves a game in the database.
@@ -81,6 +83,14 @@ public interface GameDAO {
      * @return The game question.
      */
     public GameQuestion getGameQuestion(int gameQuestionId) throws GameQuestionDoesNotExistException;
+
+    /**
+     * Returns all game questions for a given round from the database.
+     * @param gameId The id of the game.
+     * @param roundNumber The number of the round.
+     * @return The game questions.
+     */
+    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws GameDoesNotExistException, RoundDoesNotExistException;
 
     /**
      * Saves a round in the database.

@@ -31,19 +31,11 @@ public interface VocabDAO {
     public Vocab getVocab(int vocabId) throws VocabNotFoundException;
 
     /**
-     * Gets a list of vocabularies from a vocab list
-     * @param vocabListId ID of the vocab list
-     * @param numberOfVocabs Number of vocabs to be used for the questions
-     * @return A list of vocabs.
-     */
-    public List<Vocab> getVocabsFromListId(int vocabListId, int numberOfVocabs) throws VocabListNotFoundException;
-
-    /**
      * Gets a random vocab from a vocab list
      * @param vocabListId ID of the vocab list
      * @return The vocab.
      */
-    public Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException;
+    public Vocab getRandomVocabFromVocabList(int vocabListId) throws Exception;
 
     /**
      * Saves a translation in the database.
@@ -148,5 +140,12 @@ public interface VocabDAO {
      * @return The category.
      */
     public Category getCategory(int categoryId) throws CategoryNotFoundException;
+
+    /**
+     * Returns a category from the database.
+     * @param categoryName The name of the category.
+     * @return The category.
+     */
+    public Category getCategoryByName(String categoryName) throws CategoryNotFoundException;
 
 }

@@ -52,6 +52,12 @@ public interface ManageUser {
     public User getById(int userId) throws UserNotFoundException;
 
     /**
+     * Gets a user by its username
+     * @param userName The username of the user
+     * @return The user object
+     */
+    public User getByName(String userName) throws UserNotFoundException;
+    /**
      * Check if userName already exists
      * @param userName The username of the user
      * @return true if userName already exists

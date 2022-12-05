@@ -8,7 +8,7 @@ public class Game {
     /**
      * The ID of the game.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "gameId")
     private int gameId;
 

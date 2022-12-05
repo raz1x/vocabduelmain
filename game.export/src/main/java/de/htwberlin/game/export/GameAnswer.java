@@ -9,7 +9,7 @@ public class GameAnswer {
     /**
      * The ID of the answer.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "gameAnswerId")
     private int gameAnswerId;
 
@@ -27,6 +27,12 @@ public class GameAnswer {
     @JoinColumn(name = "translationId")
     private Translation translation;
 
+    /**
+     * Default constructor for GameAnswer.
+     */
+    public GameAnswer() {
+
+    }
     /**
      * Constructor for GameAnswer.
      * @param gameQuestion The GameQuestion object.

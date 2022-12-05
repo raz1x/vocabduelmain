@@ -8,7 +8,7 @@ public class VocabList {
     /**
      * Id of the vocabList.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "vocabListId")
     private int vocabListId;
 
@@ -37,6 +37,12 @@ public class VocabList {
     @Column(name = "languageB")
     private String languageB;
 
+    /**
+     * Default constructor for VocabList.
+     */
+    public VocabList() {
+
+    }
     /**
      * Constructor for VocabList
      * @param category Foreign Key of Category

@@ -2,22 +2,18 @@ package de.htwberlin.vocab.export;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "Translation")
 public class Translation {
     /**
      * Id of the translation.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "translationId")
     private int translationId;
-
-    /**
-     * Foreign Key of Vocab
-     */
-    @ManyToOne
-    @JoinColumn(name = "vocabId")
-    private Vocab vocab;
 
     /**
      * The word in Language B
@@ -26,13 +22,25 @@ public class Translation {
     private String translation;
 
     /**
+     * Foreign Key of Vocab
+     */
+    @ManyToMany(mappedBy = "translations")
+    private Set<Vocab> vocabs = new HashSet<>();
+
+
+    /**
+     * Default constructor for Translation.
+     */
+    public Translation() {
+
+    }
+
+    /**
      * Constructor for Translation
-     * @param vocab The Vocab object.
      * @param translation The word in Language B
      */
-    public Translation (Vocab vocab, String translation) {
+    public Translation (String translation) {
         this.translationId = 0;
-        this.vocab = vocab;
         this.translation = translation;
     }
 
@@ -44,19 +52,19 @@ public class Translation {
         this.translationId = translationId;
     }
 
-    public Vocab getVocab() {
-        return vocab;
-    }
-
-    public void setVocab(Vocab vocab) {
-        this.vocab = vocab;
-    }
-
     public String getTranslation() {
         return translation;
     }
 
     public void setTranslation(String translation) {
         this.translation = translation;
+    }
+
+    public Set<Vocab> getVocabs() {
+        return vocabs;
+    }
+
+    public void setVocabs(Set<Vocab> vocabs) {
+        this.vocabs = vocabs;
     }
 }

@@ -8,7 +8,7 @@ public class Category {
     /**
      * Id of the category.
      */
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "categoryId")
     private int categoryId;
 
@@ -18,6 +18,12 @@ public class Category {
     @Column(name = "categoryName")
     private String categoryName;
 
+    /**
+     * Default constructor for Category.
+     */
+    public Category() {
+
+    }
     /**
      * Constructor for Category
      * @param categoryName Name of the category

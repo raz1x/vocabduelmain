@@ -35,7 +35,7 @@ public interface ManageGame {
      * @param categoryId Foreign Key of the used category.
      * @return The Round object.
      */
-    public Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException;
+    public Round createRound(int gameId, int round, int categoryId) throws Exception;
 
     /**
      * Creates a new RoundResult.
@@ -49,10 +49,10 @@ public interface ManageGame {
      * Returns a list of generated questions.
      * @param categoryId Foreign key of the category.
      * @param gameId Foreign key of the game.
-     * @param roundNumber The round number of the game.
+     * @param round The round of the game.
      * @return A list of GameQuestion objects.
      */
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, int roundNumber) throws GameDoesNotExistException, CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, RoundDoesNotExistException;
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws Exception;
 
     /**
      * Returns a list of generated answers.
@@ -63,24 +63,18 @@ public interface ManageGame {
 
     /**
      * Returns the next Question.
-     * @param gameId Foreign key of the game.
-     * @param round The round number of the game.
-     * @param previousGameQuestionId Foreign key of the previous GameQuestion.
+     * @param previousGameQuestionId Id of the previous GameQuestion.
      * @return The GameQuestion object.
      */
-    public GameQuestion getNextQuestion(int gameId, int round, int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException;
+    public GameQuestion getNextQuestion(int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, RoundDoesNotExistException;
 
     /**
      * Locks in an answer.
-     * @param gameId Foreign key of the game.
-     * @param round The round number of the game.
-     * @param gameQuestionId Foreign key of the GameQuestion.
      * @param gameAnswerId Foreign key of the GameAnswer.
      * @param userId Foreign key of the user.
-     * @throws GameDoesNotExistException If the game does not exist.
-     * @throws GameQuestionDoesNotExistException If the game question does not exist.
      * @throws GameAnswerDoesNotExistException If the game answer does not exist.
+     * @throws UserDoesNotExistException If the user does not exist.
      */
-    public void lockInAnswer(int gameId, int round, int gameQuestionId, int gameAnswerId, int userId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, GameAnswerDoesNotExistException;
+    public void lockInAnswer(int gameAnswerId, int userId) throws GameAnswerDoesNotExistException, UserDoesNotExistException;
 
 }
