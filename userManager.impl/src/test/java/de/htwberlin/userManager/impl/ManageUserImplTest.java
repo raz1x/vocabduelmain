@@ -1,6 +1,5 @@
 package de.htwberlin.userManager.impl;
 
-import de.htwberlin.AppConfig;
 import junit.framework.TestCase;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 // Probleme mit Spring DI
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration
 public class ManageUserImplTest extends TestCase {
 
     public void testRegisterUser() {

@@ -17,12 +17,6 @@
             <artifactId>vocab.export</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>de.htwberlin</groupId>
-            <artifactId>configuration</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 </project>

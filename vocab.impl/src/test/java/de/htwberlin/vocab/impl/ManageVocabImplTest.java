@@ -1,7 +1,6 @@
 package de.htwberlin.vocab.impl;
 
 
-import de.htwberlin.AppConfig;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -10,7 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 // Probleme mit Spring DI
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration
 public class ManageVocabImplTest {
 
     public void testAddVocabList() {

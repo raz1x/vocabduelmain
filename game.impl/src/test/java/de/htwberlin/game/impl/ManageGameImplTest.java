@@ -1,6 +1,5 @@
 package de.htwberlin.game.impl;
 
-import de.htwberlin.AppConfig;
 import de.htwberlin.game.export.*;
 import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAO;
@@ -17,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 // Probleme mit Spring DI
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = AppConfig.class)
+@ContextConfiguration
 public class ManageGameImplTest {
 
     @Autowired
