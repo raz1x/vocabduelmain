@@ -8,20 +8,20 @@ public interface VocabDAO {
      * @param vocab The vocab to be saved.
      * @return The saved vocab.
      */
-    public Vocab saveVocab(Vocab vocab);
+    public Vocab saveVocab(Vocab vocab) throws VocabDAOException;
 
     /**
      * Updates a vocab from the database.
      * @param vocab The vocab to be updated.
      * @return The updated vocab.
      */
-    public Vocab updateVocab(Vocab vocab);
+    public Vocab updateVocab(Vocab vocab) throws VocabDAOException;
 
     /**
      * Deletes a vocab from the database.
      * @param vocab The vocab to be deleted.
      */
-    public void deleteVocab(Vocab vocab);
+    public void deleteVocab(Vocab vocab) throws VocabDAOException;
 
     /**
      * Returns a vocab from the database.
@@ -35,14 +35,14 @@ public interface VocabDAO {
      * @param vocabListId ID of the vocab list
      * @return The vocab.
      */
-    public Vocab getRandomVocabFromVocabList(int vocabListId) throws Exception;
+    public Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException, VocabNotFoundException;
 
     /**
      * Saves a translation in the database.
      * @param translation The translation to be saved.
      * @return The saved translation.
      */
-    public Translation saveTranslation(Translation translation);
+    public Translation saveTranslation(Translation translation) throws VocabDAOException;
 
     /**
      * Updates a translation from the database.
@@ -77,27 +77,27 @@ public interface VocabDAO {
      * @param vocabId ID of the vocab
      * @return Returns a Translation object
      */
-    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException;
+    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException, TranslationNotFoundException;
 
     /**
      * Saves a vocab list in the database.
      * @param vocabList The vocab list to be saved.
      * @return The saved vocab list.
      */
-    public VocabList saveVocabList(VocabList vocabList);
+    public VocabList saveVocabList(VocabList vocabList) throws VocabDAOException;
 
     /**
      * Updates a vocab list from the database.
      * @param vocabList The vocab list to be updated.
      * @return The updated vocab list.
      */
-    public VocabList updateVocabList(VocabList vocabList);
+    public VocabList updateVocabList(VocabList vocabList) throws VocabDAOException;
 
     /**
      * Deletes a vocab list from the database.
      * @param vocabList The vocab list to be deleted.
      */
-    public void deleteVocabList(VocabList vocabList);
+    public void deleteVocabList(VocabList vocabList) throws VocabDAOException;
 
 
     /**
@@ -119,20 +119,20 @@ public interface VocabDAO {
      * @param category The category to be saved.
      * @return The saved category.
      */
-    public Category saveCategory(Category category);
+    public Category saveCategory(Category category) throws VocabDAOException;
 
     /**
      * Updates a category from the database.
      * @param category The category to be updated.
      * @return The updated category.
      */
-    public Category updateCategory(Category category);
+    public Category updateCategory(Category category) throws VocabDAOException;
 
     /**
      * Deletes a category from the database.
      * @param category The category to be deleted.
      */
-    public void deleteCategory(Category category);
+    public void deleteCategory(Category category) throws VocabDAOException;
 
     /**
      * Returns a category from the database.
@@ -148,4 +148,9 @@ public interface VocabDAO {
      */
     public Category getCategoryByName(String categoryName) throws CategoryNotFoundException;
 
+    /**
+     * Gets a list of all categories
+     * @return Returns a list of all categories
+     */
+    public List<Category> getAllCategories() throws CategoryNotFoundException;
 }

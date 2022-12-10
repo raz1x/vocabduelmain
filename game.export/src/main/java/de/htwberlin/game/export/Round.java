@@ -31,6 +31,11 @@ public class Round {
     @Column(name = "isOngoing")
     private boolean isOnGoing;
 
+    @Column(name = "player1Answered")
+    private boolean player1Answered;
+
+    @Column(name = "player2Answered")
+    private boolean player2Answered;
     /**
      * Foreign Key of the used category.
      */
@@ -95,5 +100,32 @@ public class Round {
 
     public void setOnGoing(boolean isOnGoing) {
         this.isOnGoing = isOnGoing;
+    }
+
+    public boolean isPlayer1Answered() {
+        return player1Answered;
+    }
+
+    public void setPlayer1Answered(boolean player1Answered) {
+        this.player1Answered = player1Answered;
+    }
+
+    public boolean isPlayer2Answered() {
+        return player2Answered;
+    }
+
+    public void setPlayer2Answered(boolean player2Answered) {
+        this.player2Answered = player2Answered;
+    }
+
+    @Override
+    public String toString() {
+        return "Round{" +
+                "roundId=" + roundId +
+                ", roundNumber=" + roundNumber +
+                ", isOnGoing=" + isOnGoing +
+                ", player1Answered=" + player1Answered +
+                ", player2Answered=" + player2Answered +
+                '}';
     }
 }

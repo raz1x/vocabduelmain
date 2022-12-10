@@ -1,11 +1,10 @@
 package de.htwberlin.userManager.impl;
 
-import de.htwberlin.userManager.export.User;
-import de.htwberlin.userManager.export.UserDAO;
-import de.htwberlin.userManager.export.UserNotFoundException;
-import de.htwberlin.userManager.export.WrongPasswordException;
+import de.htwberlin.userManager.export.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -14,29 +13,29 @@ public class UserDAOImpl implements UserDAO {
     private EntityManager em;
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(User user) throws UserDAOPersistenceException {
         try {
             em.persist(user);
         } catch (PersistenceException e) {
-            throw new PersistenceException("Could not save user");
+            throw new UserDAOPersistenceException("Could not save user with id " + user.getUserId());
         }
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(User user) throws UserDAOPersistenceException {
         try {
             em.remove(user);
         } catch (PersistenceException e) {
-            throw new PersistenceException("Could not delete user");
+            throw new UserDAOPersistenceException("Could not delete user with id " + user.getUserId());
         }
     }
 
     @Override
-    public void updateUser(User user) throws PersistenceException {
+    public void updateUser(User user) throws PersistenceException, UserDAOPersistenceException {
         try {
             em.merge(user);
         } catch (PersistenceException e) {
-            throw new PersistenceException("Could not update user");
+            throw new UserDAOPersistenceException("Could not update user with id " + user.getUserId());
         }
     }
 
@@ -51,6 +50,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByName(String username) throws UserNotFoundException {
+        // TODO: Replace with NamedQuery
         Query query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
                 .setParameter("username", username);
         if (query.getResultList().size() > 0) {
@@ -61,21 +61,42 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User checkUserNameAndPassword(String username, String password) throws WrongPasswordException, PersistenceException {
+    public List<User> getAllUsers() throws UserNotFoundException {
+        // TODO: Replace with NamedQuery
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+        if (query.getResultList().size() > 0) {
+            return query.getResultList();
+        } else {
+            throw new UserNotFoundException("Could not find any users!");
+        }
+    }
+
+    @Override
+    public List<User> getOpponents(int currentUserId) throws UserNotFoundException {
+        // TODO: Replace with NamedQuery
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userId != :userId", User.class)
+                .setParameter("userId", currentUserId);
+        if (query.getResultList().size() > 0) {
+            return query.getResultList();
+        } else {
+            throw new UserNotFoundException("Could not find any users!");
+        }
+    }
+
+    @Override
+    public boolean checkUserNameAndPassword(String username, String password) throws UserNotFoundException {
         User user;
         try {
+            // TODO: Replace with NamedQuery
             user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
                     .setParameter("username", username)
                     .getSingleResult();
         } catch (PersistenceException e) {
-            throw new PersistenceException("Could not find user with username " + username);
+            throw new UserNotFoundException("Could not find user with username " + username);
         }
-        if (user.getPassword().equals(password)) {
-            return user;
-        } else {
-            throw new WrongPasswordException("Wrong password");
-        }
-
+        return user.getPassword().equals(password);
     }
+
+
 }
 

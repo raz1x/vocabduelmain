@@ -44,7 +44,7 @@ public class GameAnswer {
         this.translation = translation;
     }
 
-    public int getGameAnswer() {
+    public int getGameAnswerId() {
         return gameAnswerId;
     }
 

@@ -2,6 +2,7 @@ package de.htwberlin.vocab.export;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public interface ManageVocab {
     /**
@@ -13,7 +14,7 @@ public interface ManageVocab {
      * @param languageB Name of the language B
      * @return Returns the object of the new VocabList
      */
-    public VocabList addVocabList(String vocabListName, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException;
+    public VocabList addVocabList(String vocabListName, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException, VocabDAOException;
 
     /**
      * Updates an existing VocabList
@@ -24,13 +25,13 @@ public interface ManageVocab {
      * @param languageB Name of the language B
      * @return Returns the object of the new VocabList
      */
-    public VocabList updateVocabList(int vocabListId, String vocabTitle, int categoryId, String languageA, String languageB) throws VocabListNotFoundException, CategoryNotFoundException;
+    public VocabList updateVocabList(int vocabListId, String vocabTitle, int categoryId, String languageA, String languageB) throws VocabListNotFoundException, CategoryNotFoundException, VocabDAOException;
 
     /**
      * Removes the VocabList from the database
      * @param vocabListId ID of the VocabList
      */
-    public void removeVocabList(int vocabListId) throws VocabListNotFoundException;
+    public void removeVocabList(int vocabListId) throws VocabListNotFoundException, VocabDAOException;
 
     /**
      * Adds a new Vocab to the database
@@ -38,7 +39,7 @@ public interface ManageVocab {
      * @param vocab The word in language A
      * @return Returns the object of the new Vocab
      */
-    public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException;
+    public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException, VocabDAOException;
 
     /**
      * Updates an existing Vocab
@@ -47,13 +48,13 @@ public interface ManageVocab {
      * @param vocab The word in language A
      * @return Returns the object of the new Vocab
      */
-    public Vocab updateVocab(int vocabId, int vocabListId, String vocab) throws VocabNotFoundException;
+    public Vocab updateVocab(int vocabId, int vocabListId, String vocab) throws VocabNotFoundException, VocabDAOException;
 
     /**
      * Removes the Vocab from the database
      * @param vocabId ID of the Vocab
      */
-    public void removeVocab(int vocabId) throws VocabNotFoundException;
+    public void removeVocab(int vocabId) throws VocabNotFoundException, VocabDAOException;
 
     /**
      * Adds a new Translation to the Database
@@ -61,7 +62,7 @@ public interface ManageVocab {
      * @param translation The word in language B
      * @return Returns the object of the new Translation
      */
-    public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException;
+    public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException, VocabDAOException;
 
     /**
      * Updates an existing Translation
@@ -91,19 +92,25 @@ public interface ManageVocab {
      * @param categoryName Name of the Category
      * @return Returns the object of the new Category
      */
-    public Category updateCategory(int categoryId, String categoryName) throws CategoryNotFoundException;
+    public Category updateCategory(int categoryId, String categoryName) throws CategoryNotFoundException, VocabDAOException;
 
     /**
      * Removes the Category from the database
      * @param categoryId ID of the Category
      */
-    public void removeCategory(int categoryId) throws CategoryNotFoundException;
+    public void removeCategory(int categoryId) throws CategoryNotFoundException, VocabDAOException;
+
+    /**
+     * Returns a list of all categories
+     * @return Returns a list of all categories
+     */
+    public List<Category> getAllCategories() throws CategoryNotFoundException;
 
     /**
      * Parses a text file into a vocab list and saves it to the database
      * @param file The text file.
      * @throws VocabListAlreadyExistsException If the VocabList already exists
      */
-    public void parseVocabList(File file) throws IOException;
+    public void parseVocabList(File file) throws IOException, VocabDAOException;
 
 }

@@ -4,7 +4,6 @@ import de.htwberlin.vocab.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.persistence.*;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,7 @@ public class ManageVocabImpl implements ManageVocab {
     VocabDAO vocabDAO;
 
     @Override
-    public VocabList addVocabList(String vocabTitle, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException {
+    public VocabList addVocabList(String vocabTitle, int categoryId, int userId, String languageA, String languageB) throws CategoryNotFoundException, VocabDAOException {
         Category category;
         try {
             category = vocabDAO.getCategory(categoryId);
@@ -40,7 +39,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public VocabList updateVocabList(int vocabListId, String vocabListTitle, int categoryId, String languageA, String languageB) throws VocabListNotFoundException, CategoryNotFoundException {
+    public VocabList updateVocabList(int vocabListId, String vocabListTitle, int categoryId, String languageA, String languageB) throws VocabListNotFoundException, CategoryNotFoundException, VocabDAOException {
         VocabList vocabList;
         Category category;
         try {
@@ -63,7 +62,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void removeVocabList(int vocabListId) throws VocabListNotFoundException {
+    public void removeVocabList(int vocabListId) throws VocabListNotFoundException, VocabDAOException {
         VocabList vocabList;
         try {
             vocabList = vocabDAO.getVocabList(vocabListId);
@@ -74,7 +73,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException {
+    public Vocab addVocab(int vocabListId, String vocab) throws VocabListNotFoundException, VocabDAOException {
         VocabList vocabList;
         try {
             vocabList = vocabDAO.getVocabList(vocabListId);
@@ -87,7 +86,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public Vocab updateVocab(int vocabId, int vocabListId, String vocab) throws VocabNotFoundException {
+    public Vocab updateVocab(int vocabId, int vocabListId, String vocab) throws VocabNotFoundException, VocabDAOException {
         Vocab vocabToUpdate;
         VocabList vocabList;
         try {
@@ -107,7 +106,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void removeVocab(int vocabId) throws VocabNotFoundException{
+    public void removeVocab(int vocabId) throws VocabNotFoundException, VocabDAOException {
         Vocab vocab;
         try {
             vocab = vocabDAO.getVocab(vocabId);
@@ -118,7 +117,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException {
+    public Translation addTranslation(int vocabId, String translation) throws VocabNotFoundException, VocabDAOException {
         Vocab vocab;
         try {
             vocab = vocabDAO.getVocab(vocabId);
@@ -172,7 +171,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public Category updateCategory(int categoryId, String categoryName) throws CategoryNotFoundException {
+    public Category updateCategory(int categoryId, String categoryName) throws CategoryNotFoundException, VocabDAOException {
         Category category;
         try {
             category = vocabDAO.getCategory(categoryId);
@@ -185,7 +184,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void removeCategory(int categoryId) throws CategoryNotFoundException {
+    public void removeCategory(int categoryId) throws CategoryNotFoundException, VocabDAOException {
         Category category;
         try {
             category = vocabDAO.getCategory(categoryId);
@@ -196,7 +195,16 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void parseVocabList(File file) throws IOException {
+    public List<Category> getAllCategories() throws CategoryNotFoundException {
+        try {
+            return vocabDAO.getAllCategories();
+        } catch (Exception e) {
+            throw new CategoryNotFoundException("No categories found");
+        }
+    }
+
+    @Override
+    public void parseVocabList(File file) throws IOException, VocabDAOException {
         final String TITLE_REGEX = "[{]{3}(.*?)[}]{3}";
         final String WORD_REGEX = "[{]{1}(.*?)[}]{1}";
 

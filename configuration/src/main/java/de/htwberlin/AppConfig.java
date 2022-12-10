@@ -4,6 +4,8 @@ import de.htwberlin.game.export.GameDoesNotExistException;
 import de.htwberlin.game.export.RoundDoesNotExistException;
 import de.htwberlin.game.export.UserDoesNotExistException;
 import de.htwberlin.userManager.export.UserAlreadyExistsException;
+import de.htwberlin.userManager.export.UserDAO;
+import de.htwberlin.userManager.impl.UserDAOImpl;
 import de.htwberlin.vocab.export.CategoryNotFoundException;
 import de.htwberlin.vocab.export.VocabListNotFoundException;
 import de.htwberlin.vocab.export.VocabNotFoundException;
@@ -32,28 +34,16 @@ public class AppConfig {
 
         VocabUIController ui = (VocabUIController) applicationContext.getBean("vocabUIControllerImpl");
         ui.run();
-        //ManageGameImpl manageGame = context.getBean(ManageGameImpl.class);
-        //System.out.println(manageGame.createGame(1,2));
     }
 
     @Bean("entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setPersistenceUnitName("vocabDuelPU");
-        //emf.setDataSource(dataSource());
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         emf.setJpaVendorAdapter(vendorAdapter);
-        //emf.setJpaProperties(additionalProperties());
         return emf;
-    }
-
-    Properties additionalProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-        return properties;
     }
 
     @Bean

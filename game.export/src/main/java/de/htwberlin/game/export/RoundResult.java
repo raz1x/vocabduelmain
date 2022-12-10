@@ -27,6 +27,12 @@ public class RoundResult {
     private User user;
 
     /**
+     * If the answer is correct.
+     */
+    @Column(name = "isCorrect")
+    private boolean isCorrect;
+
+    /**
      * Default constructor for RoundResult.
      */
     public RoundResult() {
@@ -36,10 +42,12 @@ public class RoundResult {
      * Constructor for RoundResult.
      * @param chosenAnswer Foreign key of the chosen answer.
      * @param user Foreign key of the user.
+     * @param isCorrect If the answer is correct.
      */
-    public RoundResult(GameAnswer chosenAnswer, User user) {
+    public RoundResult(GameAnswer chosenAnswer, User user, boolean isCorrect) {
         this.chosenAnswer = chosenAnswer;
         this.user = user;
+        this.isCorrect = isCorrect;
     }
 
     public int getRoundResultId() {
@@ -64,5 +72,13 @@ public class RoundResult {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(boolean isCorrect) {
+        this.isCorrect = isCorrect;
     }
 }

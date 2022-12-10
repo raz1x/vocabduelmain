@@ -103,11 +103,11 @@ public class GameQuestion {
         this.vocab = vocab;
     }
 
-    public Translation getTrueAnswerId() {
+    public Translation getTrueAnswer() {
         return trueAnswer;
     }
 
-    public void setTrueAnswerId(Translation trueAnswer) {
+    public void setTrueAnswer(Translation trueAnswer) {
         this.trueAnswer = trueAnswer;
     }
 

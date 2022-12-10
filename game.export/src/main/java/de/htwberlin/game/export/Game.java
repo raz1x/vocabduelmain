@@ -25,10 +25,16 @@ public class Game {
     private int user2Id;
 
     /**
-     * The ID of the current user.
+     * The ID of the user who has to right now.
      */
     @Column(name = "currentUser")
     private int currentUser;
+
+    /**
+     * The ID of the user who starts the round.
+     */
+    @Column(name = "userStartingRound")
+    private int userStartingRound;
 
     /**
      * If the game is finished.
@@ -52,6 +58,7 @@ public class Game {
         this.user1Id = user1Id;
         this.user2Id = user2Id;
         this.currentUser = user1Id;
+        this.userStartingRound = user1Id;
         this.isOngoing = true;
     }
 
@@ -93,5 +100,21 @@ public class Game {
 
     public void setIsOngoing(boolean isOngoing) {
         this.isOngoing = isOngoing;
+    }
+
+    public int getUserStartingRound() {
+        return userStartingRound;
+    }
+
+    public void setUserStartingRound(int userStartingRound) {
+        this.userStartingRound = userStartingRound;
+    }
+
+    public int getOtherUser(int userId) {
+        if (userId == this.user1Id) {
+            return user2Id;
+        } else {
+            return user1Id;
+        }
     }
 }
