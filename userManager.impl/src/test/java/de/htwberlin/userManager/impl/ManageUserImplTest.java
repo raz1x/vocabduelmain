@@ -1,18 +1,28 @@
 package de.htwberlin.userManager.impl;
 
+import de.htwberlin.userManager.export.UserDAO;
 import junit.framework.TestCase;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 // TODO: Implement
 // Probleme mit Spring DI
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration
+@ExtendWith(MockitoExtension.class)
 public class ManageUserImplTest extends TestCase {
 
+    @InjectMocks
+    private ManageUserImpl manageUser;
+
+    @Mock
+    private UserDAO userDAO;
+
+    @Test
     public void testRegisterUser() {
+
     }
 
     public void testLoginUser() {

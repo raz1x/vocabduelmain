@@ -5,86 +5,122 @@ import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAO;
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.export.UserNotFoundException;
-import org.junit.*;
 
-import org.junit.runner.RunWith;
+import de.htwberlin.vocab.export.VocabDAO;
+import org.junit.Assert;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.mockito.Mockito.*;
 
 // TODO: Implement
 // Probleme mit Spring DI
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration
+@ExtendWith(MockitoExtension.class)
 public class ManageGameImplTest {
 
-    @Autowired
-    private ManageGame manageGame;
+    @InjectMocks
+    private ManageGameImpl manageGame;
 
-    @Autowired
+    @Mock
     private static UserDAO userDAO;
 
-    @Autowired
+    @Mock
     private static GameDAO gameDAO;
+
+    @Mock
+    private static VocabDAO vocabDAO;
 
     private static User user1;
     private static User user2;
     private static Game game;
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws UserDAOPersistenceException, UserNotFoundException, GameDAOPersistenceException {
-        userDAO.saveUser(new User("testUser1", "testUser1"));
-        userDAO.saveUser(new User("testUser2", "testUser2"));
-        user1 = userDAO.getUserByName("testUser1");
-        user2 = userDAO.getUserByName("testUser2");
-        game = gameDAO.saveGame(new Game(user1.getUserId(), user2.getUserId()));
+        user1 = new User("testuser1", "testpassword1");
+        user1.setUserId(1);
+        user2 = new User("testuser2", "testpassword2");
+        user2.setUserId(2);
+        game = new Game(1, 2);
+        game.setGameId(1);
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() throws UserDAOPersistenceException, GameDAOPersistenceException {
-        userDAO.deleteUser(user1);
-        userDAO.deleteUser(user2);
-        gameDAO.deleteGame(game);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws UserDAOPersistenceException, UserNotFoundException {
     }
 
-    @After
+    @AfterEach
     public void destroy() throws UserDAOPersistenceException, UserNotFoundException {
     }
 
     @Test
-    public void createGame() throws UserDoesNotExistException {
-        Game game = manageGame.createGame(user1.getUserId(), user2.getUserId());
-        assert (game.getGameId() > 0);
-        assert (game.getUser1Id() == user1.getUserId());
-        assert (game.getUser2Id() == user2.getUserId());
-        assert (game.getIsOngoing());
-        assert (game.getCurrentUser() == user1.getUserId());
+    public void testCreateGame() throws UserNotFoundException, UserDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        when(userDAO.getUser(1)).thenReturn(user1);
+        when(userDAO.getUser(2)).thenReturn(user2);
+        // 2. Act
+        Game game = manageGame.createGame(1, 2);
+        // 3. Assert
+        assert (game.getUser1Id() == 1);
+        assert (game.getUser2Id() == 2);
+        assert (game.getCurrentUser() == 1);
+        assert (game.getUserStartingRound() == 1);
+        verify(userDAO, times(1)).getUser(1);
+        verify(userDAO, times(1)).getUser(2);
+        verify(gameDAO, times(1)).saveGame(game);
+
+    }
+    @Test
+    public void testCreateGameUserNotFound() throws UserNotFoundException {
+        // 1. Arrange
+        // 2. Act & Assert
+        Assertions.assertThrows(UserDoesNotExistException.class, () -> manageGame.createGame(user1.getUserId(), user2.getUserId()));
+        verify(userDAO, times(1)).getUser(user1.getUserId());
     }
 
     @Test
-    public void getGame() throws GameDoesNotExistException {
-        Game game = manageGame.getGame(game.getGameId());
-        assert (game.getGameId() > 0);
-        assert (game.getUser1Id() == user1.getUserId());
-        assert (game.getUser2Id() == user2.getUserId());
-        assert (game.getIsOngoing());
-        assert (game.getCurrentUser() == user1.getUserId());
-    }
-    @Test
-    public void updateGame() {
-        // TODO: Implement
-        // Konnte nicht implementiert werden aufgrund von Problemen mit Spring DI
+    public void testGetGame() throws GameDoesNotExistException {
+        // 1. Arrange
+        when(gameDAO.getGame(1)).thenReturn(game);
+        // 2. Act
+        Game game = manageGame.getGame(1);
+        // 3. Assert
+        assert (game.getGameId() == 1);
+        assert (game.getUser1Id() == 1);
+        assert (game.getUser2Id() == 2);
+        verify(gameDAO, times(1)).getGame(1);
     }
 
+
     @Test
-    public void endGame() {
-        // TODO: Implement
-        // Konnte nicht implementiert werden aufgrund von Problemen mit Spring DI
+    public void testUpdateGame() throws GameDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        when(gameDAO.updateGame(game)).thenReturn(game);
+        // 2. Act
+        Game testGame = manageGame.updateGame(game);
+        // 3. Assert
+        assert (testGame.getUser1Id() == 1);
+        assert (testGame.getUser2Id() == 2);
+        verify(gameDAO, times(1)).updateGame(game);
+    }
+
+
+    @Test
+    public void testEndGame() throws GameDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        when(gameDAO.getGame(1)).thenReturn(game);
+        // 2. Act
+        manageGame.endGame(1);
+        // 3. Assert
+        verify(gameDAO, times(1)).deleteGame(game);
     }
 
     @Test

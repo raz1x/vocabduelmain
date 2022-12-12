@@ -37,7 +37,7 @@ public class ManageGameImpl implements ManageGame {
             gameDAO.saveGame(game);
             return game;
         } catch (Exception e) {
-            throw new UserDoesNotExistException(e.getMessage());
+            throw new UserDoesNotExistException("User does not exist");
         }
     }
 
