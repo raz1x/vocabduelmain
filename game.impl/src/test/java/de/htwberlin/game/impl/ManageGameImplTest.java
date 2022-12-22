@@ -99,6 +99,15 @@ public class ManageGameImplTest {
         verify(gameDAO, times(1)).getGame(1);
     }
 
+    @Test
+    public void testGetGameGameDoesNotExist() throws GameDoesNotExistException {
+        // 1. Arrange
+        // 2. Act
+        Assertions.assertThrows(GameDoesNotExistException.class, ()-> manageGame.getGame(1));
+        // 3. Assert
+        verify(gameDAO, times(1)).getGame(1);
+    }
+
 
     @Test
     public void testUpdateGame() throws GameDoesNotExistException, GameDAOPersistenceException {
@@ -112,6 +121,15 @@ public class ManageGameImplTest {
         verify(gameDAO, times(1)).updateGame(game);
     }
 
+    @Test
+    public void testUpdateGameGameDoesNotExist() throws GameDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        // 2. Act
+        Assertions.assertThrows(GameDoesNotExistException.class, ()-> manageGame.updateGame(game));
+        // 3. Assert
+        verify(gameDAO, times(1)).updateGame(game);
+    }
+
 
     @Test
     public void testEndGame() throws GameDoesNotExistException, GameDAOPersistenceException {
@@ -120,7 +138,18 @@ public class ManageGameImplTest {
         // 2. Act
         manageGame.endGame(1);
         // 3. Assert
-        verify(gameDAO, times(1)).deleteGame(game);
+        verify(gameDAO, times(1)).updateGame(game);
+        verify(gameDAO, times(1)).getGame(1);
+    }
+
+    @Test
+    public void testEndGameGameDoesNotExist() throws GameDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        // 2. Act
+        Assertions.assertThrows(GameDoesNotExistException.class, ()-> manageGame.endGame(1));
+        // 3. Assert
+        verify(gameDAO, times(1)).getGame(1);
+        verify(gameDAO, times(0)).updateGame(game);
     }
 
     @Test

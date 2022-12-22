@@ -44,6 +44,10 @@ public class ManageGameImpl implements ManageGame {
     @Override
     public Game getGame(int gameId) throws GameDoesNotExistException {
         try {
+            Game game = gameDAO.getGame(gameId);
+            if (game == null) {
+                throw new GameDoesNotExistException("Game does not exist");
+            }
             return gameDAO.getGame(gameId);
         } catch (Exception e) {
             throw new GameDoesNotExistException("Game " + gameId + " does not exist.");
@@ -53,8 +57,11 @@ public class ManageGameImpl implements ManageGame {
     @Override
     public Game updateGame(Game game) throws GameDoesNotExistException {
         try {
-            gameDAO.updateGame(game);
-            return game;
+            Game updatedGame = gameDAO.updateGame(game);
+            if (updatedGame == null) {
+                throw new GameDoesNotExistException("Game does not exist");
+            }
+            return updatedGame;
         } catch (Exception e) {
             throw new GameDoesNotExistException("Game " + game.getGameId() + " does not exist.");
         }
