@@ -1,6 +1,6 @@
 package de.htwberlin.vocab.impl;
 
-import de.htwberlin.vocab.export.*;
+import de.htwberlin.manageVocab.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

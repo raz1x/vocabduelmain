@@ -1,17 +1,6 @@
 package de.htwberlin;
 
-import de.htwberlin.game.export.Game;
-import de.htwberlin.game.export.GameDoesNotExistException;
-import de.htwberlin.game.export.RoundDoesNotExistException;
-import de.htwberlin.game.export.UserDoesNotExistException;
-import de.htwberlin.userManager.export.UserAlreadyExistsException;
-import de.htwberlin.userManager.export.UserNotFoundException;
-import de.htwberlin.vocab.export.CategoryNotFoundException;
-import de.htwberlin.vocab.export.VocabListNotFoundException;
-import de.htwberlin.vocab.export.VocabNotFoundException;
-import de.htwberlin.userManager.export.WrongPasswordException;
-
-import java.io.IOException;
+import de.htwberlin.manageGame.export.Game;
 
 public interface VocabUIController {
 

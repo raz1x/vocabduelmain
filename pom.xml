@@ -9,13 +9,13 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>game.export</module>
-        <module>game.impl</module>
+        <module>manageGame.export</module>
+        <module>manageGame.impl</module>
         <module>userManager.export</module>
         <module>userManager.impl</module>
         <module>vocabUI.export</module>
         <module>vocabUI.impl</module>
-        <module>vocab.export</module>
+        <module>manageVocab.export</module>
         <module>vocab.impl</module>
         <module>configuration</module>
     </modules>
@@ -34,9 +34,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>11.2.1.jre8</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

@@ -1,6 +1,6 @@
 package de.htwberlin.vocab.impl;
 
-import de.htwberlin.vocab.export.*;
+import de.htwberlin.manageVocab.export.*;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Repository;
 

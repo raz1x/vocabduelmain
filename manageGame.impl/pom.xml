@@ -9,34 +9,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>configuration</artifactId>
+    <artifactId>manageGame.impl</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>de.htwberlin</groupId>
-            <artifactId>manageGame.impl</artifactId>
+            <artifactId>manageGame.export</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.htwberlin</groupId>
-            <artifactId>vocab.impl</artifactId>
+            <artifactId>manageVocab.export</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.htwberlin</groupId>
-            <artifactId>userManager.impl</artifactId>
+            <artifactId>userManager.export</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/cglib/cglib -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>de.htwberlin</groupId>
-            <artifactId>vocabUI.impl</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
+
 </project>

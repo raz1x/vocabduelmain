@@ -2,8 +2,8 @@ package de.htwberlin.userManager.export;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "User")
+@Entity(name = "User")
+@Table(name = "Users")
 public class User {
     /**
      * Id of the user.

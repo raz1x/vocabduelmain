@@ -1,8 +1,8 @@
 package de.htwberlin;
 
-import de.htwberlin.game.export.*;
+import de.htwberlin.manageGame.export.*;
+import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
-import de.htwberlin.vocab.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
