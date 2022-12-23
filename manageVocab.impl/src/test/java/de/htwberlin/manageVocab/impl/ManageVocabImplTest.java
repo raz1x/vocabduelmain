@@ -1,4 +1,4 @@
-package de.htwberlin.vocab.impl;
+package de.htwberlin.manageVocab.impl;
 
 
 import org.junit.runner.RunWith;

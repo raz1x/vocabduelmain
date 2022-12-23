@@ -1,4 +1,4 @@
-package de.htwberlin.vocab.impl;
+package de.htwberlin.manageVocab.impl;
 
 import de.htwberlin.manageVocab.export.*;
 import org.springframework.beans.factory.annotation.Autowired;

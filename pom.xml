@@ -16,7 +16,7 @@
         <module>vocabUI.export</module>
         <module>vocabUI.impl</module>
         <module>manageVocab.export</module>
-        <module>vocab.impl</module>
+        <module>manageVocab.impl</module>
         <module>configuration</module>
     </modules>
 

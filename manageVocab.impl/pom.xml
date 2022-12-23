@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>vocab.impl</artifactId>
+    <artifactId>manageVocab.impl</artifactId>
 
     <dependencies>
         <dependency>
