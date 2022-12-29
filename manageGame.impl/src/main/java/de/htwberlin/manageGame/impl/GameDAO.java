@@ -1,5 +1,6 @@
-package de.htwberlin.manageGame.export;
+package de.htwberlin.manageGame.impl;
 
+import de.htwberlin.manageGame.export.*;
 import de.htwberlin.userManager.export.User;
 
 import java.util.List;
