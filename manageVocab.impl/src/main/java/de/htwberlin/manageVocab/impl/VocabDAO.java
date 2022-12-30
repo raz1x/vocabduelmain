@@ -1,4 +1,6 @@
-package de.htwberlin.manageVocab.export;
+package de.htwberlin.manageVocab.impl;
+
+import de.htwberlin.manageVocab.export.*;
 
 import java.util.List;
 
@@ -65,12 +67,11 @@ public interface VocabDAO {
     public Translation getTranslation(int translationId) throws TranslationNotFoundException;
 
     /**
-     * Gets a list of possible Translations from a vocab
-     * @param vocabId Id of the vocab
-     * @param numberOfTranslations Number of translations to be used for the answers
+     * Gets a list of false Translations for a vocab
+     * @param vocab The vocab
      * @return Returns a list of Translation objects
      */
-    public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException;
+    List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws VocabNotFoundException;
 
     /**
      * Gets the translation of a vocab
@@ -106,13 +107,6 @@ public interface VocabDAO {
      * @return The vocab list.
      */
     public VocabList getVocabList(int vocabListId) throws VocabListNotFoundException;
-
-    /**
-     * Gets a random vocabList from a category
-     * @param categoryId ID of the category
-     * @return Returns a VocabList object
-     */
-    public VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException;
 
     /**
      * Saves a category in the database.
@@ -153,4 +147,10 @@ public interface VocabDAO {
      * @return Returns a list of all categories
      */
     public List<Category> getAllCategories() throws CategoryNotFoundException;
+
+    /**
+     * Gets a list of all vocab lists for a category
+     * @return Returns the list of vocab lists
+     */
+    List<VocabList> getVocabListsForCategory(Category category) throws VocabListNotFoundException;
 }

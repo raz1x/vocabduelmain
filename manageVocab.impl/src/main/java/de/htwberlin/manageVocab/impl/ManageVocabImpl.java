@@ -1,6 +1,8 @@
 package de.htwberlin.manageVocab.impl;
 
 import de.htwberlin.manageVocab.export.*;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -203,6 +202,14 @@ public class ManageVocabImpl implements ManageVocab {
         }
     }
 
+    public Category getCategory(int categoryId) throws CategoryNotFoundException {
+        try {
+            return vocabDAO.getCategory(categoryId);
+        } catch (Exception e) {
+            throw new CategoryNotFoundException("Category not found");
+        }
+    }
+
     @Override
     public void parseVocabList(File file) throws IOException, VocabDAOException {
         final String TITLE_REGEX = "[{]{3}(.*?)[}]{3}";
@@ -261,6 +268,33 @@ public class ManageVocabImpl implements ManageVocab {
             for (Vocab vocab : vocabs) {
                 vocabDAO.saveVocab(vocab);
             }
+        }
+    }
+
+    @Override
+    public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException {
+        Vocab vocab = vocabDAO.getVocab(vocabId);
+        Set<Translation> vocabTranslations = vocab.getTranslations();
+        List<Translation> translations = vocabDAO.getOtherTranslationsForVocabId(vocab);
+        Collections.shuffle(translations);
+        List<Translation> result = new ArrayList<>();
+        for (int i = 0; i < numberOfTranslations; i++) {
+            result.add(translations.get(i));
+        }
+        return result;
+    }
+
+    @Override
+    public VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException, VocabListNotFoundException {
+        Random random = new Random();
+        try {
+            Category category = vocabDAO.getCategory(categoryId);
+            List<VocabList> vocabLists = vocabDAO.getVocabListsForCategory(category);
+            return vocabLists.get(random.nextInt(vocabLists.size()));
+        } catch (CategoryNotFoundException e ) {
+            throw new CategoryNotFoundException("Category not found with id " + categoryId);
+        } catch (VocabListNotFoundException e) {
+            throw new VocabListNotFoundException("No vocab lists found for category with id " + categoryId);
         }
     }
 }

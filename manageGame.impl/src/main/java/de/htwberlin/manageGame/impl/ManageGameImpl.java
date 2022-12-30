@@ -22,7 +22,7 @@ public class ManageGameImpl implements ManageGame {
     private GameDAO gameDAO;
 
     @Autowired
-    private VocabDAO vocabDAO;
+    private ManageVocab manageVocab;
 
     @Autowired
     private UserDAO userDAO;
@@ -103,7 +103,7 @@ public class ManageGameImpl implements ManageGame {
             throw new GameDoesNotExistException("Game " + gameId + " does not exist.");
         }
         try {
-            category = vocabDAO.getCategory(categoryId);
+            category = manageVocab.getCategory(categoryId);
         } catch (CategoryNotFoundException e) {
             throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
         }
@@ -115,7 +115,8 @@ public class ManageGameImpl implements ManageGame {
                 generateAnswers(gameQuestion.getGameQuestionId());
             }
             return round;
-        } catch (GameDAOPersistenceException | VocabNotFoundException | GameQuestionDoesNotExistException e) {
+        } catch (GameDAOPersistenceException | VocabNotFoundException | GameQuestionDoesNotExistException |
+                 VocabListNotFoundException e) {
             throw new GameDAOPersistenceException("Could not create round while generating questions and answers.");
         }
     }
@@ -151,20 +152,22 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws GameDAOPersistenceException, CategoryNotFoundException {
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws GameDAOPersistenceException, CategoryNotFoundException, VocabListNotFoundException {
         List<GameQuestion> gameQuestions = new ArrayList<>();
         VocabList vocabList;
         try {
-             vocabList = vocabDAO.getRandomVocabListFromCategory(categoryId);
+             vocabList = manageVocab.getRandomVocabListFromCategory(categoryId);
         } catch (CategoryNotFoundException e) {
             throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
+        } catch (VocabListNotFoundException e) {
+            throw new VocabListNotFoundException("Vocab list for category " + categoryId + " does not exist.");
         }
         for (int i = 0; i < 3; i++) {
             try {
-                Vocab question = vocabDAO.getRandomVocabFromVocabList(vocabList.getVocabListId());
-                Translation trueAnswer = vocabDAO.getTranslationFromVocabId(question.getVocabId());
+                Vocab question = manageVocab.getRandomVocabFromVocabList(vocabList.getVocabListId());
+                Translation trueAnswer = manageVocab.getTranslationFromVocabId(question.getVocabId());
                 Game game = gameDAO.getGame(gameId);
-                Category category = vocabDAO.getCategory(categoryId);
+                Category category = manageVocab.getCategory(categoryId);
                 GameQuestion gameQuestion = new GameQuestion(game, round, question, trueAnswer, i);
                 gameDAO.saveGameQuestion(gameQuestion);
                 //save the true answer
@@ -182,7 +185,7 @@ public class ManageGameImpl implements ManageGame {
     public List<GameAnswer> generateAnswers(int gameQuestionId) throws VocabNotFoundException, GameQuestionDoesNotExistException, GameDAOPersistenceException {
         GameQuestion gameQuestion = gameDAO.getGameQuestion(gameQuestionId);
         List<GameAnswer> gameAnswers = new ArrayList<>();
-        List<Translation> possibleTranslations = vocabDAO.getPossibleTranslationsFromVocabId(gameQuestion.getVocab().getVocabId(), 3);
+        List<Translation> possibleTranslations = manageVocab.getPossibleTranslationsFromVocabId(gameQuestion.getVocab().getVocabId(), 3);
         for (int i = 0; i < 3; i++) {
             GameAnswer gameAnswer = new GameAnswer(gameQuestion, possibleTranslations.get(i));
             gameDAO.saveGameAnswer(gameAnswer);

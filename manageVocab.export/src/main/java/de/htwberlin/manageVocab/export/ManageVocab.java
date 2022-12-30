@@ -106,10 +106,15 @@ public interface ManageVocab {
      */
     public List<Category> getAllCategories() throws CategoryNotFoundException;
 
+    Category getCategory(int categoryId) throws CategoryNotFoundException;
+
     /**
      * Parses a text file into a vocab list and saves it to the database
      * @param file The text file.
      */
     public void parseVocabList(File file) throws IOException, VocabDAOException;
 
+    List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException;
+
+    VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException, VocabListNotFoundException;
 }
