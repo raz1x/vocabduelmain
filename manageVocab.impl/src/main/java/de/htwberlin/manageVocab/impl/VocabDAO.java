@@ -33,13 +33,6 @@ public interface VocabDAO {
     public Vocab getVocab(int vocabId) throws VocabNotFoundException;
 
     /**
-     * Gets a random vocab from a vocab list
-     * @param vocabListId ID of the vocab list
-     * @return The vocab.
-     */
-    public Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException, VocabNotFoundException;
-
-    /**
      * Saves a translation in the database.
      * @param translation The translation to be saved.
      * @return The saved translation.
@@ -73,12 +66,6 @@ public interface VocabDAO {
      */
     List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws VocabNotFoundException;
 
-    /**
-     * Gets the translation of a vocab
-     * @param vocabId ID of the vocab
-     * @return Returns a Translation object
-     */
-    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException, TranslationNotFoundException;
 
     /**
      * Saves a vocab list in the database.
@@ -153,4 +140,6 @@ public interface VocabDAO {
      * @return Returns the list of vocab lists
      */
     List<VocabList> getVocabListsForCategory(Category category) throws VocabListNotFoundException;
+
+    List<Vocab> getVocabsForVocabList(VocabList vocabList) throws VocabNotFoundException;
 }

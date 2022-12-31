@@ -1,4 +1,9 @@
-package de.htwberlin.userManager.export;
+package de.htwberlin.userManager.impl;
+
+import de.htwberlin.userManager.export.User;
+import de.htwberlin.userManager.export.UserDAOPersistenceException;
+import de.htwberlin.userManager.export.UserNotFoundException;
+import de.htwberlin.userManager.export.WrongPasswordException;
 
 import java.util.List;
 

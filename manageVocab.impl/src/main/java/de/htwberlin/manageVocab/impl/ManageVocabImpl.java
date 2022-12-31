@@ -297,4 +297,31 @@ public class ManageVocabImpl implements ManageVocab {
             throw new VocabListNotFoundException("No vocab lists found for category with id " + categoryId);
         }
     }
+
+    @Override
+    public Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException, VocabNotFoundException {
+        Random random = new Random();
+        List<Vocab> vocabs;
+        VocabList vocabList = vocabDAO.getVocabList(vocabListId);
+
+        try {
+            vocabs = vocabDAO.getVocabsForVocabList(vocabList);
+            return vocabs.get(random.nextInt(vocabs.size()));
+        } catch (VocabNotFoundException e) {
+            throw new VocabNotFoundException("Could not find vocab for vocab list with id " + vocabListId);
+        }
+    }
+
+    @Override
+    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException, TranslationNotFoundException {
+        try {
+            Vocab vocab = vocabDAO.getVocab(vocabId);
+
+            return vocab.getTranslations().iterator().next();
+        } catch (PersistenceException e) {
+            throw new TranslationNotFoundException("Translation not found for vocab with id " + vocabId);
+        }
+    }
+
+
 }

@@ -1,6 +1,5 @@
 package de.htwberlin.userManager.impl;
 
-import de.htwberlin.userManager.export.UserDAO;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

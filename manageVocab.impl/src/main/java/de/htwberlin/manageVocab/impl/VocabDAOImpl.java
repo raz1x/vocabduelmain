@@ -43,27 +43,13 @@ public class VocabDAOImpl implements VocabDAO {
     @Override
     public Vocab getVocab(int vocabId) throws VocabNotFoundException {
         try {
-            return em.find(Vocab.class, vocabId);
+            Vocab vocab = em.find(Vocab.class, vocabId);
+            if (vocab == null) {
+                throw new VocabNotFoundException("Could not find vocab with id " + vocabId);
+            }
+            return vocab;
         } catch (PersistenceException e) {
             throw new VocabNotFoundException("Could not find vocab with id " + vocabId);
-        }
-    }
-
-    @Override
-    public Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException, VocabNotFoundException {
-        Random random = new Random();
-        List<Vocab> vocabs;
-        VocabList vocabList = em.find(VocabList.class, vocabListId);
-        if (vocabList == null) {
-            throw new VocabListNotFoundException("Could not find vocab list with id " + vocabListId);
-        }
-        try {
-            vocabs = em.createQuery("SELECT v FROM Vocab v WHERE v.vocabList = :vocabList", Vocab.class)
-                    .setParameter("vocabList", vocabList)
-                    .getResultList();
-            return vocabs.get(random.nextInt(vocabs.size()));
-        } catch (PersistenceException e) {
-            throw new VocabNotFoundException("Could not find vocab for vocab list with id " + vocabListId);
         }
     }
 
@@ -119,19 +105,6 @@ public class VocabDAOImpl implements VocabDAO {
     }
 
     @Override
-    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException, TranslationNotFoundException {
-        try {
-            Vocab vocab = em.find(Vocab.class, vocabId);
-            if (vocab == null) {
-                throw new VocabNotFoundException("Could not find vocab with id " + vocabId);
-            }
-            return vocab.getTranslations().iterator().next();
-        } catch (PersistenceException e) {
-            throw new TranslationNotFoundException("Translation not found for vocab with id " + vocabId);
-        }
-    }
-
-    @Override
     public VocabList saveVocabList(VocabList vocabList) throws VocabDAOException {
         try {
             em.persist(vocabList);
@@ -162,7 +135,11 @@ public class VocabDAOImpl implements VocabDAO {
     @Override
     public VocabList getVocabList(int vocabListId) throws VocabListNotFoundException {
         try {
-            return em.find(VocabList.class, vocabListId);
+            VocabList vocabList = em.find(VocabList.class, vocabListId);
+            if (vocabList == null) {
+                throw new VocabListNotFoundException("Could not find vocab list with id " + vocabListId);
+            }
+            return vocabList;
         } catch (PersistenceException e) {
             throw new VocabListNotFoundException("Could not find vocabList with id " + vocabListId);
         }
@@ -218,6 +195,17 @@ public class VocabDAOImpl implements VocabDAO {
             throw new VocabListNotFoundException("No vocab lists found for category with id " + category.getCategoryId());
         }
         return typedQuery.getResultList();
+    }
+
+    @Override
+    public List<Vocab> getVocabsForVocabList(VocabList vocabList) throws VocabNotFoundException {
+        try {
+            return em.createQuery("SELECT v FROM Vocab v WHERE v.vocabList = :vocabList", Vocab.class)
+                    .setParameter("vocabList", vocabList)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new VocabNotFoundException("No vocabs found for vocab list with id " + vocabList.getVocabListId());
+        }
     }
 
     @Override

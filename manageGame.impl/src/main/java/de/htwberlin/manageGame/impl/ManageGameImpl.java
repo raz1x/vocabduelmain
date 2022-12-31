@@ -2,6 +2,7 @@ package de.htwberlin.manageGame.impl;
 
 import de.htwberlin.manageGame.export.*;
 import de.htwberlin.manageVocab.export.*;
+import de.htwberlin.userManager.export.ManageUser;
 import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAO;
 
@@ -25,13 +26,13 @@ public class ManageGameImpl implements ManageGame {
     private ManageVocab manageVocab;
 
     @Autowired
-    private UserDAO userDAO;
+    private ManageUser manageUser;
 
     @Override
     public Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException {
         try {
-            User user1 = userDAO.getUser(user1Id);
-            User user2 = userDAO.getUser(user2Id);
+            User user1 = manageUser.getUser(user1Id);
+            User user2 = manageUser.getUser(user2Id);
 
             Game game = new Game(user1.getUserId(), user2.getUserId());
             gameDAO.saveGame(game);
@@ -82,7 +83,7 @@ public class ManageGameImpl implements ManageGame {
     public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException {
         User user;
         try {
-            user = userDAO.getUser(userId);
+            user = manageUser.getUser(userId);
         } catch (Exception e) {
             throw new UserDoesNotExistException("User " + userId + " does not exist.");
         }
@@ -232,7 +233,7 @@ public class ManageGameImpl implements ManageGame {
     public void lockInAnswer(int gameAnswerId, int userId, boolean isCorrect) throws GameAnswerDoesNotExistException, UserDoesNotExistException {
         try {
             GameAnswer gameAnswer = gameDAO.getGameAnswer(gameAnswerId);
-            User user = userDAO.getUser(userId);
+            User user = manageUser.getUser(userId);
             RoundResult roundResult = new RoundResult(gameAnswer, user, isCorrect);
             gameDAO.saveRoundResult(roundResult);
         } catch (Exception e) {
@@ -244,7 +245,7 @@ public class ManageGameImpl implements ManageGame {
     public int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException {
         try {
             Game game = gameDAO.getGame(gameId);
-            User user = userDAO.getUser(userId);
+            User user = manageUser.getUser(userId);
             List<RoundResult> correctRoundResults = gameDAO.getCorrectRoundResults(game, user);
             return correctRoundResults.size();
         } catch (Exception e) {

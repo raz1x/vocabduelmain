@@ -117,4 +117,18 @@ public interface ManageVocab {
     List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException;
 
     VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException, VocabListNotFoundException;
+
+    /**
+     * Gets a random vocab from a vocab list
+     * @param vocabListId ID of the vocab list
+     * @return The vocab.
+     */
+    Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException, VocabNotFoundException;
+
+    /**
+     * Gets the translation of a vocab
+     * @param vocabId ID of the vocab
+     * @return Returns a Translation object
+     */
+    Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException, TranslationNotFoundException;
 }
