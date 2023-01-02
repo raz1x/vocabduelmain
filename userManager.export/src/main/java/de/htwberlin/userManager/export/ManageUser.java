@@ -58,7 +58,7 @@ public interface ManageUser {
      * @param userId The id of the user
      * @return The user object
      */
-    public User getById(int userId) throws UserNotFoundException;
+    public User getById(int userId) throws UserNotFoundException, UserDAOPersistenceException;
 
     /**
      * Gets all users from the database

@@ -134,10 +134,10 @@ public class ManageUserImpl implements ManageUser {
     }
 
     @Override
-    public User getById(int userId) throws UserNotFoundException {
+    public User getById(int userId) throws UserNotFoundException, UserDAOPersistenceException {
         try {
             return userDAO.getUser(userId);
-        } catch (UserNotFoundException e) {
+        } catch (Exception e) {
             throw new UserNotFoundException("User not found");
         }
     }

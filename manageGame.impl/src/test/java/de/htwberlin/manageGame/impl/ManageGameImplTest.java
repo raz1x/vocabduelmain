@@ -7,11 +7,15 @@ import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -36,6 +40,7 @@ public class ManageGameImplTest {
     private static User user1;
     private static User user2;
     private static Game game;
+    private static List<Game> games;
 
     @BeforeAll
     public static void init() throws UserDAOPersistenceException, UserNotFoundException, GameDAOPersistenceException {
@@ -45,6 +50,8 @@ public class ManageGameImplTest {
         user2.setUserId(2);
         game = new Game(1, 2);
         game.setGameId(1);
+        games = new ArrayList<>();
+        games.add(game);
     }
 
     @AfterAll
@@ -60,7 +67,7 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void testCreateGame() throws UserNotFoundException, UserDoesNotExistException, GameDAOPersistenceException {
+    public void testCreateGame() throws UserNotFoundException, UserDoesNotExistException, GameDAOPersistenceException, UserDAOPersistenceException {
         // 1. Arrange
         when(manageUser.getById(1)).thenReturn(user1);
         when(manageUser.getById(2)).thenReturn(user2);
@@ -77,7 +84,7 @@ public class ManageGameImplTest {
 
     }
     @Test
-    public void testCreateGameUserNotFound() throws UserNotFoundException {
+    public void testCreateGameUserNotFound() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
         // 2. Act & Assert
         Assertions.assertThrows(UserDoesNotExistException.class, () -> manageGame.createGame(user1.getUserId(), user2.getUserId()));
@@ -151,11 +158,37 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void getAllOngoingGamesForUser() throws GameDoesNotExistException {
+    public void getAllOngoingGamesForUser() throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException, UserDAOPersistenceException {
+        // 1. Arrange
+        when(manageUser.getById(user1.getUserId())).thenReturn(user1);
+        when(gameDAO.getOngoingGamesForUser(user1)).thenReturn(games);        // 2. Act
+        List<Game> games = manageGame.getAllOngoingGamesForUser(user1.getUserId());
+        // 3. Assert
+        assert (games.size() == 1);
+        verify(gameDAO, times(1)).getOngoingGamesForUser(user1);
+        verify(manageUser, times(1)).getById(user1.getUserId());
+    }
+
+    @Test
+    public void getAllOngoingGamesForUserGamesDoNotExist() throws UserNotFoundException, UserDAOPersistenceException, GameDoesNotExistException, UserDoesNotExistException {
+        when(manageUser.getById(user1.getUserId())).thenReturn(user1);
+        List<Game> emptyList = new ArrayList<>();
+        when(gameDAO.getOngoingGamesForUser(user1)).thenReturn(emptyList);        // 2. Act
+        List<Game> games = manageGame.getAllOngoingGamesForUser(user1.getUserId());
+        // 3. Assert
+        Assertions.assertThrows(GameDoesNotExistException.class, ()-> manageGame.getAllOngoingGamesForUser(user1.getUserId()));
+        verify(gameDAO, times(1)).getOngoingGamesForUser(user1);
+        verify(manageUser, times(1)).getById(user1.getUserId());
+    }
+
+    //geht nicht
+    @Test
+    public void getAllOngoingGamesForUserUserDoesNotExist() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
         // 2. Act
-        when(gameDAO.getOngoingGamesForUser(user1)).thenReturn(new ArrayList<>());
+        Assertions.assertThrows(UserDoesNotExistException.class, ()-> manageGame.getAllOngoingGamesForUser(user1.getUserId()));
         // 3. Assert
+        verify(manageUser, times(1)).getById(user1.getUserId());
     }
 
     @Test

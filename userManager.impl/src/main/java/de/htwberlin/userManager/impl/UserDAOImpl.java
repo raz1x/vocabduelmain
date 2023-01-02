@@ -42,9 +42,15 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUser(int userId) throws UserNotFoundException {
         try {
-            return em.find(User.class, userId);
-        } catch (Exception e) {
+            User user = em.find(User.class, userId);
+            if (user == null) {
+                throw new UserNotFoundException("Could not find user with id " + userId);
+            }
+            return user;
+        } catch (UserNotFoundException e) {
             throw new UserNotFoundException("Could not find user with id " + userId);
+        } catch (PersistenceException e) {
+            throw new RuntimeException("Persistence Exception in getUser");
         }
     }
 
