@@ -4,7 +4,6 @@ import de.htwberlin.manageGame.export.*;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.ManageUser;
 import de.htwberlin.userManager.export.User;
-import de.htwberlin.userManager.export.UserDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,8 @@ public class ManageGameImpl implements ManageGame {
     @Override
     public Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException {
         try {
-            User user1 = manageUser.getUser(user1Id);
-            User user2 = manageUser.getUser(user2Id);
+            User user1 = manageUser.getById(user1Id);
+            User user2 = manageUser.getById(user2Id);
 
             Game game = new Game(user1.getUserId(), user2.getUserId());
             gameDAO.saveGame(game);
@@ -83,7 +82,7 @@ public class ManageGameImpl implements ManageGame {
     public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException {
         User user;
         try {
-            user = manageUser.getUser(userId);
+            user = manageUser.getById(userId);
         } catch (Exception e) {
             throw new UserDoesNotExistException("User " + userId + " does not exist.");
         }
@@ -119,15 +118,6 @@ public class ManageGameImpl implements ManageGame {
         } catch (GameDAOPersistenceException | VocabNotFoundException | GameQuestionDoesNotExistException |
                  VocabListNotFoundException e) {
             throw new GameDAOPersistenceException("Could not create round while generating questions and answers.");
-        }
-    }
-
-    @Override
-    public Round getRound(int roundId) throws RoundDoesNotExistException {
-        try {
-            return gameDAO.getRoundById(roundId);
-        } catch (Exception e) {
-            throw new RoundDoesNotExistException("Round " + roundId + " does not exist.");
         }
     }
 
@@ -216,24 +206,10 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public GameQuestion getNextQuestion(int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, RoundDoesNotExistException {
-        GameQuestion previousGameQuestion = gameDAO.getGameQuestion(previousGameQuestionId);
-        Game game = gameDAO.getGame(previousGameQuestion.getGame().getGameId());
-        Round round = gameDAO.getRound(game.getGameId(), previousGameQuestion.getRound().getRoundNumber());
-        List<GameQuestion> gameQuestions = gameDAO.getGameQuestionsForRound(game.getGameId(), round.getRoundNumber());
-        for (int i = 0; i < gameQuestions.size(); i++) {
-            if (gameQuestions.get(i).getGameQuestionId() == previousGameQuestionId) {
-                return gameQuestions.get(i + 1);
-            }
-        }
-        return null;
-    }
-
-    @Override
     public void lockInAnswer(int gameAnswerId, int userId, boolean isCorrect) throws GameAnswerDoesNotExistException, UserDoesNotExistException {
         try {
             GameAnswer gameAnswer = gameDAO.getGameAnswer(gameAnswerId);
-            User user = manageUser.getUser(userId);
+            User user = manageUser.getById(userId);
             RoundResult roundResult = new RoundResult(gameAnswer, user, isCorrect);
             gameDAO.saveRoundResult(roundResult);
         } catch (Exception e) {
@@ -245,7 +221,7 @@ public class ManageGameImpl implements ManageGame {
     public int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException {
         try {
             Game game = gameDAO.getGame(gameId);
-            User user = manageUser.getUser(userId);
+            User user = manageUser.getById(userId);
             List<RoundResult> correctRoundResults = gameDAO.getCorrectRoundResults(game, user);
             return correctRoundResults.size();
         } catch (Exception e) {

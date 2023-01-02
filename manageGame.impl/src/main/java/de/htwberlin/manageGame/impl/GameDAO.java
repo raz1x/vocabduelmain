@@ -20,11 +20,6 @@ public interface GameDAO {
      */
     public Game updateGame(Game game) throws GameDAOPersistenceException;
 
-    /**
-     * Deletes a game from the database.
-     * @param game The game to be deleted.
-     */
-    public void deleteGame(Game game) throws GameDAOPersistenceException;
 
     /**
      * Returns a game from the database.
@@ -48,19 +43,6 @@ public interface GameDAO {
     public GameAnswer saveGameAnswer(GameAnswer gameAnswer) throws GameDAOPersistenceException;
 
     /**
-     * Updates a game answer from the database.
-     * @param gameAnswer The game answer to be updated.
-     * @return The updated game answer.
-     */
-    public GameAnswer updateGameAnswer(GameAnswer gameAnswer) throws GameDAOPersistenceException;
-
-    /**
-     * Deletes a game answer from the database.
-     * @param gameAnswer The game answer to be deleted.
-     */
-    public void deleteGameAnswer(GameAnswer gameAnswer) throws GameDAOPersistenceException;
-
-    /**
      * Returns a game answer from the database.
      * @param gameAnswerId The id of the game answer.
      * @return The game answer.
@@ -79,19 +61,6 @@ public interface GameDAO {
      * @return The saved game question.
      */
     public GameQuestion saveGameQuestion(GameQuestion gameQuestion) throws GameDAOPersistenceException;
-
-    /**
-     * Updates a game question from the database.
-     * @param gameQuestion The game question to be updated.
-     * @return The updated game question.
-     */
-    public GameQuestion updateGameQuestion(GameQuestion gameQuestion) throws GameDAOPersistenceException;
-
-    /**
-     * Deletes a game question from the database.
-     * @param gameQuestion The game question to be deleted.
-     */
-    public void deleteGameQuestion(GameQuestion gameQuestion) throws GameDAOPersistenceException;
 
     /**
      * Returns a game question from the database.
@@ -122,11 +91,6 @@ public interface GameDAO {
      */
     public Round updateRound(Round round) throws GameDAOPersistenceException;
 
-    /**
-     * Deletes a round from the database.
-     * @param round The round to be deleted.
-     */
-    public void deleteRound(Round round) throws GameDAOPersistenceException;
 
     /**
      * Returns a round from the database.
@@ -163,26 +127,6 @@ public interface GameDAO {
      * @return The saved round result.
      */
     public RoundResult saveRoundResult(RoundResult roundResult) throws GameDAOPersistenceException;
-
-    /**
-     * Updates a round result from the database.
-     * @param roundResult The round result to be updated.
-     * @return The updated round result.
-     */
-    public RoundResult updateRoundResult(RoundResult roundResult) throws GameDAOPersistenceException;
-
-    /**
-     * Deletes a round result from the database.
-     * @param roundResult The round result to be deleted.
-     */
-    public void deleteRoundResult(RoundResult roundResult) throws GameDAOPersistenceException;
-
-    /**
-     * Returns a round result from the database.
-     * @param roundResultId The id of the round result.
-     * @return The round result.
-     */
-    public RoundResult getRoundResult(int roundResultId) throws RoundResultDoesNotExistException;
 
     /**
      * Returns all correct round results for a game from the database.

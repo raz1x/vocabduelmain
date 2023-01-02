@@ -1,12 +1,12 @@
 package de.htwberlin.manageGame.impl;
 
 import de.htwberlin.manageGame.export.*;
+import de.htwberlin.manageVocab.export.ManageVocab;
+import de.htwberlin.userManager.export.ManageUser;
 import de.htwberlin.userManager.export.User;
-import de.htwberlin.userManager.export.UserDAO;
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
-import de.htwberlin.manageVocab.export.VocabDAO;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,13 +25,13 @@ public class ManageGameImplTest {
     private ManageGameImpl manageGame;
 
     @Mock
-    private static UserDAO userDAO;
+    private static ManageUser manageUser;
 
     @Mock
     private static GameDAO gameDAO;
 
     @Mock
-    private static VocabDAO vocabDAO;
+    private static ManageVocab vocabDAO;
 
     private static User user1;
     private static User user2;
@@ -62,8 +62,8 @@ public class ManageGameImplTest {
     @Test
     public void testCreateGame() throws UserNotFoundException, UserDoesNotExistException, GameDAOPersistenceException {
         // 1. Arrange
-        when(userDAO.getUser(1)).thenReturn(user1);
-        when(userDAO.getUser(2)).thenReturn(user2);
+        when(manageUser.getById(1)).thenReturn(user1);
+        when(manageUser.getById(2)).thenReturn(user2);
         // 2. Act
         Game game = manageGame.createGame(1, 2);
         // 3. Assert
@@ -71,8 +71,8 @@ public class ManageGameImplTest {
         assert (game.getUser2Id() == 2);
         assert (game.getCurrentUser() == 1);
         assert (game.getUserStartingRound() == 1);
-        verify(userDAO, times(1)).getUser(1);
-        verify(userDAO, times(1)).getUser(2);
+        verify(manageUser, times(1)).getById(1);
+        verify(manageUser, times(1)).getById(2);
         verify(gameDAO, times(1)).saveGame(game);
 
     }
@@ -81,7 +81,7 @@ public class ManageGameImplTest {
         // 1. Arrange
         // 2. Act & Assert
         Assertions.assertThrows(UserDoesNotExistException.class, () -> manageGame.createGame(user1.getUserId(), user2.getUserId()));
-        verify(userDAO, times(1)).getUser(user1.getUserId());
+        verify(manageUser, times(1)).getById(user1.getUserId());
     }
 
     @Test
@@ -151,9 +151,11 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void getAllOngoingGamesForUser() {
-        // TODO: Implement
-        // Konnte nicht implementiert werden aufgrund von Problemen mit Spring DI
+    public void getAllOngoingGamesForUser() throws GameDoesNotExistException {
+        // 1. Arrange
+        // 2. Act
+        when(gameDAO.getOngoingGamesForUser(user1)).thenReturn(new ArrayList<>());
+        // 3. Assert
     }
 
     @Test

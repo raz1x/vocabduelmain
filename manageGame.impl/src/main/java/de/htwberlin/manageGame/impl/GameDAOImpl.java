@@ -35,15 +35,6 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void deleteGame(Game game) throws GameDAOPersistenceException {
-        try {
-            em.remove(game);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not delete game with id " + game.getGameId());
-        }
-    }
-
-    @Override
     public Game getGame(int gameId) throws GameDoesNotExistException {
         try {
             return em.find(Game.class, gameId);
@@ -75,23 +66,6 @@ public class GameDAOImpl implements GameDAO {
         }
     }
 
-    @Override
-    public GameAnswer updateGameAnswer(GameAnswer gameAnswer) throws GameDAOPersistenceException {
-        try {
-            return em.merge(gameAnswer);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not update game answer with id " + gameAnswer.getGameAnswerId());
-        }
-    }
-
-    @Override
-    public void deleteGameAnswer(GameAnswer gameAnswer) throws GameDAOPersistenceException {
-        try {
-            em.remove(gameAnswer);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not delete game answer with id " + gameAnswer.getGameAnswerId());
-        }
-    }
 
     @Override
     public GameAnswer getGameAnswer(int gameAnswerId) throws GameAnswerDoesNotExistException {
@@ -120,24 +94,6 @@ public class GameDAOImpl implements GameDAO {
             return gameQuestion;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not save game question with id " + gameQuestion.getGameQuestionId());
-        }
-    }
-
-    @Override
-    public GameQuestion updateGameQuestion(GameQuestion gameQuestion) throws GameDAOPersistenceException {
-        try {
-            return em.merge(gameQuestion);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not update game question with id " + gameQuestion.getGameQuestionId());
-        }
-    }
-
-    @Override
-    public void deleteGameQuestion(GameQuestion gameQuestion) throws GameDAOPersistenceException {
-        try {
-            em.remove(gameQuestion);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not delete game question with id " + gameQuestion.getGameQuestionId());
         }
     }
 
@@ -194,15 +150,6 @@ public class GameDAOImpl implements GameDAO {
     }
 
     @Override
-    public void deleteRound(Round round) throws GameDAOPersistenceException {
-        try {
-            em.remove(round);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not delete round with id " + round.getRoundId());
-        }
-    }
-
-    @Override
     public Round getRound(int gameId, int roundNumber) throws RoundDoesNotExistException {
         try {
             Game game = em.find(Game.class, gameId);
@@ -255,33 +202,6 @@ public class GameDAOImpl implements GameDAO {
             return roundResult;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not save round result with id " + roundResult.getRoundResultId());
-        }
-    }
-
-    @Override
-    public RoundResult updateRoundResult(RoundResult roundResult) throws GameDAOPersistenceException {
-        try {
-            return em.merge(roundResult);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not update round result with id " + roundResult.getRoundResultId());
-        }
-    }
-
-    @Override
-    public void deleteRoundResult(RoundResult roundResult) throws GameDAOPersistenceException {
-        try {
-            em.remove(roundResult);
-        } catch (Exception e) {
-            throw new GameDAOPersistenceException("Could not delete round result with id " + roundResult.getRoundResultId());
-        }
-    }
-
-    @Override
-    public RoundResult getRoundResult(int roundResultId) throws RoundResultDoesNotExistException {
-        try {
-            return em.find(RoundResult.class, roundResultId);
-        } catch (Exception e) {
-            throw new RoundResultDoesNotExistException("Could not find round result with id " + roundResultId);
         }
     }
 

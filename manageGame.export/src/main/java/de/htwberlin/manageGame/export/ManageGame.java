@@ -11,33 +11,33 @@ public interface ManageGame {
      * @param user2Id The ID of the second user.
      * @return The Game object.
      */
-    public Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException;
+    Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException;
 
     /**
      * Gets an existing game from the database.
      * @param gameId The ID of the game.
      * @return The Game object.
      */
-    public Game getGame(int gameId) throws GameDoesNotExistException;
+    Game getGame(int gameId) throws GameDoesNotExistException;
 
     /**
      * Updates a game.
      * @param game The Game object.
      * @return The updated Game object.
      */
-    public Game updateGame(Game game) throws GameDoesNotExistException;
+    Game updateGame(Game game) throws GameDoesNotExistException;
 
     /**
      * Finishes a game.
      * @param gameId The ID of the game.
      */
-    public void endGame(int gameId) throws GameDoesNotExistException;
+    void endGame(int gameId) throws GameDoesNotExistException;
 
     /**
      * Gets all ongoing games for a user.
      * @param userId The ID of the user.
      */
-    public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException;
+    List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException;
 
     /**
      * Creates a new round.
@@ -46,27 +46,20 @@ public interface ManageGame {
      * @param categoryId Foreign Key of the used category.
      * @return The Round object.
      */
-    public Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException;
-
-    /**
-     * Gets a round from the database.
-     * @param roundId Id of the round.
-     * @return The round object.
-     */
-    public Round getRound(int roundId) throws RoundDoesNotExistException;
+    Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException;
 
     /**
      * Updates a round.
      * @param round The round object.
      * @return The updated round object.
      */
-    public Round updateRound(Round round) throws RoundDoesNotExistException;
+    Round updateRound(Round round) throws RoundDoesNotExistException;
 
     /**
      * Ends a round.
      * @param roundId Id of the round.
      */
-    public void endRound(int roundId) throws RoundDoesNotExistException;
+    void endRound(int roundId) throws RoundDoesNotExistException;
 
     /**
      * Returns a list of generated questions.
@@ -75,14 +68,14 @@ public interface ManageGame {
      * @param round The round of the game.
      * @return A list of GameQuestion objects.
      */
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws Exception;
+    List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws Exception;
 
     /**
      * Returns a list of generated answers.
      * @param gameQuestionId Foreign key of the GameQuestion.
      * @return A list of GameAnswer objects.
      */
-    public List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, GameDAOPersistenceException;
+    List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, GameDAOPersistenceException;
 
     /**
      * Returns a list of all game questions for a round of a game.
@@ -90,21 +83,15 @@ public interface ManageGame {
      * @param roundNumber The round number of the game.
      * @return A list of GameQuestion objects.
      */
-    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws RoundDoesNotExistException;
+    List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws RoundDoesNotExistException;
 
     /**
      * Returns a list of all game answers for a game question.
      * @param gameQuestionId Foreign key of the game question.
      * @return A list of GameAnswer objects.
      */
-    public List<GameAnswer> getGameAnswersForGameQuestion(int gameQuestionId) throws GameAnswerDoesNotExistException;
+    List<GameAnswer> getGameAnswersForGameQuestion(int gameQuestionId) throws GameAnswerDoesNotExistException;
 
-    /**
-     * Returns the next Question.
-     * @param previousGameQuestionId Id of the previous GameQuestion.
-     * @return The GameQuestion object.
-     */
-    public GameQuestion getNextQuestion(int previousGameQuestionId) throws GameDoesNotExistException, GameQuestionDoesNotExistException, RoundDoesNotExistException;
 
     /**
      * Locks in an answer.
@@ -114,7 +101,7 @@ public interface ManageGame {
      * @throws GameAnswerDoesNotExistException If the game answer does not exist.
      * @throws UserDoesNotExistException If the user does not exist.
      */
-    public void lockInAnswer(int gameAnswerId, int userId, boolean isCorrect) throws GameAnswerDoesNotExistException, UserDoesNotExistException;
+    void lockInAnswer(int gameAnswerId, int userId, boolean isCorrect) throws GameAnswerDoesNotExistException, UserDoesNotExistException;
 
     /**
      * Returns the score of a user.
@@ -122,19 +109,19 @@ public interface ManageGame {
      * @param gameId Foreign key of the game.
      * @return The score of the user.
      */
-    public int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException;
+    int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException;
 
     /**
      * Returns the latest round number of the game.
      * @param gameId Foreign key of the game.
      * @return The round number.
      */
-    public int getLatestRoundForGame(int gameId) throws GameDoesNotExistException;
+    int getLatestRoundForGame(int gameId) throws GameDoesNotExistException;
 
     /**
      * Returns the latest round of the game.
      * @param gameId Foreign key of the game.
      * @return The round object.
      */
-    public Round getOngoingRoundForGame(int gameId) throws RoundDoesNotExistException;
+    Round getOngoingRoundForGame(int gameId) throws RoundDoesNotExistException;
 }
