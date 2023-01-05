@@ -1,56 +1,41 @@
 package de.htwberlin.manageVocab.impl;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.*;
 
-// TODO: Implement
-// Probleme mit Spring DI
+class ManageVocabImplTest {
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration
-public class ManageVocabImplTest {
-
-    public void testAddVocabList() {
+    @BeforeEach
+    void setUp() {
     }
 
-    public void testUpdateVocabList() {
+    @Test
+    void getAllCategories() {
     }
 
-    public void testRemoveVocabList() {
+    @Test
+    void getCategory() {
     }
 
-    public void testAddVocab() {
+    @Test
+    void parseVocabList() {
     }
 
-    public void testUpdateVocab() {
+    @Test
+    void getPossibleTranslationsFromVocabId() {
     }
 
-    public void testRemoveVocab() {
+    @Test
+    void getRandomVocabListFromCategory() {
     }
 
-    public void testAddTranslation() {
+    @Test
+    void getRandomVocabFromVocabList() {
     }
 
-    public void testUpdateTranslation() {
-    }
-
-    public void testRemoveTranslation() {
-    }
-
-    public void testAddCategory() {
-    }
-
-    public void testUpdateCategory() {
-    }
-
-    public void testRemoveCategory() {
-    }
-
-    public void testGetAllCategories() {
-    }
-
-    public void testParseVocabList() {
+    @Test
+    void getTranslationFromVocabId() {
     }
 }

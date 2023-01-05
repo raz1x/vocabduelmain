@@ -31,7 +31,7 @@ public interface ManageVocab {
      * @param numberOfTranslations The number of translations to be returned
      * @return Returns a list of VocabList objects
      */
-    List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException;
+    List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException, VocabDAOException, TranslationNotFoundException;
 
     /**
      * Gets a random vocab list from a category

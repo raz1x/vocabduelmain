@@ -1,6 +1,7 @@
 package de.htwberlin.manageGame.export;
 
 import de.htwberlin.manageVocab.export.*;
+import de.htwberlin.userManager.export.UserNotFoundException;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public interface ManageGame {
      * Gets all ongoing games for a user.
      * @param userId The ID of the user.
      */
-    List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException;
+    List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException;
 
     /**
      * Creates a new round.
@@ -46,7 +47,7 @@ public interface ManageGame {
      * @param categoryId Foreign Key of the used category.
      * @return The Round object.
      */
-    Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException;
+    Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException;
 
     /**
      * Updates a round.
@@ -75,7 +76,7 @@ public interface ManageGame {
      * @param gameQuestionId Foreign key of the GameQuestion.
      * @return A list of GameAnswer objects.
      */
-    List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, GameDAOPersistenceException;
+    List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, GameDAOPersistenceException, VocabDAOException, TranslationNotFoundException;
 
     /**
      * Returns a list of all game questions for a round of a game.

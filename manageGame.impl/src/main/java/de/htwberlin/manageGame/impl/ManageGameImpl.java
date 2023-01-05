@@ -5,6 +5,7 @@ import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.ManageUser;
 import de.htwberlin.userManager.export.User;
 
+import de.htwberlin.userManager.export.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -79,12 +80,12 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException {
+    public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserNotFoundException {
         User user;
         try {
             user = manageUser.getById(userId);
         } catch (Exception e) {
-            throw new UserDoesNotExistException("User " + userId + " does not exist.");
+            throw new UserNotFoundException("User " + userId + " does not exist.");
         }
         List<Game> games = gameDAO.getOngoingGamesForUser(user);
         if (games.isEmpty()) {
@@ -94,7 +95,7 @@ public class ManageGameImpl implements ManageGame {
      }
 
     @Override
-    public Round createRound(int gameId, int roundNumber, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException {
+    public Round createRound(int gameId, int roundNumber, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException {
         Game game;
         Category category;
         try {
@@ -120,6 +121,10 @@ public class ManageGameImpl implements ManageGame {
             throw new GameQuestionDoesNotExistException("Could not find game question for round " + roundNumber + " in game " + gameId);
         } catch (VocabListNotFoundException e) {
             throw new VocabListNotFoundException("Could not find vocab list for category " + categoryId);
+        } catch (TranslationNotFoundException e) {
+            throw new TranslationNotFoundException("Could not find translation for vocab.");
+        } catch (VocabDAOException e) {
+            throw new RuntimeException("Error while persisting vocab.");
         }
     }
 
@@ -175,7 +180,7 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public List<GameAnswer> generateAnswers(int gameQuestionId) throws VocabNotFoundException, GameQuestionDoesNotExistException, GameDAOPersistenceException {
+    public List<GameAnswer> generateAnswers(int gameQuestionId) throws VocabNotFoundException, GameQuestionDoesNotExistException, GameDAOPersistenceException, VocabDAOException, TranslationNotFoundException {
         GameQuestion gameQuestion = gameDAO.getGameQuestion(gameQuestionId);
         List<GameAnswer> gameAnswers = new ArrayList<>();
         List<Translation> possibleTranslations = manageVocab.getPossibleTranslationsFromVocabId(gameQuestion.getVocab().getVocabId(), 3);

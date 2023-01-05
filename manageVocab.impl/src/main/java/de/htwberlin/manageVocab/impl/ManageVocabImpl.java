@@ -103,7 +103,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException {
+    public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException, VocabDAOException, TranslationNotFoundException {
         Vocab vocab = vocabDAO.getVocab(vocabId);
         Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations = vocabDAO.getOtherTranslationsForVocabId(vocab);
@@ -151,6 +151,8 @@ public class ManageVocabImpl implements ManageVocab {
             return vocab.getTranslations().iterator().next();
         } catch (PersistenceException e) {
             throw new TranslationNotFoundException("Translation not found for vocab with id " + vocabId);
+        } catch (VocabDAOException e) {
+            throw new RuntimeException(e);
         }
     }
 
