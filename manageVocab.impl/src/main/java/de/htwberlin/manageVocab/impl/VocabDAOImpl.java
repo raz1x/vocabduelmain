@@ -23,25 +23,7 @@ public class VocabDAOImpl implements VocabDAO {
     }
 
     @Override
-    public Vocab updateVocab(Vocab vocab) throws VocabDAOException {
-        try {
-            return em.merge(vocab);
-        } catch (PersistenceException e) {
-            throw new VocabDAOException("Could not update vocab with id " + vocab.getVocabId());
-        }
-    }
-
-    @Override
-    public void deleteVocab(Vocab vocab) throws VocabDAOException {
-        try {
-            em.remove(vocab);
-        } catch (PersistenceException e) {
-            throw new VocabDAOException("Could not delete vocab with id " + vocab.getVocabId());
-        }
-    }
-
-    @Override
-    public Vocab getVocab(int vocabId) throws VocabNotFoundException {
+    public Vocab getVocab(int vocabId) throws VocabNotFoundException, VocabDAOException {
         try {
             Vocab vocab = em.find(Vocab.class, vocabId);
             if (vocab == null) {
@@ -49,7 +31,7 @@ public class VocabDAOImpl implements VocabDAO {
             }
             return vocab;
         } catch (PersistenceException e) {
-            throw new VocabNotFoundException("Could not find vocab with id " + vocabId);
+            throw new VocabDAOException("Persistence error while getting vocab with id " + vocabId);
         }
     }
 
@@ -64,43 +46,20 @@ public class VocabDAOImpl implements VocabDAO {
     }
 
     @Override
-    public Translation updateTranslation(Translation translation) {
-        try {
-            return em.merge(translation);
-        } catch (PersistenceException e) {
-            throw new PersistenceException("Could not update translation");
-        }
-    }
-
-    @Override
-    public void deleteTranslation(Translation translation) {
-        try {
-            em.remove(translation);
-        } catch (PersistenceException e) {
-            throw new PersistenceException("Could not delete translation");
-        }
-    }
-
-    @Override
-    public Translation getTranslation(int translationId) throws TranslationNotFoundException {
-        try {
-            return em.find(Translation.class, translationId);
-        } catch (PersistenceException e) {
-            throw new TranslationNotFoundException("Could not find translation with id " + translationId);
-        }
-    }
-
-    @Override
-    public List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws VocabNotFoundException {
+    public List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws TranslationNotFoundException, VocabDAOException {
         Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations;
         try {
-            return em.createQuery("SELECT t FROM Translation t JOIN t.vocabs v WHERE t != :translation AND v.vocabList = :vocabList", Translation.class)
+            translations = em.createQuery("SELECT t FROM Translation t JOIN t.vocabs v WHERE t != :translation AND v.vocabList = :vocabList", Translation.class)
                     .setParameter("translation", vocabTranslations)
                     .setParameter("vocabList", vocab.getVocabList())
                     .getResultList();
+            if (translations == null) {
+                throw new TranslationNotFoundException("Could not find other translations for vocab with id " + vocab.getVocabId());
+            }
+            return translations;
         } catch (PersistenceException e) {
-            throw new VocabNotFoundException("Vocab not found with id " + vocab.getVocabId());
+            throw new VocabDAOException("Persistence error while getting other translations for vocab with id " + vocab.getVocabId());
         }
     }
 
@@ -111,24 +70,6 @@ public class VocabDAOImpl implements VocabDAO {
             return vocabList;
         } catch (PersistenceException e) {
             throw new VocabDAOException("Could not save vocabList with id " + vocabList.getVocabListId());
-        }
-    }
-
-    @Override
-    public VocabList updateVocabList(VocabList vocabList) throws VocabDAOException {
-        try {
-            return em.merge(vocabList);
-        } catch (PersistenceException e) {
-            throw new VocabDAOException("Could not update vocabList with id " + vocabList.getVocabListId());
-        }
-    }
-
-    @Override
-    public void deleteVocabList(VocabList vocabList) throws VocabDAOException {
-        try {
-            em.remove(vocabList);
-        } catch (PersistenceException e) {
-            throw new VocabDAOException("Could not delete vocabList with id " + vocabList.getVocabListId());
         }
     }
 
@@ -152,24 +93,6 @@ public class VocabDAOImpl implements VocabDAO {
             return category;
         } catch (PersistenceException e) {
             throw new VocabDAOException("Could not save category with id " + category.getCategoryId());
-        }
-    }
-
-    @Override
-    public Category updateCategory(Category category) throws VocabDAOException {
-        try {
-            return em.merge(category);
-        } catch (PersistenceException e) {
-            throw new VocabDAOException("Could not update category with id " + category.getCategoryId());
-        }
-    }
-
-    @Override
-    public void deleteCategory(Category category) throws VocabDAOException {
-        try {
-            em.remove(category);
-        } catch (PersistenceException e) {
-            throw new VocabDAOException("Could not delete category with id" + category.getCategoryId());
         }
     }
 

@@ -17,7 +17,7 @@ public interface VocabDAO {
      * @param vocabId The id of the vocab.
      * @return The vocab.
      */
-    Vocab getVocab(int vocabId) throws VocabNotFoundException;
+    Vocab getVocab(int vocabId) throws VocabNotFoundException, VocabDAOException;
 
     /**
      * Saves a translation in the database.
@@ -31,7 +31,7 @@ public interface VocabDAO {
      * @param vocab The vocab
      * @return Returns a list of Translation objects
      */
-    List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws VocabNotFoundException;
+    List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws VocabNotFoundException, TranslationNotFoundException, VocabDAOException;
 
 
     /**

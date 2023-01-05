@@ -1,7 +1,7 @@
 package de.htwberlin.manageGame.impl;
 
 import de.htwberlin.manageGame.export.*;
-import de.htwberlin.manageVocab.export.ManageVocab;
+import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.ManageUser;
 import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
@@ -25,22 +25,23 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ManageGameImplTest {
 
+    @Mock
+    private ManageUser manageUser;
+
+    @Mock
+    private GameDAO gameDAO;
+
+    @Mock
+    private ManageVocab manageVocab;
+
     @InjectMocks
     private ManageGameImpl manageGame;
-
-    @Mock
-    private static ManageUser manageUser;
-
-    @Mock
-    private static GameDAO gameDAO;
-
-    @Mock
-    private static ManageVocab vocabDAO;
 
     private static User user1;
     private static User user2;
     private static Game game;
     private static List<Game> games;
+    private static Category category;
 
     @BeforeAll
     public static void init() throws UserDAOPersistenceException, UserNotFoundException, GameDAOPersistenceException {
@@ -52,6 +53,8 @@ public class ManageGameImplTest {
         game.setGameId(1);
         games = new ArrayList<>();
         games.add(game);
+        category = new Category("testcategory");
+        category.setCategoryId(1);
     }
 
     @AfterAll
@@ -181,7 +184,7 @@ public class ManageGameImplTest {
         verify(manageUser, times(1)).getById(user1.getUserId());
     }
 
-    //geht nicht
+    //TODO: geht nicht
     @Test
     public void getAllOngoingGamesForUserUserDoesNotExist() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
@@ -192,27 +195,49 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void createRound() {
-        // TODO: Implement
-        // Konnte nicht implementiert werden aufgrund von Problemen mit Spring DI
+    public void createRound() throws Exception {
+        // 1. Arrange
+        ManageGameImpl manageGameSpy = spy(ManageGameImpl.class);
+        Round round = new Round(game, 1, category);
+        List<GameQuestion> gameQuestions = new ArrayList<>();
+        when(gameDAO.getGame(game.getGameId())).thenReturn(game);
+        when(manageVocab.getCategory(1)).thenReturn(category);
+        //when(manageGameSpy.generateQuestions(1, 1, round)).thenReturn(gameQuestions);
+        lenient().doReturn(gameQuestions).when(manageGameSpy).generateQuestions(anyInt(), anyInt(), any(Round.class));
+        // 2. Act
+        manageGameSpy.createRound(game.getGameId(), 1, 1);
+        // 3. Assert
+        verify(gameDAO, times(1)).getGame(game.getGameId());
+        verify(manageVocab, times(1)).getCategory(1);
+        verify(gameDAO, times(1)).updateGame(game);
+        verify(gameDAO, times(1)).saveRound(new Round(game, 1, category));
     }
 
     @Test
-    public void getRound() {
-        // TODO: Implement
-        // Konnte nicht implementiert werden aufgrund von Problemen mit Spring DI
+    public void updateRound() throws GameDAOPersistenceException, RoundDoesNotExistException {
+        // 1. Arrange
+        Round round = new Round(game, 1, category);
+        when(gameDAO.updateRound(round)).thenReturn(round);
+        // 2. Act
+        Round testRound = manageGame.updateRound(round);
+        // 3. Assert
+        assert (testRound.getGame().getGameId() == 1);
+        assert (testRound.getRoundNumber() == 1);
+        assert (testRound.getCategory().getCategoryId() == 1);
+        verify(gameDAO, times(1)).updateRound(round);
     }
 
     @Test
-    public void updateRound() {
-        // TODO: Implement
-        // Konnte nicht implementiert werden aufgrund von Problemen mit Spring DI
-    }
-
-    @Test
-    public void endRound() {
-        // TODO: Implement
-        // Konnte nicht implementiert werden aufgrund von Problemen mit Spring DI
+    public void endRound() throws RoundDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        Round round = new Round(game, 1, category);
+        Round spyround = spy(round);
+        when(gameDAO.getRoundById(anyInt())).thenReturn(spyround);
+        // 2. Act
+        manageGame.endRound(1);
+        // 3. Assert
+        verify(gameDAO, times(1)).updateRound(round);
+        verify(spyround, times(1)).setOnGoing(false);
     }
 
     @Test

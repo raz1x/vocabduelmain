@@ -13,14 +13,6 @@ public class GameQuestion {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "gameQuestionId")
     private int gameQuestionId;
-
-    /**
-     * Foreign key of the game.
-     */
-    @ManyToOne
-    @JoinColumn(name = "gameId")
-    private Game game;
-
     /**
      * Number of the round.
      */
@@ -56,15 +48,13 @@ public class GameQuestion {
     }
     /**
      * Constructor for GameQuestion.
-     * @param game The Game object.
      * @param round The Round object.
      * @param vocab The Vocab object.
      * @param trueAnswer The foreign key of the true answer.
      * @param questionNumber The index of the question in the round.
      */
-    public GameQuestion(Game game, Round round, Vocab vocab, Translation trueAnswer, int questionNumber) {
+    public GameQuestion(Round round, Vocab vocab, Translation trueAnswer, int questionNumber) {
         this.gameQuestionId = 0;
-        this.game = game;
         this.round = round;
         this.vocab = vocab;
         this.trueAnswer = trueAnswer;
@@ -77,14 +67,6 @@ public class GameQuestion {
 
     public void setGameQuestionId(int gameQuestionId) {
         this.gameQuestionId = gameQuestionId;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
     }
 
     public Round getRound() {

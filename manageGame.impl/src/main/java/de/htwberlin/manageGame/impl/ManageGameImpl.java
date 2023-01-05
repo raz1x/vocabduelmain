@@ -48,7 +48,7 @@ public class ManageGameImpl implements ManageGame {
             if (game == null) {
                 throw new GameDoesNotExistException("Game does not exist");
             }
-            return gameDAO.getGame(gameId);
+            return game;
         } catch (Exception e) {
             throw new GameDoesNotExistException("Game " + gameId + " does not exist.");
         }
@@ -94,30 +94,32 @@ public class ManageGameImpl implements ManageGame {
      }
 
     @Override
-    public Round createRound(int gameId, int roundNumber, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException {
+    public Round createRound(int gameId, int roundNumber, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException {
         Game game;
         Category category;
         try {
             game = gameDAO.getGame(gameId);
+            category = manageVocab.getCategory(categoryId);
         } catch (GameDoesNotExistException e) {
             throw new GameDoesNotExistException("Game " + gameId + " does not exist.");
-        }
-        try {
-            category = manageVocab.getCategory(categoryId);
         } catch (CategoryNotFoundException e) {
             throw new CategoryNotFoundException("Category " + categoryId + " does not exist.");
         }
         try {
-            Round round = new Round(game, roundNumber, category);
-            gameDAO.saveRound(round);
-            List <GameQuestion> gameQuestions = generateQuestions(category.getCategoryId(), game.getGameId(), round);
+            Round round = gameDAO.saveRound(new Round(game, roundNumber, category));
+            List<GameQuestion> gameQuestions = generateQuestions(category.getCategoryId(), game.getGameId(), round);
             for (GameQuestion gameQuestion : gameQuestions) {
                 generateAnswers(gameQuestion.getGameQuestionId());
             }
             return round;
-        } catch (GameDAOPersistenceException | VocabNotFoundException | GameQuestionDoesNotExistException |
-                 VocabListNotFoundException e) {
-            throw new GameDAOPersistenceException("Could not create round while generating questions and answers.");
+        } catch (GameDAOPersistenceException e) {
+            throw new RuntimeException("Error while persisting round.");
+        } catch (VocabNotFoundException e) {
+            throw new VocabNotFoundException("Could not find vocab for category " + categoryId);
+        } catch (GameQuestionDoesNotExistException e) {
+            throw new GameQuestionDoesNotExistException("Could not find game question for round " + roundNumber + " in game " + gameId);
+        } catch (VocabListNotFoundException e) {
+            throw new VocabListNotFoundException("Could not find vocab list for category " + categoryId);
         }
     }
 
@@ -159,7 +161,7 @@ public class ManageGameImpl implements ManageGame {
                 Translation trueAnswer = manageVocab.getTranslationFromVocabId(question.getVocabId());
                 Game game = gameDAO.getGame(gameId);
                 Category category = manageVocab.getCategory(categoryId);
-                GameQuestion gameQuestion = new GameQuestion(game, round, question, trueAnswer, i);
+                GameQuestion gameQuestion = new GameQuestion(round, question, trueAnswer, i);
                 gameDAO.saveGameQuestion(gameQuestion);
                 //save the true answer
                 GameAnswer gameAnswer = new GameAnswer(gameQuestion, trueAnswer);
