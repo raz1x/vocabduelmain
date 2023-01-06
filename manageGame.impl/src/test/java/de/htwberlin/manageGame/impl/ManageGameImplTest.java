@@ -191,8 +191,9 @@ public class ManageGameImplTest {
     @Test
     public void getAllOngoingGamesForUserUserDoesNotExist() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
+        when(manageUser.getById(user1.getUserId())).thenThrow(UserNotFoundException.class);
         // 2. Act
-        Assertions.assertThrows(UserDoesNotExistException.class, ()-> manageGame.getAllOngoingGamesForUser(1293));
+        Assertions.assertThrows(UserNotFoundException.class, ()-> manageGame.getAllOngoingGamesForUser(user1.getUserId()));
         // 3. Assert
         verify(manageUser, times(1)).getById(user1.getUserId());
     }

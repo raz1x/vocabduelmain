@@ -28,7 +28,7 @@ public class ManageVocabImpl implements ManageVocab {
     public List<Category> getAllCategories() throws CategoryNotFoundException {
         try {
             return vocabDAO.getAllCategories();
-        } catch (Exception e) {
+        } catch (CategoryNotFoundException e) {
             throw new CategoryNotFoundException("No categories found");
         }
     }
@@ -42,7 +42,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void parseVocabList(File file) throws IOException, VocabDAOException {
+    public void parseVocabList(File file) throws IOException {
         final String TITLE_REGEX = "[{]{3}(.*?)[}]{3}";
         final String WORD_REGEX = "[{]{1}(.*?)[}]{1}";
 
@@ -64,10 +64,20 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             category = vocabDAO.getCategoryByName(categoryName);
         } catch (Exception e) {
-            category = vocabDAO.saveCategory(new Category(categoryName));
+            try {
+                category = vocabDAO.saveCategory(new Category(categoryName));
+            } catch (VocabDAOException ex) {
+                throw new RuntimeException("Persistence error while saving category.");
+            }
+
         }
         VocabList newVocabList = new VocabList(category, title, languageA, languageB);
-        VocabList savedVocabList = vocabDAO.saveVocabList(newVocabList);
+        VocabList savedVocabList;
+        try {
+            savedVocabList = vocabDAO.saveVocabList(newVocabList);
+        } catch (VocabDAOException e) {
+            throw new RuntimeException("Persistence error while saving vocab list.");
+        }
         for (int i = 1; i < lines.length; i++) {
             String line = lines[i];
             String[] words = line.split(":");
@@ -94,19 +104,41 @@ public class ManageVocabImpl implements ManageVocab {
                 vocabs.add(newVocab);
             }
             for (Translation translation : translations) {
-                vocabDAO.saveTranslation(translation);
+                try {
+                    vocabDAO.saveTranslation(translation);
+                } catch (VocabDAOException e) {
+                    throw new RuntimeException("Persistence error while saving translation.");
+                }
             }
             for (Vocab vocab : vocabs) {
-                vocabDAO.saveVocab(vocab);
+                try {
+                    vocabDAO.saveVocab(vocab);
+                } catch (VocabDAOException e) {
+                    throw new RuntimeException("Persistence error while saving vocab.");
+                }
             }
         }
     }
 
     @Override
-    public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException, VocabDAOException, TranslationNotFoundException {
-        Vocab vocab = vocabDAO.getVocab(vocabId);
+    public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException, TranslationNotFoundException {
+        Vocab vocab;
+        try {
+            vocab = vocabDAO.getVocab(vocabId);
+        } catch (VocabDAOException e) {
+            throw new RuntimeException("Persistence error while getting vocab.");
+        }
         Set<Translation> vocabTranslations = vocab.getTranslations();
-        List<Translation> translations = vocabDAO.getOtherTranslationsForVocabId(vocab);
+        List<Translation> translations;
+        try {
+           translations = vocabDAO.getOtherTranslationsForVocabId(vocab);
+        } catch (TranslationNotFoundException e) {
+            throw new TranslationNotFoundException("No translations found");
+        } catch (VocabNotFoundException e) {
+            throw new VocabNotFoundException("Vocab not found");
+        } catch (VocabDAOException e) {
+            throw new RuntimeException("Persistence error while getting other translations for a vocab.");
+        }
         Collections.shuffle(translations);
         List<Translation> result = new ArrayList<>();
         for (int i = 0; i < numberOfTranslations; i++) {

@@ -41,12 +41,12 @@ public class VocabDAOImpl implements VocabDAO {
             em.persist(translation);
             return translation;
         } catch (PersistenceException e) {
-            throw new VocabDAOException("Could not save translation with id " + translation.getTranslationId());
+            throw new RuntimeException("Could not save translation with id " + translation.getTranslationId());
         }
     }
 
     @Override
-    public List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws TranslationNotFoundException, VocabDAOException {
+    public List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws TranslationNotFoundException {
         Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations;
         try {
@@ -59,7 +59,7 @@ public class VocabDAOImpl implements VocabDAO {
             }
             return translations;
         } catch (PersistenceException e) {
-            throw new VocabDAOException("Persistence error while getting other translations for vocab with id " + vocab.getVocabId());
+            throw new RuntimeException("Persistence error while getting other translations for vocab with id " + vocab.getVocabId());
         }
     }
 
@@ -146,9 +146,15 @@ public class VocabDAOImpl implements VocabDAO {
     @Override
     public List<Category> getAllCategories() throws CategoryNotFoundException {
         try {
-            return em.createQuery("SELECT c FROM Category c", Category.class).getResultList();
+            List<Category> categories = em.createQuery("SELECT c FROM Category c", Category.class).getResultList();
+            if(categories.isEmpty()) {
+                throw new CategoryNotFoundException("No categories found");
+            }
+            return categories;
         } catch (PersistenceException e) {
-            throw new CategoryNotFoundException("Could not find any categories");
+            throw new RuntimeException("Persistence error while getting all categories");
+        } catch (CategoryNotFoundException e) {
+            throw new CategoryNotFoundException("No categories found");
         }
     }
 }
