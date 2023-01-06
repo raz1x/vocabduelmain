@@ -95,7 +95,7 @@ public class ManageGameImpl implements ManageGame {
      }
 
     @Override
-    public Round createRound(int gameId, int roundNumber, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException {
+    public Round createRound(int gameId, int roundNumber, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException {
         Game game;
         Category category;
         try {
@@ -115,14 +115,6 @@ public class ManageGameImpl implements ManageGame {
             return round;
         } catch (GameDAOPersistenceException e) {
             throw new RuntimeException("Error while persisting round.");
-        } catch (VocabNotFoundException e) {
-            throw new VocabNotFoundException("Could not find vocab for category " + categoryId);
-        } catch (GameQuestionDoesNotExistException e) {
-            throw new GameQuestionDoesNotExistException("Could not find game question for round " + roundNumber + " in game " + gameId);
-        } catch (VocabListNotFoundException e) {
-            throw new VocabListNotFoundException("Could not find vocab list for category " + categoryId);
-        } catch (TranslationNotFoundException e) {
-            throw new TranslationNotFoundException("Could not find translation for vocab.");
         } catch (VocabDAOException e) {
             throw new RuntimeException("Error while persisting vocab.");
         }

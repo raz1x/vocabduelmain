@@ -47,7 +47,7 @@ public interface ManageGame {
      * @param categoryId Foreign Key of the used category.
      * @return The Round object.
      */
-    Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException;
+    Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException;
 
     /**
      * Updates a round.

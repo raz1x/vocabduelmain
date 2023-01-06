@@ -267,7 +267,8 @@ public class VocabUIControllerImpl implements VocabUIController {
                 break;
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Invalid choice!");
-            } catch (GameDoesNotExistException | CategoryNotFoundException | GameDAOPersistenceException e) {
+            } catch (GameDoesNotExistException | CategoryNotFoundException | VocabNotFoundException |
+                     GameQuestionDoesNotExistException | VocabListNotFoundException | TranslationNotFoundException e) {
                 System.out.println("Could not create round!");
                 return;
             }
@@ -284,7 +285,7 @@ public class VocabUIControllerImpl implements VocabUIController {
         } catch (GameDoesNotExistException e) {
             System.out.println("No games found!");
             return;
-        } catch (UserDoesNotExistException e) {
+        } catch (UserDoesNotExistException | UserNotFoundException e) {
             System.out.println("User not found!");
             return;
         }
