@@ -20,18 +20,18 @@ public class ManageUserImpl implements ManageUser {
     @Override
     public User registerUser(String userName, String password) throws UserAlreadyExistsException {
         User user;
-        if(!userExists(userName)) {
+        try {
+            user = userDAO.getUserByName(userName);
+        } catch (UserNotFoundException e) {
             user = new User(userName, password);
             System.out.println("User " + userName + " registered!");
             try {
                 userDAO.saveUser(user);
-            } catch (UserDAOPersistenceException e) {
+            } catch (UserDAOPersistenceException ex) {
                 throw new UserAlreadyExistsException("Could not register user " + userName);
             }
-            return user;
-        } else {
-            throw new UserAlreadyExistsException("User already exists");
         }
+        return user;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ManageUserImpl implements ManageUser {
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException("User not found!");
         } catch (UserDAOPersistenceException e) {
-            throw new UserDAOPersistenceException("Could not login user " + userName);
+            throw new RuntimeException("Persistence Exception while logging in user");
         }
     }
 
@@ -80,7 +80,7 @@ public class ManageUserImpl implements ManageUser {
         try {
             userDAO.deleteUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new UserDAOPersistenceException("User could not be deleted!");
+            throw new RuntimeException("Runtime Exception while deleting user");
         }
         System.out.println("User " + userId + " deleted.");
     }
@@ -93,16 +93,17 @@ public class ManageUserImpl implements ManageUser {
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException("User not found!");
         }
-        if (userExists(newUserName)) {
-            throw new UserAlreadyExistsException("User already exists!");
-        }
-        user.setUserName(newUserName);
         try {
-            userDAO.updateUser(user);
-        } catch (UserDAOPersistenceException e) {
-            throw new UserDAOPersistenceException("User could not be updated!");
+            userDAO.getUserByName(newUserName);
+        } catch (UserNotFoundException e){
+            user.setUserName(newUserName);
+            try {
+                userDAO.updateUser(user);
+            } catch (UserDAOPersistenceException ex) {
+                throw new RuntimeException("Runtime Exception while updating user");
+            }
+            System.out.println("User " + userId + " changed username to " + newUserName);
         }
-        System.out.println("User " + userId + " changed username to " + newUserName);
         return user;
     }
 
@@ -118,7 +119,7 @@ public class ManageUserImpl implements ManageUser {
         try {
             userDAO.updateUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new UserDAOPersistenceException("User could not be updated!");
+            throw new RuntimeException("Runtime Exception while updating user");
         }
         System.out.println("Successfully changed password of user " + userId);
         return user;
@@ -158,18 +159,5 @@ public class ManageUserImpl implements ManageUser {
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException("No opponents found!");
         }
-    }
-
-    @Override
-    public boolean userExists(String userName) {
-        try {
-            userDAO.getUserByName(userName);
-            return true;
-        } catch(UserNotFoundException e) {
-            return false;
-        }
-
-
-
     }
 }

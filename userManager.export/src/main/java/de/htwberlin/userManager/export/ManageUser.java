@@ -73,11 +73,5 @@ public interface ManageUser {
      */
     public List<User> getOpponents(int currentUserId) throws UserNotFoundException;
 
-    /**
-     * Check if userName already exists
-     * @param userName The username of the user
-     * @return true if userName already exists
-     */
-    public boolean userExists(String userName);
 }
 
