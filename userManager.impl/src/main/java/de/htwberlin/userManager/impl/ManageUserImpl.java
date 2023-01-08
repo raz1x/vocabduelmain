@@ -64,7 +64,7 @@ public class ManageUserImpl implements ManageUser {
         try {
             userDAO.updateUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new UserDAOPersistenceException("User could not be logged out!");
+            throw new RuntimeException("Persistence Exception while logging out user");
         }
         System.out.println("User " + userId + " logged out.");
     }
@@ -80,7 +80,7 @@ public class ManageUserImpl implements ManageUser {
         try {
             userDAO.deleteUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new RuntimeException("Runtime Exception while deleting user");
+            throw new RuntimeException("Persistence Exception while deleting user");
         }
         System.out.println("User " + userId + " deleted.");
     }
@@ -100,7 +100,7 @@ public class ManageUserImpl implements ManageUser {
             try {
                 userDAO.updateUser(user);
             } catch (UserDAOPersistenceException ex) {
-                throw new RuntimeException("Runtime Exception while updating user");
+                throw new RuntimeException("Persistence Exception while updating user");
             }
             System.out.println("User " + userId + " changed username to " + newUserName);
         }
@@ -119,7 +119,7 @@ public class ManageUserImpl implements ManageUser {
         try {
             userDAO.updateUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new RuntimeException("Runtime Exception while updating user");
+            throw new RuntimeException("Persistence Exception while updating user");
         }
         System.out.println("Successfully changed password of user " + userId);
         return user;
