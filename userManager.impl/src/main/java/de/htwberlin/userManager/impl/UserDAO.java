@@ -31,7 +31,7 @@ public interface UserDAO {
      * @param userId The id of the user.
      * @return The user.
      */
-    public User getUser(int userId) throws UserNotFoundException;
+    public User getUser(int userId) throws UserNotFoundException, UserDAOPersistenceException;
 
     /**
      * Returns a user from the database.

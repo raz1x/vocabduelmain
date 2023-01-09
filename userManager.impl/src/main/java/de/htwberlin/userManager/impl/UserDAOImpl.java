@@ -40,7 +40,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUser(int userId) throws UserNotFoundException {
+    public User getUser(int userId) throws UserNotFoundException, UserDAOPersistenceException {
         try {
             User user = em.find(User.class, userId);
             if (user == null) {
@@ -50,7 +50,7 @@ public class UserDAOImpl implements UserDAO {
         } catch (UserNotFoundException e) {
             throw new UserNotFoundException("Could not find user with id " + userId);
         } catch (PersistenceException e) {
-            throw new RuntimeException("Persistence Exception in getUser");
+            throw new UserDAOPersistenceException("Persistence Exception in getUser");
         }
     }
 

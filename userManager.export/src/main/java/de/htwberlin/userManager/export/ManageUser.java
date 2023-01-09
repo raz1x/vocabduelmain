@@ -9,7 +9,7 @@ public interface ManageUser {
      * @param password The password of the user
      * @return The user object
      */
-    public User registerUser(String userName, String password) throws UserAlreadyExistsException;
+    User registerUser(String userName, String password) throws UserAlreadyExistsException;
 
     /**
      * Logs in a user
@@ -17,18 +17,18 @@ public interface ManageUser {
      * @param password The password of the user
      * @return The user object
      */
-    public User loginUser(String userName, String password) throws UserNotFoundException, WrongPasswordException, UserDAOPersistenceException;
+    User loginUser(String userName, String password) throws UserNotFoundException, WrongPasswordException, UserDAOPersistenceException;
 
     /** Logs out a user
      * @param userId The id of the user
      */
-    public void logoutUser(int userId) throws UserNotFoundException, UserDAOPersistenceException;
+    void logoutUser(int userId) throws UserNotFoundException, UserDAOPersistenceException;
 
     /**
      * Deletes a user
      * @param userId The id of the user
      */
-    public void deleteUser(int userId) throws UserNotFoundException, UserDAOPersistenceException;
+    void deleteUser(int userId) throws UserNotFoundException, UserDAOPersistenceException;
 
     /**
      * Updates the username of a user
@@ -36,7 +36,7 @@ public interface ManageUser {
      * @param userName The new username
      * @return The user object
      */
-    public User updateUserName(int userId, String userName) throws UserNotFoundException, UserAlreadyExistsException, UserDAOPersistenceException;
+    User updateUserName(int userId, String userName) throws UserNotFoundException, UserAlreadyExistsException, UserDAOPersistenceException;
 
     /**
      * Updates the password of a user
@@ -44,34 +44,40 @@ public interface ManageUser {
      * @param newPassword  The new password
      * @return The user object
      */
-    public User updatePassword(int userId, String newPassword) throws UserNotFoundException, UserDAOPersistenceException;
+    User updatePassword(int userId, String newPassword) throws UserNotFoundException, UserDAOPersistenceException;
 
     /**
      * Gets a user by its username
      * @param userName The username of the user
      * @return The user object
      */
-    public User getByName(String userName) throws UserNotFoundException;
+    User getByName(String userName) throws UserNotFoundException;
 
     /**
      * Gets a user by its id
      * @param userId The id of the user
      * @return The user object
      */
-    public User getById(int userId) throws UserNotFoundException;
+    User getById(int userId) throws UserNotFoundException;
 
     /**
      * Gets all users from the database
      * @return A list of all users.
      */
-    public List<User> getAllUsers() throws UserNotFoundException;
+    List<User> getAllUsers() throws UserNotFoundException;
 
     /**
      * Gets all potential opponents for a user
      * @param currentUserId The id of the current user
      * @return A list of all opponents.
      */
-    public List<User> getOpponents(int currentUserId) throws UserNotFoundException;
+    List<User> getOpponents(int currentUserId) throws UserNotFoundException;
 
+    /**
+     * Checks if a user with given username already exists.
+     * @param userName The name of the user
+     * @return If the user exists.
+     */
+    boolean userExists(String userName);
 }
 

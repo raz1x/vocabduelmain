@@ -160,4 +160,14 @@ public class ManageUserImpl implements ManageUser {
             throw new UserNotFoundException("No opponents found!");
         }
     }
+
+    @Override
+    public boolean userExists(String userName) {
+        try {
+            userDAO.getUserByName(userName);
+            return true;
+        } catch(UserNotFoundException e) {
+            return false;
+        }
+    }
 }
