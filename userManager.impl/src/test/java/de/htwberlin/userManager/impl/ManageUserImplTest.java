@@ -126,7 +126,7 @@ public class ManageUserImplTest {
     }
 
     @Test
-    void getById() throws UserNotFoundException {
+    void getById() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
         User user = new User("test", "test");
         when(userDAO.getUser(1)).thenReturn(user);

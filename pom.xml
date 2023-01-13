@@ -25,6 +25,7 @@
         <module>manageVocab.export</module>
         <module>manageVocab.impl</module>
         <module>configuration</module>
+        <module>userManager.rest</module>
     </modules>
 
     <dependencies>
@@ -111,6 +112,11 @@
         <dependency>
             <groupId>org.restlet.jse</groupId>
             <artifactId>org.restlet.ext.jackson</artifactId>
+            <version>${restlet-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.spring</artifactId>
             <version>${restlet-version}</version>
         </dependency>
 
