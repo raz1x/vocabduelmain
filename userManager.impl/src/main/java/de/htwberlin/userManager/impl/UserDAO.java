@@ -4,10 +4,13 @@ import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 import de.htwberlin.userManager.export.WrongPasswordException;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
 public interface UserDAO {
+
+    public void setEntityManager(EntityManager em);
     /**
      * Saves a user in the database.
      * @param user The user to be saved.

@@ -12,6 +12,10 @@ public class UserDAOImpl implements UserDAO {
     @PersistenceContext
     private EntityManager em;
 
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
+
     @Override
     public void saveUser(User user) throws UserDAOPersistenceException {
         try {
