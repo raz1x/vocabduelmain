@@ -15,7 +15,11 @@
             <groupId>de.htwberlin</groupId>
             <artifactId>userManager.rest-server</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.htwberlin</groupId>
+            <artifactId>userManager.export</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

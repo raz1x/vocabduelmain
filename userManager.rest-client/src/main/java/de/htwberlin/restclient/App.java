@@ -1,9 +1,9 @@
 package de.htwberlin.restclient;
 
+
 import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.restserver.ManageUserService;
-
 
 public class App {
     private ManageUserService service = new ManageUserClientAdapter();
