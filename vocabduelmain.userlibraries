@@ -1,88 +1,244 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eclipse-userlibraries>
-  <library name="Maven: org.junit.jupiter:junit-jupiter-engine:5.9.0">
-    <archive path="C:/Users/flost/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.0/junit-jupiter-engine-5.9.0.jar" />
+  <library name="Maven: org.springframework:spring-jdbc:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-jdbc/6.0.2/spring-jdbc-6.0.2.jar" />
   </library>
-  <library name="Maven: org.junit.platform:junit-platform-engine:1.9.0">
-    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-engine/1.9.0/junit-platform-engine-1.9.0.jar" />
+  <library name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.6/jackson-core-2.9.6.jar" />
   </library>
-  <library name="Maven: org.opentest4j:opentest4j:1.2.0">
-    <archive path="C:/Users/flost/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar" />
+  <library name="Maven: org.springframework:spring-test:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-test/6.0.2/spring-test-6.0.2.jar" />
   </library>
-  <library name="Maven: org.junit.platform:junit-platform-commons:1.9.0">
-    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-commons/1.9.0/junit-platform-commons-1.9.0.jar" />
+  <library name="Maven: cglib:cglib-nodep:2.2">
+    <archive path="C:/Users/flost/.m2/repository/cglib/cglib-nodep/2.2/cglib-nodep-2.2.jar" />
   </library>
-  <library name="Maven: org.junit.jupiter:junit-jupiter-api:5.9.0">
-    <archive path="C:/Users/flost/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.0/junit-jupiter-api-5.9.0.jar" />
+  <library name="Maven: org.springframework:spring-web:3.2.18.RELEASE">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-web/3.2.18.RELEASE/spring-web-3.2.18.RELEASE.jar" />
   </library>
-  <library name="Maven: org.apiguardian:apiguardian-api:1.1.2">
-    <archive path="C:/Users/flost/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar" />
+  <library name="Maven: org.yaml:snakeyaml:1.18">
+    <archive path="C:/Users/flost/.m2/repository/org/yaml/snakeyaml/1.18/snakeyaml-1.18.jar" />
   </library>
-  <library name="Maven: org.junit.platform:junit-platform-runner:1.9.0">
-    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-runner/1.9.0/junit-platform-runner-1.9.0.jar" />
+  <library name="Maven: org.restlet.jee:org.restlet.ext.xstream:2.3.1">
+    <archive path="C:/Users/flost/.m2/repository/org/restlet/jee/org.restlet.ext.xstream/2.3.1/org.restlet.ext.xstream-2.3.1.jar" />
   </library>
-  <library name="Maven: junit:junit:4.13.2">
-    <archive path="C:/Users/flost/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar" />
+  <library name="Maven: com.fasterxml.woodstox:woodstox-core:5.0.3">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/woodstox/woodstox-core/5.0.3/woodstox-core-5.0.3.jar" />
   </library>
-  <library name="Maven: org.hamcrest:hamcrest-core:1.3">
-    <archive path="C:/Users/flost/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" />
+  <library name="Maven: org.springframework:spring-aop:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-aop/6.0.2/spring-aop-6.0.2.jar" />
   </library>
-  <library name="Maven: org.junit.platform:junit-platform-launcher:1.9.0">
-    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-launcher/1.9.0/junit-platform-launcher-1.9.0.jar" />
+  <library name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.9.6/jackson-module-jaxb-annotations-2.9.6.jar" />
   </library>
-  <library name="Maven: org.junit.platform:junit-platform-suite-api:1.9.0">
-    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-suite-api/1.9.0/junit-platform-suite-api-1.9.0.jar" />
+  <library name="Maven: org.springframework:spring-context:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-context/6.0.2/spring-context-6.0.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-xml/2.9.6/jackson-dataformat-xml-2.9.6.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-expression:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-expression/6.0.2/spring-expression-6.0.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-csv/2.9.6/jackson-dataformat-csv-2.9.6.jar" />
   </library>
   <library name="Maven: org.junit.platform:junit-platform-suite-commons:1.9.0">
     <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-suite-commons/1.9.0/junit-platform-suite-commons-1.9.0.jar" />
   </library>
-  <library name="Maven: org.hibernate.orm:hibernate-core:6.1.4.Final">
-    <archive path="C:/Users/flost/.m2/repository/org/hibernate/orm/hibernate-core/6.1.4.Final/hibernate-core-6.1.4.Final.jar" />
+  <library name="Maven: org.mockito:mockito-junit-jupiter:4.8.0">
+    <archive path="C:/Users/flost/.m2/repository/org/mockito/mockito-junit-jupiter/4.8.0/mockito-junit-jupiter-4.8.0.jar" />
+  </library>
+  <library name="Maven: org.opentest4j:opentest4j:1.2.0">
+    <archive path="C:/Users/flost/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar" />
+  </library>
+  <library name="Maven: org.restlet.jee:org.restlet.ext.servlet:2.4.3">
+    <archive path="C:/Users/flost/.m2/repository/org/restlet/jee/org.restlet.ext.servlet/2.4.3/org.restlet.ext.servlet-2.4.3.jar" />
+  </library>
+  <library name="Maven: org.jboss:jandex:2.2.3.Final">
+    <archive path="C:/Users/flost/.m2/repository/org/jboss/jandex/2.2.3.Final/jandex-2.2.3.Final.jar" />
+  </library>
+  <library name="Maven: org.junit.jupiter:junit-jupiter-engine:5.8.2">
+    <archive path="C:/Users/flost/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar" />
+  </library>
+  <library name="Maven: org.junit.platform:junit-platform-engine:1.8.2">
+    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar" />
+  </library>
+  <library name="Maven: org.junit.platform:junit-platform-runner:1.9.0">
+    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-runner/1.9.0/junit-platform-runner-1.9.0.jar" />
+  </library>
+  <library name="Maven: org.glassfish.jaxb:jaxb-core:3.0.0">
+    <archive path="C:/Users/flost/.m2/repository/org/glassfish/jaxb/jaxb-core/3.0.0/jaxb-core-3.0.0.jar" />
+  </library>
+  <library name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.3.0">
+    <archive path="C:/Users/flost/.m2/repository/org/codehaus/woodstox/woodstox-core-asl/4.3.0/woodstox-core-asl-4.3.0.jar" />
+  </library>
+  <library name="Maven: org.codehaus.jettison:jettison:1.3.5">
+    <archive path="C:/Users/flost/.m2/repository/org/codehaus/jettison/jettison/1.3.5/jettison-1.3.5.jar" />
+  </library>
+  <library name="Maven: net.bytebuddy:byte-buddy:1.12.19">
+    <archive path="C:/Users/flost/.m2/repository/net/bytebuddy/byte-buddy/1.12.19/byte-buddy-1.12.19.jar" />
+  </library>
+  <library name="Maven: org.javassist:javassist:3.27.0-GA">
+    <archive path="C:/Users/flost/.m2/repository/org/javassist/javassist/3.27.0-GA/javassist-3.27.0-GA.jar" />
+  </library>
+  <library name="Maven: org.hibernate:hibernate-core:5.6.14.Final">
+    <archive path="C:/Users/flost/.m2/repository/org/hibernate/hibernate-core/5.6.14.Final/hibernate-core-5.6.14.Final.jar" />
+  </library>
+  <library name="Maven: org.hibernate.common:hibernate-commons-annotations:5.1.2.Final">
+    <archive path="C:/Users/flost/.m2/repository/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final.jar" />
+  </library>
+  <library name="Maven: org.glassfish.jaxb:txw2:3.0.0">
+    <archive path="C:/Users/flost/.m2/repository/org/glassfish/jaxb/txw2/3.0.0/txw2-3.0.0.jar" />
   </library>
   <library name="Maven: jakarta.persistence:jakarta.persistence-api:3.0.0">
     <archive path="C:/Users/flost/.m2/repository/jakarta/persistence/jakarta.persistence-api/3.0.0/jakarta.persistence-api-3.0.0.jar" />
   </library>
-  <library name="Maven: jakarta.transaction:jakarta.transaction-api:2.0.0">
-    <archive path="C:/Users/flost/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.0/jakarta.transaction-api-2.0.0.jar" />
+  <library name="Maven: commons-logging:commons-logging:1.1.3">
+    <archive path="C:/Users/flost/.m2/repository/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar" />
   </library>
-  <library name="Maven: org.jboss.logging:jboss-logging:3.4.3.Final">
-    <archive path="C:/Users/flost/.m2/repository/org/jboss/logging/jboss-logging/3.4.3.Final/jboss-logging-3.4.3.Final.jar" />
+  <library name="Maven: com.sun.istack:istack-commons-runtime:4.0.0">
+    <archive path="C:/Users/flost/.m2/repository/com/sun/istack/istack-commons-runtime/4.0.0/istack-commons-runtime-4.0.0.jar" />
   </library>
-  <library name="Maven: org.hibernate.common:hibernate-commons-annotations:6.0.2.Final">
-    <archive path="C:/Users/flost/.m2/repository/org/hibernate/common/hibernate-commons-annotations/6.0.2.Final/hibernate-commons-annotations-6.0.2.Final.jar" />
+  <library name="Maven: com.microsoft.sqlserver:mssql-jdbc:11.2.1.jre8">
+    <archive path="C:/Users/flost/.m2/repository/com/microsoft/sqlserver/mssql-jdbc/11.2.1.jre8/mssql-jdbc-11.2.1.jre8.jar" />
   </library>
-  <library name="Maven: org.jboss:jandex:2.4.2.Final">
-    <archive path="C:/Users/flost/.m2/repository/org/jboss/jandex/2.4.2.Final/jandex-2.4.2.Final.jar" />
+  <library name="Maven: xmlpull:xmlpull:1.1.3.1">
+    <archive path="C:/Users/flost/.m2/repository/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar" />
   </library>
-  <library name="Maven: com.fasterxml:classmate:1.5.1">
-    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/classmate/1.5.1/classmate-1.5.1.jar" />
+  <library name="Maven: junit:junit:4.13.2">
+    <archive path="C:/Users/flost/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar" />
   </library>
-  <library name="Maven: net.bytebuddy:byte-buddy:1.12.9">
-    <archive path="C:/Users/flost/.m2/repository/net/bytebuddy/byte-buddy/1.12.9/byte-buddy-1.12.9.jar" />
+  <library name="Maven: javax.xml.bind:jaxb-api:2.3.1">
+    <archive path="C:/Users/flost/.m2/repository/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar" />
+  </library>
+  <library name="Maven: javax.persistence:javax.persistence-api:2.2">
+    <archive path="C:/Users/flost/.m2/repository/javax/persistence/javax.persistence-api/2.2/javax.persistence-api-2.2.jar" />
   </library>
   <library name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:3.0.1">
     <archive path="C:/Users/flost/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/3.0.1/jakarta.xml.bind-api-3.0.1.jar" />
   </library>
+  <library name="Maven: org.springframework:spring-jcl:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-jcl/6.0.2/spring-jcl-6.0.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-orm:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-orm/6.0.2/spring-orm-6.0.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.6/jackson-annotations-2.9.6.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-tx:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-tx/6.0.2/spring-tx-6.0.2.jar" />
+  </library>
+  <library name="Maven: antlr:antlr:2.7.7">
+    <archive path="C:/Users/flost/.m2/repository/antlr/antlr/2.7.7/antlr-2.7.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-webmvc:3.2.18.RELEASE">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-webmvc/3.2.18.RELEASE/spring-webmvc-3.2.18.RELEASE.jar" />
+  </library>
+  <library name="Maven: org.restlet.jee:org.restlet.ext.spring:2.4.3">
+    <archive path="C:/Users/flost/.m2/repository/org/restlet/jee/org.restlet.ext.spring/2.4.3/org.restlet.ext.spring-2.4.3.jar" />
+  </library>
+  <library name="Maven: com.fasterxml:classmate:1.5.1">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/classmate/1.5.1/classmate-1.5.1.jar" />
+  </library>
+  <library name="Maven: org.restlet.jee:org.restlet:2.4.3">
+    <archive path="C:/Users/flost/.m2/repository/org/restlet/jee/org.restlet/2.4.3/org.restlet-2.4.3.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.module:jackson-module-jsonSchema:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/module/jackson-module-jsonSchema/2.9.6/jackson-module-jsonSchema-2.9.6.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-beans:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-beans/6.0.2/spring-beans-6.0.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.9.6/jackson-dataformat-yaml-2.9.6.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-core:6.0.2">
+    <archive path="C:/Users/flost/.m2/repository/org/springframework/spring-core/6.0.2/spring-core-6.0.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.9.6">
+    <archive path="C:/Users/flost/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-smile/2.9.6/jackson-dataformat-smile-2.9.6.jar" />
+  </library>
+  <library name="Maven: org.junit.platform:junit-platform-suite-api:1.9.0">
+    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-suite-api/1.9.0/junit-platform-suite-api-1.9.0.jar" />
+  </library>
+  <library name="Maven: org.mockito:mockito-core:4.8.0">
+    <archive path="C:/Users/flost/.m2/repository/org/mockito/mockito-core/4.8.0/mockito-core-4.8.0.jar" />
+  </library>
+  <library name="Maven: org.objenesis:objenesis:3.2">
+    <archive path="C:/Users/flost/.m2/repository/org/objenesis/objenesis/3.2/objenesis-3.2.jar" />
+  </library>
+  <library name="Maven: org.restlet.jee:org.restlet.ext.jackson:2.4.3">
+    <archive path="C:/Users/flost/.m2/repository/org/restlet/jee/org.restlet.ext.jackson/2.4.3/org.restlet.ext.jackson-2.4.3.jar" />
+  </library>
+  <library name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.1.1.Final">
+    <archive path="C:/Users/flost/.m2/repository/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.1.1.Final/jboss-transaction-api_1.2_spec-1.1.1.Final.jar" />
+  </library>
+  <library name="Maven: org.junit.jupiter:junit-jupiter-api:5.8.2">
+    <archive path="C:/Users/flost/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar" />
+  </library>
+  <library name="Maven: org.junit.platform:junit-platform-commons:1.8.2">
+    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar" />
+  </library>
+  <library name="Maven: org.junit.platform:junit-platform-launcher:1.9.0">
+    <archive path="C:/Users/flost/.m2/repository/org/junit/platform/junit-platform-launcher/1.9.0/junit-platform-launcher-1.9.0.jar" />
+  </library>
+  <library name="Maven: org.glassfish.jaxb:jaxb-runtime:3.0.0">
+    <archive path="C:/Users/flost/.m2/repository/org/glassfish/jaxb/jaxb-runtime/3.0.0/jaxb-runtime-3.0.0.jar" />
+  </library>
+  <library name="Maven: org.dom4j:dom4j:2.1.3">
+    <archive path="C:/Users/flost/.m2/repository/org/dom4j/dom4j/2.1.3/dom4j-2.1.3.jar" />
+  </library>
+  <library name="Maven: org.codehaus.woodstox:stax2-api:3.1.4">
+    <archive path="C:/Users/flost/.m2/repository/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar" />
+  </library>
+  <library name="Maven: org.apiguardian:apiguardian-api:1.1.2">
+    <archive path="C:/Users/flost/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar" />
+  </library>
+  <library name="Maven: org.jboss.logging:jboss-logging:3.4.2.Final">
+    <archive path="C:/Users/flost/.m2/repository/org/jboss/logging/jboss-logging/3.4.2.Final/jboss-logging-3.4.2.Final.jar" />
+  </library>
+  <library name="Maven: org.hibernate:hibernate-entitymanager:5.6.14.Final">
+    <archive path="C:/Users/flost/.m2/repository/org/hibernate/hibernate-entitymanager/5.6.14.Final/hibernate-entitymanager-5.6.14.Final.jar" />
+  </library>
+  <library name="Maven: org.hibernate:hibernate-core-jakarta:5.5.7.Final">
+    <archive path="C:/Users/flost/.m2/repository/org/hibernate/hibernate-core-jakarta/5.5.7.Final/hibernate-core-jakarta-5.5.7.Final.jar" />
+  </library>
+  <library name="Maven: org.hamcrest:hamcrest-core:1.3">
+    <archive path="C:/Users/flost/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" />
+  </library>
+  <library name="Maven: jakarta.transaction:jakarta.transaction-api:2.0.0">
+    <archive path="C:/Users/flost/.m2/repository/jakarta/transaction/jakarta.transaction-api/2.0.0/jakarta.transaction-api-2.0.0.jar" />
+  </library>
+  <library name="Maven: jakarta.activation:jakarta.activation-api:2.0.1">
+    <archive path="C:/Users/flost/.m2/repository/jakarta/activation/jakarta.activation-api/2.0.1/jakarta.activation-api-2.0.1.jar" />
+  </library>
+  <library name="Maven: com.thoughtworks.xstream:xstream:1.4.7">
+    <archive path="C:/Users/flost/.m2/repository/com/thoughtworks/xstream/xstream/1.4.7/xstream-1.4.7.jar" />
+  </library>
   <library name="Maven: com.sun.activation:jakarta.activation:2.0.1">
     <archive path="C:/Users/flost/.m2/repository/com/sun/activation/jakarta.activation/2.0.1/jakarta.activation-2.0.1.jar" />
   </library>
-  <library name="Maven: org.glassfish.jaxb:jaxb-runtime:3.0.2">
-    <archive path="C:/Users/flost/.m2/repository/org/glassfish/jaxb/jaxb-runtime/3.0.2/jaxb-runtime-3.0.2.jar" />
+  <library name="Maven: stax:stax-api:1.0.1">
+    <archive path="C:/Users/flost/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar" />
   </library>
-  <library name="Maven: org.glassfish.jaxb:jaxb-core:3.0.2">
-    <archive path="C:/Users/flost/.m2/repository/org/glassfish/jaxb/jaxb-core/3.0.2/jaxb-core-3.0.2.jar" />
+  <library name="Maven: net.bytebuddy:byte-buddy-agent:1.12.14">
+    <archive path="C:/Users/flost/.m2/repository/net/bytebuddy/byte-buddy-agent/1.12.14/byte-buddy-agent-1.12.14.jar" />
   </library>
-  <library name="Maven: org.glassfish.jaxb:txw2:3.0.2">
-    <archive path="C:/Users/flost/.m2/repository/org/glassfish/jaxb/txw2/3.0.2/txw2-3.0.2.jar" />
+  <library name="Maven: xpp3:xpp3_min:1.1.4c">
+    <archive path="C:/Users/flost/.m2/repository/xpp3/xpp3_min/1.1.4c/xpp3_min-1.1.4c.jar" />
   </library>
-  <library name="Maven: com.sun.istack:istack-commons-runtime:4.0.1">
-    <archive path="C:/Users/flost/.m2/repository/com/sun/istack/istack-commons-runtime/4.0.1/istack-commons-runtime-4.0.1.jar" />
+  <library name="Maven: javax.xml.stream:stax-api:1.0-2">
+    <archive path="C:/Users/flost/.m2/repository/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar" />
   </library>
-  <library name="Maven: jakarta.inject:jakarta.inject-api:2.0.0">
-    <archive path="C:/Users/flost/.m2/repository/jakarta/inject/jakarta.inject-api/2.0.0/jakarta.inject-api-2.0.0.jar" />
+  <library name="Maven: javax.validation:validation-api:1.1.0.Final">
+    <archive path="C:/Users/flost/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar" />
   </library>
-  <library name="Maven: org.antlr:antlr4-runtime:4.10.1">
-    <archive path="C:/Users/flost/.m2/repository/org/antlr/antlr4-runtime/4.10.1/antlr4-runtime-4.10.1.jar" />
+  <library name="Maven: javax.activation:javax.activation-api:1.2.0">
+    <archive path="C:/Users/flost/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar" />
   </library>
 </eclipse-userlibraries>
 

@@ -38,19 +38,19 @@ public class ManageUserRestAdapter extends ServerResource implements ManageUserS
 
     // with text
     @Override
-    public User getUser(String id) {
+    public User getUser(String id) throws CustomException {
         User user = null;
         try {
             user = userDAO.getUser(Integer.parseInt(id));
         } catch (UserNotFoundException | UserDAOPersistenceException e) {
             setStatus(Status.CLIENT_ERROR_NOT_FOUND, "User not found");
         } catch (NumberFormatException e) {
-            setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "Bad request, try to use a number");
+            throw new CustomException("Invalid id");
         }
         return user;
     }
 
-    //json
+    //xml
     @Override
     public User createUser(User user) throws UserDAOPersistenceException {
         try {
@@ -62,10 +62,22 @@ public class ManageUserRestAdapter extends ServerResource implements ManageUserS
         return user;
     }
 
+    @Override
+    public User createUserJson(User user) throws UserDAOPersistenceException {
+        try {
+            userDAO.getUserByName(user.getUserName());
+            setStatus(Status.CLIENT_ERROR_CONFLICT, "User already exists");
+        } catch (UserNotFoundException e) {
+            userDAO.saveUser(user);
+        }
+        return user;
+    }
+
     //json
     @Override
-    public void updateUser(User user) throws UserDAOPersistenceException {
+    public User updateUser(User user) throws UserDAOPersistenceException {
         userDAO.updateUser(user);
+        return user;
     }
 
     //query params
@@ -74,5 +86,6 @@ public class ManageUserRestAdapter extends ServerResource implements ManageUserS
         String id = getQueryValue("id");
         User user = userDAO.getUser(Integer.parseInt(id));
         userDAO.deleteUser(user);
+        setStatus(Status.SUCCESS_OK, "User deleted");
     }
 }

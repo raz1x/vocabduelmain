@@ -3,6 +3,7 @@ package de.htwberlin.restclient;
 import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.export.UserNotFoundException;
+import de.htwberlin.userManager.restserver.CustomException;
 import de.htwberlin.userManager.restserver.ManageUserService;
 import org.restlet.resource.ClientResource;
 
@@ -13,7 +14,7 @@ public class ManageUserClientAdapter implements ManageUserService {
     private ManageUserService clientResource = ClientResource.create(BASE_URI + "/user", ManageUserService.class);
 
     @Override
-    public User getUser(String id) {
+    public User getUser(String id) throws CustomException {
         return clientResource.getUser(id);
     }
 
@@ -23,8 +24,8 @@ public class ManageUserClientAdapter implements ManageUserService {
     }
 
     @Override
-    public void updateUser(User user) throws UserDAOPersistenceException {
-        clientResource.updateUser(user);
+    public User updateUser(User user) throws UserDAOPersistenceException {
+        return clientResource.updateUser(user);
     }
 
     @Override

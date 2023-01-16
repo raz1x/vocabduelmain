@@ -12,13 +12,16 @@ import org.restlet.resource.Put;
 public interface ManageUserService {
 
     @Get("text")
-    public User getUser(String id);
+    public User getUser(String id) throws CustomException;
 
-    @Put("json")
+    @Put("xml")
     public User createUser(User user) throws UserDAOPersistenceException;
 
+    @Put("json")
+    public User createUserJson(User user) throws UserDAOPersistenceException;
+
     @Post("json")
-    public void updateUser(User user) throws UserDAOPersistenceException;
+    public User updateUser(User user) throws UserDAOPersistenceException;
 
     @Delete("text")
     public void deleteUser() throws UserNotFoundException, UserDAOPersistenceException;
