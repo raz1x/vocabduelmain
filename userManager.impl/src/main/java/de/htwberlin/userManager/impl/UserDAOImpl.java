@@ -35,9 +35,9 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void updateUser(User user) throws PersistenceException, UserDAOPersistenceException {
+    public User updateUser(User user) throws PersistenceException, UserDAOPersistenceException {
         try {
-            em.merge(user);
+           return em.merge(user);
         } catch (PersistenceException e) {
             throw new UserDAOPersistenceException("Could not update user with id " + user.getUserId());
         }

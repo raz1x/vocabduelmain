@@ -27,7 +27,7 @@ public interface UserDAO {
      * Updates a user in the database.
      * @param user The user to be updated.
      */
-    public void updateUser(User user) throws UserDAOPersistenceException;
+    public User updateUser(User user) throws UserDAOPersistenceException;
 
     /**
      * Returns a user from the database.

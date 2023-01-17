@@ -40,7 +40,7 @@ public class ManageUserImpl implements ManageUser {
             if (userDAO.checkUserNameAndPassword(userName, password)) {
                 User user = userDAO.getUserByName(userName);
                 user.setLoggedIn(true);
-                userDAO.updateUser(user);
+                user = userDAO.updateUser(user);
                 return user;
             } else {
                 throw new WrongPasswordException("Wrong password!");

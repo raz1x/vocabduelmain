@@ -76,8 +76,7 @@ public class ManageUserRestAdapter extends ServerResource implements ManageUserS
     //json
     @Override
     public User updateUser(User user) throws UserDAOPersistenceException {
-        userDAO.updateUser(user);
-        return user;
+        return userDAO.updateUser(user);
     }
 
     //query params

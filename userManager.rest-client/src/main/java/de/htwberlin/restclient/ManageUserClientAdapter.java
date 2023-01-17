@@ -24,6 +24,11 @@ public class ManageUserClientAdapter implements ManageUserService {
     }
 
     @Override
+    public User createUserJson(User user) throws UserDAOPersistenceException {
+        return null;
+    }
+
+    @Override
     public User updateUser(User user) throws UserDAOPersistenceException {
         return clientResource.updateUser(user);
     }
