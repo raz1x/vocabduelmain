@@ -47,10 +47,8 @@ public class UserDAOImpl implements UserDAO {
                 throw new UserNotFoundException("Could not find user with id " + userId);
             }
             return user;
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("Could not find user with id " + userId);
         } catch (PersistenceException e) {
-            throw new UserDAOPersistenceException("Persistence Exception in getUser");
+            throw new UserDAOPersistenceException("Persistence Exception while getting User with id " + userId);
         }
     }
 
@@ -97,7 +95,7 @@ public class UserDAOImpl implements UserDAO {
             user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
                     .setParameter("username", username)
                     .getSingleResult();
-        } catch (PersistenceException e) {
+        } catch (Exception e) {
             throw new UserNotFoundException("Could not find user with username " + username);
         }
         return user.getPassword().equals(password);

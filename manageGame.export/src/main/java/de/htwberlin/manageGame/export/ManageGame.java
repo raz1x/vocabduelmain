@@ -1,6 +1,7 @@
 package de.htwberlin.manageGame.export;
 
 import de.htwberlin.manageVocab.export.*;
+import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface ManageGame {
      * @param user2Id The ID of the second user.
      * @return The Game object.
      */
-    Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException;
+    Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException, UserNotFoundException;
 
     /**
      * Gets an existing game from the database.
@@ -84,7 +85,7 @@ public interface ManageGame {
      * @param roundNumber The round number of the game.
      * @return A list of GameQuestion objects.
      */
-    List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws RoundDoesNotExistException;
+    List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws RoundDoesNotExistException, GameDoesNotExistException, GameQuestionDoesNotExistException;
 
     /**
      * Returns a list of all game answers for a game question.
@@ -100,9 +101,9 @@ public interface ManageGame {
      * @param userId Foreign key of the user.
      * @param isCorrect If the answer is correct.
      * @throws GameAnswerDoesNotExistException If the game answer does not exist.
-     * @throws UserDoesNotExistException If the user does not exist.
+     * @throws UserNotFoundException If the user does not exist.
      */
-    void lockInAnswer(int gameAnswerId, int userId, boolean isCorrect) throws GameAnswerDoesNotExistException, UserDoesNotExistException;
+    void lockInAnswer(int gameAnswerId, int userId, boolean isCorrect) throws GameAnswerDoesNotExistException, UserNotFoundException;
 
     /**
      * Returns the score of a user.
@@ -110,7 +111,7 @@ public interface ManageGame {
      * @param gameId Foreign key of the game.
      * @return The score of the user.
      */
-    int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException;
+    int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException;
 
     /**
      * Returns the latest round number of the game.

@@ -41,12 +41,12 @@ public class VocabDAOImpl implements VocabDAO {
             em.persist(translation);
             return translation;
         } catch (PersistenceException e) {
-            throw new RuntimeException("Could not save translation with id " + translation.getTranslationId());
+            throw new VocabDAOException("Could not save translation with id " + translation.getTranslationId());
         }
     }
 
     @Override
-    public List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws TranslationNotFoundException {
+    public List<Translation> getOtherTranslationsForVocabId(Vocab vocab) throws TranslationNotFoundException, VocabDAOException {
         Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations;
         try {
@@ -59,7 +59,7 @@ public class VocabDAOImpl implements VocabDAO {
             }
             return translations;
         } catch (PersistenceException e) {
-            throw new RuntimeException("Persistence error while getting other translations for vocab with id " + vocab.getVocabId());
+            throw new VocabDAOException("Persistence error while getting other translations for vocab with id " + vocab.getVocabId());
         }
     }
 
@@ -97,7 +97,7 @@ public class VocabDAOImpl implements VocabDAO {
     }
 
     @Override
-    public Category getCategory(int categoryId) throws CategoryNotFoundException {
+    public Category getCategory(int categoryId) throws CategoryNotFoundException, VocabDAOException {
         try {
             Category category = em.find(Category.class, categoryId);
             if (category == null) {
@@ -105,46 +105,56 @@ public class VocabDAOImpl implements VocabDAO {
             }
             return category;
         } catch (PersistenceException e) {
-            throw new CategoryNotFoundException("Could not find category with id " + categoryId);
+            throw new VocabDAOException("Persistence error while getting category with id " + categoryId);
         }
     }
 
     @Override
     public List<VocabList> getVocabListsForCategory(Category category) throws VocabListNotFoundException {
         String query = "SELECT v FROM VocabList v WHERE v.category = :category";
-        TypedQuery<VocabList> typedQuery = em.createQuery(query, VocabList.class);
-        typedQuery.setParameter("category", category);
-        if(typedQuery.getResultList().isEmpty()) {
-            throw new VocabListNotFoundException("No vocab lists found for category with id " + category.getCategoryId());
-        }
-        return typedQuery.getResultList();
-    }
-
-    @Override
-    public List<Vocab> getVocabsForVocabList(VocabList vocabList) throws VocabNotFoundException {
         try {
-            return em.createQuery("SELECT v FROM Vocab v WHERE v.vocabList = :vocabList", Vocab.class)
-                    .setParameter("vocabList", vocabList)
-                    .getResultList();
+            TypedQuery<VocabList> typedQuery = em.createQuery(query, VocabList.class);
+            typedQuery.setParameter("category", category);
+            if(typedQuery.getResultList().isEmpty()) {
+                throw new VocabListNotFoundException("No vocab lists found for category with id " + category.getCategoryId());
+            }
+            return typedQuery.getResultList();
         } catch (PersistenceException e) {
-            throw new VocabNotFoundException("No vocabs found for vocab list with id " + vocabList.getVocabListId());
+            throw new VocabListNotFoundException("Persistence error while getting vocab lists for category with id " + category.getCategoryId());
+        }
+
+    }
+
+    @Override
+    public List<Vocab> getVocabsForVocabList(VocabList vocabList) throws VocabDAOException, VocabNotFoundException {
+        try {
+            TypedQuery<Vocab> query = em.createQuery("SELECT v FROM Vocab v WHERE v.vocabList = :vocabList", Vocab.class)
+                    .setParameter("vocabList", vocabList);
+            if (query.getResultList().isEmpty()) {
+                throw new VocabNotFoundException("No vocabs found for vocab list with id " + vocabList.getVocabListId());
+            }
+            return query.getResultList();
+        } catch (PersistenceException e) {
+            throw new VocabDAOException("Persistence error while getting vocabs for vocab list with id " + vocabList.getVocabListId());
         }
     }
 
     @Override
-    public Category getCategoryByName(String categoryName) throws CategoryNotFoundException {
+    public Category getCategoryByName(String categoryName) throws CategoryNotFoundException, VocabDAOException {
         try {
             // TODO: replace with named query
             return em.createQuery("SELECT c FROM Category c WHERE c.categoryName = :categoryName", Category.class)
                     .setParameter("categoryName", categoryName)
                     .getSingleResult();
+        } catch (NoResultException e) {
+            throw new CategoryNotFoundException("Category with name " + categoryName + " not found");
         } catch (PersistenceException e) {
-            throw new CategoryNotFoundException("Could not find category with name " + categoryName);
+            throw new VocabDAOException("Persistence error while getting category with name " + categoryName);
         }
     }
 
     @Override
-    public List<Category> getAllCategories() throws CategoryNotFoundException {
+    public List<Category> getAllCategories() throws CategoryNotFoundException, VocabDAOException {
         try {
             List<Category> categories = em.createQuery("SELECT c FROM Category c", Category.class).getResultList();
             if(categories.isEmpty()) {
@@ -152,9 +162,7 @@ public class VocabDAOImpl implements VocabDAO {
             }
             return categories;
         } catch (PersistenceException e) {
-            throw new RuntimeException("Persistence error while getting all categories");
-        } catch (CategoryNotFoundException e) {
-            throw new CategoryNotFoundException("No categories found");
+            throw new VocabDAOException("Persistence error while getting all categories");
         }
     }
 }

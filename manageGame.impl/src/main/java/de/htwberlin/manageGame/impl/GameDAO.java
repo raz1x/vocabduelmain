@@ -75,7 +75,7 @@ public interface GameDAO {
      * @param roundNumber The number of the round.
      * @return The game questions.
      */
-    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws GameDoesNotExistException, RoundDoesNotExistException;
+    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws GameDoesNotExistException, RoundDoesNotExistException, GameQuestionDoesNotExistException;
 
     /**
      * Saves a round in the database.

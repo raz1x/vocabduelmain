@@ -60,20 +60,20 @@ public interface VocabDAO {
      * @param categoryId The id of the category.
      * @return The category.
      */
-    Category getCategory(int categoryId) throws CategoryNotFoundException;
+    Category getCategory(int categoryId) throws CategoryNotFoundException, VocabDAOException;
 
     /**
      * Returns a category from the database.
      * @param categoryName The name of the category.
      * @return The category.
      */
-    Category getCategoryByName(String categoryName) throws CategoryNotFoundException;
+    Category getCategoryByName(String categoryName) throws CategoryNotFoundException, VocabDAOException;
 
     /**
      * Gets a list of all categories
      * @return Returns a list of all categories
      */
-    List<Category> getAllCategories() throws CategoryNotFoundException;
+    List<Category> getAllCategories() throws CategoryNotFoundException, VocabDAOException;
 
     /**
      * Gets a list of all vocab lists for a category
@@ -81,5 +81,5 @@ public interface VocabDAO {
      */
     List<VocabList> getVocabListsForCategory(Category category) throws VocabListNotFoundException;
 
-    List<Vocab> getVocabsForVocabList(VocabList vocabList) throws VocabNotFoundException;
+    List<Vocab> getVocabsForVocabList(VocabList vocabList) throws VocabNotFoundException, VocabDAOException;
 }

@@ -5,8 +5,10 @@ import de.htwberlin.userManager.export.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 @Repository
@@ -45,15 +47,13 @@ public class GameDAOImpl implements GameDAO {
 
     @Override
     public List<Game> getOngoingGamesForUser(User user) throws GameDoesNotExistException {
-        try {
-            return em.createQuery("SELECT g FROM Game g WHERE g.currentUser = :userId AND g.isOngoing = :isOngoing", Game.class)
-                    .setParameter("userId", user.getUserId())
-                    .setParameter("isOngoing", true)
-                    .getResultList();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new GameDoesNotExistException("Could not find games for user " + user.getUserName());
+        TypedQuery<Game> query = em.createQuery("SELECT g FROM Game g WHERE g.currentUser = :userId AND g.isOngoing = :isOngoing", Game.class)
+                .setParameter("userId", user.getUserId())
+                .setParameter("isOngoing", true);
+        if (query.getResultList().size() == 0) {
+            throw new GameDoesNotExistException("Could not find any ongoing games for user with id " + user.getUserId());
         }
+        return query.getResultList();
     }
 
     @Override
@@ -69,22 +69,23 @@ public class GameDAOImpl implements GameDAO {
 
     @Override
     public GameAnswer getGameAnswer(int gameAnswerId) throws GameAnswerDoesNotExistException {
-        try {
-            return em.find(GameAnswer.class, gameAnswerId);
-        } catch (Exception e) {
+        GameAnswer gameAnswer;
+        gameAnswer = em.find(GameAnswer.class, gameAnswerId);
+        if (gameAnswer == null) {
             throw new GameAnswerDoesNotExistException("Could not find game answer with id " + gameAnswerId);
         }
+        return gameAnswer;
     }
 
     @Override
     public List<GameAnswer> getGameAnswersForGameQuestion(int gameQuestionId) throws GameAnswerDoesNotExistException {
-        try {
-            return em.createQuery("SELECT ga FROM GameAnswer ga WHERE ga.gameQuestion.gameQuestionId = :gameQuestionId", GameAnswer.class)
-                    .setParameter("gameQuestionId", gameQuestionId)
-                    .getResultList();
-        } catch (Exception e) {
-            throw new GameAnswerDoesNotExistException("Could not find game answers for game question " + gameQuestionId);
+        List<GameAnswer> gameAnswers;
+        TypedQuery<GameAnswer> query = em.createQuery("SELECT ga FROM GameAnswer ga WHERE ga.gameQuestion.gameQuestionId = :gameQuestionId", GameAnswer.class)
+                .setParameter("gameQuestionId", gameQuestionId);
+        if (query.getResultList().size() == 0) {
+            throw new GameAnswerDoesNotExistException("Could not find any game answers for game question with id " + gameQuestionId);
         }
+        return query.getResultList();
     }
 
     @Override
@@ -99,35 +100,35 @@ public class GameDAOImpl implements GameDAO {
 
     @Override
     public GameQuestion getGameQuestion(int gameQuestionId) throws GameQuestionDoesNotExistException {
-        try {
-            return em.find(GameQuestion.class, gameQuestionId);
-        } catch (Exception e) {
+        GameQuestion gameQuestion;
+        gameQuestion = em.find(GameQuestion.class, gameQuestionId);
+        if (gameQuestion == null) {
             throw new GameQuestionDoesNotExistException("Could not find game question with id " + gameQuestionId);
         }
+        return gameQuestion;
     }
 
     @Override
-    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws GameDoesNotExistException, RoundDoesNotExistException {
-        try {
-            Game game = em.find(Game.class, gameId);
-            if (game == null) {
-                throw new GameDoesNotExistException("Could not find game with id " + gameId);
-            }
-            Round round;
-            try {
-                round = em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.roundNumber = :roundNumber", Round.class)
-                        .setParameter("game", game)
-                        .setParameter("roundNumber", roundNumber)
-                        .getSingleResult();
-            } catch (Exception e) {
-                throw new RoundDoesNotExistException("Could not find round with number " + roundNumber + " for game with id " + gameId);
-            }
-            return em.createQuery("SELECT gq FROM GameQuestion gq WHERE gq.round = :round", GameQuestion.class)
-                    .setParameter("round", round)
-                    .getResultList();
-        } catch (Exception e) {
-            throw new PersistenceException("Could not get game questions for round " + roundNumber + " for game with id " + gameId);
+    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws GameDoesNotExistException, RoundDoesNotExistException, GameQuestionDoesNotExistException {
+        Game game = em.find(Game.class, gameId);
+        if (game == null) {
+            throw new GameDoesNotExistException("Could not find game with id " + gameId);
         }
+        Round round;
+        try {
+            round = em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.roundNumber = :roundNumber", Round.class)
+                    .setParameter("game", game)
+                    .setParameter("roundNumber", roundNumber)
+                    .getSingleResult();
+        } catch (Exception e) {
+            throw new RoundDoesNotExistException("Could not find round with number " + roundNumber + " for game with id " + gameId);
+        }
+        TypedQuery<GameQuestion> gameQuestionQuery = em.createQuery("SELECT gq FROM GameQuestion gq WHERE gq.round = :round", GameQuestion.class)
+                .setParameter("round", round);
+        if (gameQuestionQuery.getResultList().size() == 0) {
+            throw new GameQuestionDoesNotExistException("Could not find any game questions for round with number " + roundNumber + " for game with id " + gameId);
+        }
+        return gameQuestionQuery.getResultList();
     }
 
     @Override
@@ -207,15 +208,13 @@ public class GameDAOImpl implements GameDAO {
 
     @Override
     public List<RoundResult> getCorrectRoundResults(Game game, User user) throws RoundResultDoesNotExistException {
-        try {
-            return em.createQuery("SELECT rr FROM RoundResult rr JOIN rr.chosenAnswer ga " +
-                            "JOIN ga.gameQuestion gq JOIN gq.game g WHERE g.gameId = :gameId AND rr.user = :user AND rr.isCorrect = true", RoundResult.class)
-                    .setParameter("gameId", game.getGameId())
-                    .setParameter("user", user)
-                    .getResultList();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RoundResultDoesNotExistException("Could not find round results for game with id " + game.getGameId() + " and user with id " + user.getUserId());
-        }
+         TypedQuery<RoundResult> roundResults = em.createQuery("SELECT rr FROM RoundResult rr JOIN rr.chosenAnswer ga " +
+                        "JOIN ga.gameQuestion gq JOIN gq.game g WHERE g.gameId = :gameId AND rr.user = :user AND rr.isCorrect = true", RoundResult.class)
+                .setParameter("gameId", game.getGameId())
+                .setParameter("user", user);
+         if (roundResults.getResultList().size() == 0) {
+             throw new RoundResultDoesNotExistException("Could not find any correct round results for game with id " + game.getGameId() + " and user with id " + user.getUserId());
+         }
+         return roundResults.getResultList();
     }
 }

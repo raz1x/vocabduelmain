@@ -28,16 +28,16 @@ public class ManageVocabImpl implements ManageVocab {
     public List<Category> getAllCategories() throws CategoryNotFoundException {
         try {
             return vocabDAO.getAllCategories();
-        } catch (CategoryNotFoundException e) {
-            throw new CategoryNotFoundException("No categories found");
+        } catch (VocabDAOException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     public Category getCategory(int categoryId) throws CategoryNotFoundException {
         try {
             return vocabDAO.getCategory(categoryId);
-        } catch (Exception e) {
-            throw new CategoryNotFoundException("Category not found");
+        } catch (VocabDAOException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -67,7 +67,7 @@ public class ManageVocabImpl implements ManageVocab {
             try {
                 category = vocabDAO.saveCategory(new Category(categoryName));
             } catch (VocabDAOException ex) {
-                throw new RuntimeException("Persistence error while saving category.");
+                throw new RuntimeException(ex.getMessage());
             }
 
         }
@@ -76,7 +76,7 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             savedVocabList = vocabDAO.saveVocabList(newVocabList);
         } catch (VocabDAOException e) {
-            throw new RuntimeException("Persistence error while saving vocab list.");
+            throw new RuntimeException(e.getMessage());
         }
         for (int i = 1; i < lines.length; i++) {
             String line = lines[i];
@@ -107,14 +107,14 @@ public class ManageVocabImpl implements ManageVocab {
                 try {
                     vocabDAO.saveTranslation(translation);
                 } catch (VocabDAOException e) {
-                    throw new RuntimeException("Persistence error while saving translation.");
+                    throw new RuntimeException(e.getMessage());
                 }
             }
             for (Vocab vocab : vocabs) {
                 try {
                     vocabDAO.saveVocab(vocab);
                 } catch (VocabDAOException e) {
-                    throw new RuntimeException("Persistence error while saving vocab.");
+                    throw new RuntimeException(e.getMessage());
                 }
             }
         }
@@ -126,18 +126,14 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             vocab = vocabDAO.getVocab(vocabId);
         } catch (VocabDAOException e) {
-            throw new RuntimeException("Persistence error while getting vocab.");
+            throw new RuntimeException(e.getMessage());
         }
         Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations;
         try {
            translations = vocabDAO.getOtherTranslationsForVocabId(vocab);
-        } catch (TranslationNotFoundException e) {
-            throw new TranslationNotFoundException("No translations found");
-        } catch (VocabNotFoundException e) {
-            throw new VocabNotFoundException("Vocab not found");
         } catch (VocabDAOException e) {
-            throw new RuntimeException("Persistence error while getting other translations for a vocab.");
+            throw new RuntimeException(e.getMessage());
         }
         Collections.shuffle(translations);
         List<Translation> result = new ArrayList<>();
@@ -154,10 +150,8 @@ public class ManageVocabImpl implements ManageVocab {
             Category category = vocabDAO.getCategory(categoryId);
             List<VocabList> vocabLists = vocabDAO.getVocabListsForCategory(category);
             return vocabLists.get(random.nextInt(vocabLists.size()));
-        } catch (CategoryNotFoundException e ) {
-            throw new CategoryNotFoundException("Category not found with id " + categoryId);
-        } catch (VocabListNotFoundException e) {
-            throw new VocabListNotFoundException("No vocab lists found for category with id " + categoryId);
+        } catch (VocabDAOException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -170,8 +164,8 @@ public class ManageVocabImpl implements ManageVocab {
         try {
             vocabs = vocabDAO.getVocabsForVocabList(vocabList);
             return vocabs.get(random.nextInt(vocabs.size()));
-        } catch (VocabNotFoundException e) {
-            throw new VocabNotFoundException("Could not find vocab for vocab list with id " + vocabListId);
+        } catch (VocabDAOException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -179,12 +173,9 @@ public class ManageVocabImpl implements ManageVocab {
     public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException, TranslationNotFoundException {
         try {
             Vocab vocab = vocabDAO.getVocab(vocabId);
-
             return vocab.getTranslations().iterator().next();
-        } catch (PersistenceException e) {
-            throw new TranslationNotFoundException("Translation not found for vocab with id " + vocabId);
         } catch (VocabDAOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 

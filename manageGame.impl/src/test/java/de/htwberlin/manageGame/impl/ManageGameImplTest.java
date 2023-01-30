@@ -92,8 +92,9 @@ public class ManageGameImplTest {
     @Test
     public void testCreateGameUserNotFound() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
+        when(manageUser.getById(1)).thenThrow(UserNotFoundException.class);
         // 2. Act & Assert
-        Assertions.assertThrows(UserDoesNotExistException.class, () -> manageGame.createGame(user1.getUserId(), user2.getUserId()));
+        Assertions.assertThrows(UserNotFoundException.class, () -> manageGame.createGame(user1.getUserId(), user2.getUserId()));
         verify(manageUser, times(1)).getById(user1.getUserId());
     }
 
@@ -156,6 +157,7 @@ public class ManageGameImplTest {
     @Test
     public void testEndGameGameDoesNotExist() throws GameDoesNotExistException, GameDAOPersistenceException {
         // 1. Arrange
+        when(gameDAO.getGame(1)).thenThrow(GameDoesNotExistException.class);
         // 2. Act
         Assertions.assertThrows(GameDoesNotExistException.class, ()-> manageGame.endGame(1));
         // 3. Assert
@@ -245,7 +247,7 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void generateQuestions() throws VocabListNotFoundException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException {
+    public void generateQuestions() throws VocabListNotFoundException, CategoryNotFoundException, GameDAOPersistenceException, VocabNotFoundException, TranslationNotFoundException, GameDoesNotExistException {
         // 1. Arrange
         VocabList vocabList = new VocabList(category, "testList", "test", "test");
         vocabList.setVocabListId(1);
@@ -282,7 +284,7 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void getGameQuestionsForRound() throws RoundDoesNotExistException, GameDoesNotExistException {
+    public void getGameQuestionsForRound() throws RoundDoesNotExistException, GameDoesNotExistException, GameQuestionDoesNotExistException {
         // 1. Arrange
         List<GameQuestion> gameQuestions = new ArrayList<>();
         gameQuestions.add(new GameQuestion(round, new Vocab(new VocabList(category, "testList", "test", "test"), "test"), new Translation("test"), 1));

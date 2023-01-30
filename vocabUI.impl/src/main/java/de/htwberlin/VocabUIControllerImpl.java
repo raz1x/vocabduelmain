@@ -239,7 +239,7 @@ public class VocabUIControllerImpl implements VocabUIController {
             User opponent = opponents.get(index - 1);
             Game game = manageGame.createGame(currentUser.getUserId(), opponent.getUserId());
             showCreateRound(game);
-        } catch (UserDoesNotExistException e) {
+        } catch (UserDoesNotExistException | UserNotFoundException e) {
             System.out.println("User not found!");
         }
     }
@@ -323,7 +323,13 @@ public class VocabUIControllerImpl implements VocabUIController {
         try {
             gameQuestion = manageGame.getGameQuestionsForRound(game.getGameId(), round.getRoundNumber());
         } catch (RoundDoesNotExistException e) {
-            System.out.println("Could not find game questions for this round!");
+            System.out.println("Round not found!");
+            return;
+        } catch (GameQuestionDoesNotExistException e) {
+            System.out.println("No questions found for this round!");
+            return;
+        } catch (GameDoesNotExistException e) {
+            System.out.println("Could not find the game for this round!");
             return;
         }
         // display all questions with their answers
@@ -352,8 +358,8 @@ public class VocabUIControllerImpl implements VocabUIController {
                         break;
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("Invalid choice!");
-                    } catch (UserDoesNotExistException e) {
-                        throw new RuntimeException(e);
+                    } catch (UserNotFoundException e) {
+                        System.out.println("User not found!");
                     }
                 }
             } catch (GameAnswerDoesNotExistException e) {
@@ -436,8 +442,10 @@ public class VocabUIControllerImpl implements VocabUIController {
             }
         } catch (GameDoesNotExistException e) {
             System.out.println("No games found!");
-        } catch (UserDoesNotExistException e) {
+        } catch (UserNotFoundException | UserDoesNotExistException e) {
             System.out.println("User not found!");
+        } catch (RoundResultDoesNotExistException e) {
+            System.out.println("No results found!");
         }
     }
 

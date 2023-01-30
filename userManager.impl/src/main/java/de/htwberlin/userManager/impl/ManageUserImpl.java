@@ -28,14 +28,14 @@ public class ManageUserImpl implements ManageUser {
             try {
                 userDAO.saveUser(user);
             } catch (UserDAOPersistenceException ex) {
-                throw new UserAlreadyExistsException("Could not register user " + userName);
+                throw new RuntimeException(ex.getMessage());
             }
         }
         return user;
     }
 
     @Override
-    public User loginUser(String userName, String password) throws UserNotFoundException, WrongPasswordException, UserDAOPersistenceException {
+    public User loginUser(String userName, String password) throws UserNotFoundException, WrongPasswordException {
         try {
             if (userDAO.checkUserNameAndPassword(userName, password)) {
                 User user = userDAO.getUserByName(userName);
@@ -45,53 +45,43 @@ public class ManageUserImpl implements ManageUser {
             } else {
                 throw new WrongPasswordException("Wrong password!");
             }
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("User not found!");
         } catch (UserDAOPersistenceException e) {
-            throw new RuntimeException("Persistence Exception while logging in user");
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public void logoutUser(int userId) throws UserNotFoundException, UserDAOPersistenceException {
+    public void logoutUser(int userId) throws UserNotFoundException {
         User user;
         try {
             user = userDAO.getUser(userId);
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("User not found!");
-        }
-        user.setLoggedIn(false);
-        try {
+            user.setLoggedIn(false);
             userDAO.updateUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new RuntimeException("Persistence Exception while logging out user");
+            throw new RuntimeException(e.getMessage());
         }
         System.out.println("User " + userId + " logged out.");
     }
 
     @Override
-    public void deleteUser(int userId) throws UserNotFoundException, UserDAOPersistenceException {
-        User user;
+    public void deleteUser(int userId) throws UserNotFoundException {
+        User user = null;
         try {
             user = userDAO.getUser(userId);
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("User not found!");
-        }
-        try {
             userDAO.deleteUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new RuntimeException("Persistence Exception while deleting user");
+            throw new RuntimeException(e.getMessage());
         }
         System.out.println("User " + userId + " deleted.");
     }
 
     @Override
-    public User updateUserName(int userId, String newUserName) throws UserNotFoundException, UserAlreadyExistsException, UserDAOPersistenceException {
-        User user;
+    public User updateUserName(int userId, String newUserName) throws UserNotFoundException {
+        User user = null;
         try {
             user = userDAO.getUser(userId);
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("User not found!");
+        } catch (UserDAOPersistenceException e) {
+            throw new RuntimeException(e.getMessage());
         }
         try {
             userDAO.getUserByName(newUserName);
@@ -100,7 +90,7 @@ public class ManageUserImpl implements ManageUser {
             try {
                 userDAO.updateUser(user);
             } catch (UserDAOPersistenceException ex) {
-                throw new RuntimeException("Persistence Exception while updating user");
+                throw new RuntimeException(e.getMessage());
             }
             System.out.println("User " + userId + " changed username to " + newUserName);
         }
@@ -108,18 +98,14 @@ public class ManageUserImpl implements ManageUser {
     }
 
     @Override
-    public User updatePassword(int userId, String newPassword) throws UserNotFoundException, UserDAOPersistenceException {
-        User user;
+    public User updatePassword(int userId, String newPassword) throws UserNotFoundException {
+        User user = null;
         try {
             user = userDAO.getUser(userId);
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("User not found!");
-        }
-        user.setPassword(newPassword);
-        try {
+            user.setPassword(newPassword);
             userDAO.updateUser(user);
         } catch (UserDAOPersistenceException e) {
-            throw new RuntimeException("Persistence Exception while updating user");
+            throw new RuntimeException(e.getMessage());
         }
         System.out.println("Successfully changed password of user " + userId);
         return user;
@@ -127,38 +113,26 @@ public class ManageUserImpl implements ManageUser {
 
     @Override
     public User getByName(String userName) throws UserNotFoundException {
-        try {
-            return userDAO.getUserByName(userName);
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("User not found");
-        }
+        return userDAO.getUserByName(userName);
     }
 
     @Override
     public User getById(int userId) throws UserNotFoundException {
         try {
             return userDAO.getUser(userId);
-        } catch (Exception e) {
-            throw new UserNotFoundException("User not found");
+        } catch (UserDAOPersistenceException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public List<User> getAllUsers() throws UserNotFoundException {
-        try {
-            return userDAO.getAllUsers();
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("No users found!");
-        }
+        return userDAO.getAllUsers();
     }
 
     @Override
     public List<User> getOpponents(int currentUserId) throws UserNotFoundException {
-        try {
-            return userDAO.getOpponents(currentUserId);
-        } catch (UserNotFoundException e) {
-            throw new UserNotFoundException("No opponents found!");
-        }
+        return userDAO.getOpponents(currentUserId);
     }
 
     @Override
