@@ -33,7 +33,7 @@ public class ManageVocabImplTest {
     }
 
     @Test
-    void getAllCategories() throws CategoryNotFoundException {
+    void getAllCategories() throws CategoryNotFoundException, VocabDAOException {
         // 1. Arrange
         List<Category> expected = new ArrayList<>();
         when(vocabDAO.getAllCategories()).thenReturn(expected);
@@ -54,7 +54,7 @@ public class ManageVocabImplTest {
     }
 
     @Test
-    void getCategory() throws CategoryNotFoundException {
+    void getCategory() throws CategoryNotFoundException, VocabDAOException {
         // 1. Arrange
         Category expected = new Category("test");
         when(vocabDAO.getCategory(1)).thenReturn(expected);
@@ -94,7 +94,7 @@ public class ManageVocabImplTest {
     }
 
     @Test
-    void getRandomVocabListFromCategory() throws VocabListNotFoundException, CategoryNotFoundException {
+    void getRandomVocabListFromCategory() throws VocabListNotFoundException, CategoryNotFoundException, VocabDAOException {
         // 1. Arrange
         Category category = new Category("test");
         List<VocabList> expected = new ArrayList<>();
@@ -110,7 +110,7 @@ public class ManageVocabImplTest {
     }
 
     @Test
-    void getRandomVocabFromVocabList() throws VocabNotFoundException, VocabListNotFoundException {
+    void getRandomVocabFromVocabList() throws VocabNotFoundException, VocabListNotFoundException, VocabDAOException {
         // 1. Arrange
         VocabList vocabList = new VocabList(new Category("test"), "testList", "testA", "testB");
         List<Vocab> expected = new ArrayList<>();

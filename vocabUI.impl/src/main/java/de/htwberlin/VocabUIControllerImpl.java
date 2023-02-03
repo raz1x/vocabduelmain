@@ -1,6 +1,7 @@
 package de.htwberlin;
 
 import de.htwberlin.manageGame.export.*;
+import de.htwberlin.manageGame.rest_client.ManageGameRestClient;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class VocabUIControllerImpl implements VocabUIController {
     private ManageUser manageUser;
 
     @Autowired
+    private ManageGameRestClient manageGameRestClient;
+
+    @Autowired
     private ManageGame manageGame;
 
     @Autowired
@@ -28,7 +32,11 @@ public class VocabUIControllerImpl implements VocabUIController {
 
     @Override
     public void run() {
-        showMainMenu();
+        try {
+            manageGameRestClient.getAllOngoingGamesForUser(1);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -44,9 +52,6 @@ public class VocabUIControllerImpl implements VocabUIController {
             return;
         } catch (WrongPasswordException e) {
             System.out.println("Wrong password!");
-            return;
-        } catch (UserDAOPersistenceException e) {
-            System.out.println("Could not login user");
             return;
         }
         showManagerMenu();
@@ -114,7 +119,7 @@ public class VocabUIControllerImpl implements VocabUIController {
                 case 5 -> System.out.println("Goodbye!");
                 default -> System.out.println("Invalid choice!");
             }
-            } catch (UserNotFoundException | UserDAOPersistenceException e) {
+            } catch (UserNotFoundException e) {
                 System.out.println("User not found!");
             }
         } while (choice != 5);
@@ -145,11 +150,7 @@ public class VocabUIControllerImpl implements VocabUIController {
             System.out.println("Please enter the username of the user you want to delete: ");
             String username = readUserInput();
             User user = manageUser.getByName(username);
-            try {
-                manageUser.deleteUser(user.getUserId());
-            } catch (UserDAOPersistenceException e) {
-                System.out.println("Could not delete user!");
-            }
+            manageUser.deleteUser(user.getUserId());
         } catch (UserNotFoundException e) {
             System.out.println("User not found!");
         }

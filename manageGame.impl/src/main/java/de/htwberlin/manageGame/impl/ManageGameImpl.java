@@ -100,7 +100,7 @@ public class ManageGameImpl implements ManageGame {
                 generateAnswers(gameQuestion.getGameQuestionId());
             }
             return round;
-        } catch (GameDAOPersistenceException | VocabDAOException e) {
+        } catch (GameDAOPersistenceException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -127,7 +127,7 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws GameDAOPersistenceException, CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, TranslationNotFoundException, GameDoesNotExistException {
+    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, TranslationNotFoundException, GameDoesNotExistException {
         List<GameQuestion> gameQuestions = new ArrayList<>();
         VocabList vocabList;
         vocabList = manageVocab.getRandomVocabListFromCategory(categoryId);
@@ -137,23 +137,36 @@ public class ManageGameImpl implements ManageGame {
             Game game = gameDAO.getGame(gameId);
             Category category = manageVocab.getCategory(categoryId);
             GameQuestion gameQuestion = new GameQuestion(round, question, trueAnswer, i);
-            gameDAO.saveGameQuestion(gameQuestion);
+            try {
+                gameDAO.saveGameQuestion(gameQuestion);
+            } catch (GameDAOPersistenceException e) {
+                throw new RuntimeException(e.getMessage());
+            }
             //save the true answer
             GameAnswer gameAnswer = new GameAnswer(gameQuestion, trueAnswer);
-            gameDAO.saveGameAnswer(gameAnswer);
+            try {
+                gameDAO.saveGameAnswer(gameAnswer);
+            } catch (GameDAOPersistenceException e) {
+                throw new RuntimeException(e.getMessage());
+            }
             gameQuestions.add(gameQuestion);
         }
         return gameQuestions;
     }
 
     @Override
-    public List<GameAnswer> generateAnswers(int gameQuestionId) throws VocabNotFoundException, GameQuestionDoesNotExistException, GameDAOPersistenceException, VocabDAOException, TranslationNotFoundException {
+    public List<GameAnswer> generateAnswers(int gameQuestionId) throws VocabNotFoundException, GameQuestionDoesNotExistException, TranslationNotFoundException {
         GameQuestion gameQuestion = gameDAO.getGameQuestion(gameQuestionId);
         List<GameAnswer> gameAnswers = new ArrayList<>();
-        List<Translation> possibleTranslations = manageVocab.getPossibleTranslationsFromVocabId(gameQuestion.getVocab().getVocabId(), 3);
+        List<Translation> possibleTranslations = null;
+        possibleTranslations = manageVocab.getPossibleTranslationsFromVocabId(gameQuestion.getVocab().getVocabId(), 3);
         for (int i = 0; i < 3; i++) {
             GameAnswer gameAnswer = new GameAnswer(gameQuestion, possibleTranslations.get(i));
-            gameDAO.saveGameAnswer(gameAnswer);
+            try {
+                gameDAO.saveGameAnswer(gameAnswer);
+            } catch (GameDAOPersistenceException e) {
+                throw new RuntimeException(e.getMessage());
+            }
             gameAnswers.add(gameAnswer);
         }
         return gameAnswers;

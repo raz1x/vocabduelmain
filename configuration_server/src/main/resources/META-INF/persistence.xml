@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="vocabDuelPU"
+                      transaction-type="RESOURCE_LOCAL">
+
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <class>de.htwberlin.manageVocab.export.Category</class>
+        <class>de.htwberlin.manageVocab.export.Translation</class>
+        <class>de.htwberlin.manageVocab.export.Vocab</class>
+        <class>de.htwberlin.manageVocab.export.VocabList</class>
+        <class>de.htwberlin.userManager.export.User</class>
+        <class>de.htwberlin.manageGame.export.Round</class>
+        <class>de.htwberlin.manageGame.export.RoundResult</class>
+        <class>de.htwberlin.manageGame.export.Game</class>
+        <class>de.htwberlin.manageGame.export.GameQuestion</class>
+        <class>de.htwberlin.manageGame.export.GameAnswer</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.url"
+                      value="jdbc:sqlserver://sqlservervier.f4.htw-berlin.de;databaseName=u563182;encrypt=true;trustServerCertificate=true;" />
+            <property name="jakarta.persistence.driver"
+                      value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+            <property name="jakarta.persistence.jdbc.user" value="u563182" />
+            <property name="jakarta.persistence.jdbc.password"
+                      value="p563182" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServer2012Dialect" />
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

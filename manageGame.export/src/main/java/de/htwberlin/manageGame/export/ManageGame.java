@@ -70,14 +70,14 @@ public interface ManageGame {
      * @param round The round of the game.
      * @return A list of GameQuestion objects.
      */
-    List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws Exception;
+    List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, TranslationNotFoundException, GameDoesNotExistException;
 
     /**
      * Returns a list of generated answers.
      * @param gameQuestionId Foreign key of the GameQuestion.
      * @return A list of GameAnswer objects.
      */
-    List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, GameDAOPersistenceException, VocabDAOException, TranslationNotFoundException;
+    List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, TranslationNotFoundException;
 
     /**
      * Returns a list of all game questions for a round of a game.

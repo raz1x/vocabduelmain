@@ -17,18 +17,18 @@ public interface ManageUser {
      * @param password The password of the user
      * @return The user object
      */
-    User loginUser(String userName, String password) throws UserNotFoundException, WrongPasswordException, UserDAOPersistenceException;
+    User loginUser(String userName, String password) throws UserNotFoundException, WrongPasswordException;
 
     /** Logs out a user
      * @param userId The id of the user
      */
-    void logoutUser(int userId) throws UserNotFoundException, UserDAOPersistenceException;
+    void logoutUser(int userId) throws UserNotFoundException;
 
     /**
      * Deletes a user
      * @param userId The id of the user
      */
-    void deleteUser(int userId) throws UserNotFoundException, UserDAOPersistenceException;
+    void deleteUser(int userId) throws UserNotFoundException;
 
     /**
      * Updates the username of a user
@@ -36,7 +36,7 @@ public interface ManageUser {
      * @param userName The new username
      * @return The user object
      */
-    User updateUserName(int userId, String userName) throws UserNotFoundException, UserAlreadyExistsException, UserDAOPersistenceException;
+    User updateUserName(int userId, String userName) throws UserNotFoundException, UserAlreadyExistsException;
 
     /**
      * Updates the password of a user
@@ -44,7 +44,7 @@ public interface ManageUser {
      * @param newPassword  The new password
      * @return The user object
      */
-    User updatePassword(int userId, String newPassword) throws UserNotFoundException, UserDAOPersistenceException;
+    User updatePassword(int userId, String newPassword) throws UserNotFoundException;
 
     /**
      * Gets a user by its username

@@ -18,6 +18,11 @@
         <module>manageVocab.export</module>
         <module>manageVocab.impl</module>
         <module>configuration</module>
+        <module>manageGame.rest_server</module>
+        <module>configuration_server</module>
+        <module>manageGame.rest_client</module>
+        <module>manageVocab.rest_server</module>
+        <module>userManager.rest_server</module>
     </modules>
 
     <dependencies>
@@ -96,6 +101,17 @@
             <artifactId>byte-buddy</artifactId>
             <version>1.12.19</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
+
 
     </dependencies>
 
