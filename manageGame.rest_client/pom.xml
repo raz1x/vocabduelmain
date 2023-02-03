@@ -22,12 +22,6 @@
             <artifactId>manageGame.export</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>de.htwberlin</groupId>
-            <artifactId>manageGame.rest_server</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 </project>

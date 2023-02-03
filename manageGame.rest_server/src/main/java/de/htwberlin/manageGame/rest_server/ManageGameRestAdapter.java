@@ -7,95 +7,94 @@ import de.htwberlin.manageVocab.export.VocabListNotFoundException;
 import de.htwberlin.manageVocab.export.VocabNotFoundException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/manageGame")
-public class ManageGameRestAdapter implements ManageGameRest {
+public class ManageGameRestAdapter {
 
     @Autowired
     private ManageGame manageGame;
 
-    @Override
-    public Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException, UserNotFoundException {
+    @GetMapping("/createGame/{user1Id}/{user2Id}")
+    public Game createGame(@PathVariable("user1Id") int user1Id, @PathVariable("user2Id") int user2Id) throws UserDoesNotExistException, UserNotFoundException {
         return manageGame.createGame(user1Id, user2Id);
     }
 
-    @Override
-    public Game getGame(int gameId) throws GameDoesNotExistException {
+    @GetMapping("/getGame/{gameId}")
+    public Game getGame(@PathVariable int gameId) throws GameDoesNotExistException {
         return manageGame.getGame(gameId);
     }
 
-    @Override
-    public Game updateGame(Game game) throws GameDoesNotExistException {
+    @PutMapping(value = "/updateGame", consumes = "application/json", produces = "application/json")
+    public Game updateGame(@RequestBody Game game) throws GameDoesNotExistException {
         return manageGame.updateGame(game);
     }
 
-    @Override
-    public void endGame(int gameId) throws GameDoesNotExistException {
+    @PostMapping("/endGame/{gameId}")
+    public void endGame(@PathVariable int gameId) throws GameDoesNotExistException {
         manageGame.endGame(gameId);
     }
 
-    @Override
-    public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException {
+    @GetMapping("/getAllOngoingGamesForUser/{userId}")
+    public List<Game> getAllOngoingGamesForUser(@PathVariable int userId) throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException {
         return manageGame.getAllOngoingGamesForUser(userId);
     }
 
-    @Override
-    public Round createRound(int gameId, int round, int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException {
+    @PostMapping("/createRound/{gameId}/{round}/{categoryId}")
+    public Round createRound(@PathVariable("gameId") int gameId, @PathVariable("round") int round, @PathVariable("categoryId") int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException {
         return manageGame.createRound(gameId, round, categoryId);
     }
 
-    @Override
-    public Round updateRound(Round round) throws RoundDoesNotExistException {
+    @PutMapping(value = "/updateRound", consumes = "application/json", produces = "application/json")
+    public Round updateRound(@RequestBody Round round) throws RoundDoesNotExistException {
         return manageGame.updateRound(round);
     }
 
-    @Override
-    public void endRound(int roundId) throws RoundDoesNotExistException {
+    @PostMapping("/endRound/{roundId}")
+    public void endRound(@PathVariable int roundId) throws RoundDoesNotExistException {
         manageGame.endRound(roundId);
     }
 
-    @Override
-    public List<GameQuestion> generateQuestions(int categoryId, int gameId, Round round) throws CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, TranslationNotFoundException, GameDoesNotExistException {
+    @PostMapping(value = "/generateQuestions/{categoryId}/{gameId}", consumes = "application/json", produces = "application/json")
+    public List<GameQuestion> generateQuestions(@PathVariable("categoryId") int categoryId, @PathVariable("gameId") int gameId, @RequestBody Round round) throws CategoryNotFoundException, VocabListNotFoundException, VocabNotFoundException, TranslationNotFoundException, GameDoesNotExistException {
         return manageGame.generateQuestions(categoryId, gameId, round);
     }
 
-    @Override
-    public List<GameAnswer> generateAnswers(int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, TranslationNotFoundException {
+    @PostMapping("/generateAnswers/{gameQuestionId}")
+    public List<GameAnswer> generateAnswers(@PathVariable int gameQuestionId) throws GameQuestionDoesNotExistException, VocabNotFoundException, TranslationNotFoundException {
         return manageGame.generateAnswers(gameQuestionId);
     }
 
-    @Override
-    public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundId) throws GameDoesNotExistException, RoundDoesNotExistException, GameQuestionDoesNotExistException {
+    @GetMapping("/getGameQuestionsForRound/{gameId}/{roundId}")
+    public List<GameQuestion> getGameQuestionsForRound(@PathVariable("gameId") int gameId, @PathVariable("roundId") int roundId) throws GameDoesNotExistException, RoundDoesNotExistException, GameQuestionDoesNotExistException {
         return manageGame.getGameQuestionsForRound(gameId, roundId);
     }
 
-    @Override
-    public List<GameAnswer> getGameAnswersForGameQuestion(int gameQuestionId) throws GameAnswerDoesNotExistException {
+    @GetMapping("/getGameAnswersForGameQuestion/{gameQuestionId}")
+    public List<GameAnswer> getGameAnswersForGameQuestion(@PathVariable int gameQuestionId) throws GameAnswerDoesNotExistException {
         return manageGame.getGameAnswersForGameQuestion(gameQuestionId);
     }
 
-    @Override
-    public void lockInAnswer(int gameAnswerId, int userId, boolean isCorrect) throws GameAnswerDoesNotExistException, UserNotFoundException {
+    @PostMapping("/lockInAnswer/{gameAnswerId}/{userId}/{isCorrect}")
+    public void lockInAnswer(@PathVariable("gameAnswerId") int gameAnswerId, @PathVariable("userId") int userId, @PathVariable("isCorrect") boolean isCorrect) throws GameAnswerDoesNotExistException, UserNotFoundException {
         manageGame.lockInAnswer(gameAnswerId, userId, isCorrect);
     }
 
-    @Override
-    public int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException {
+    @GetMapping("/getScoreForUser/{userId}/{gameId}")
+    public int getScoreForUser(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) throws GameDoesNotExistException, UserDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException {
         return manageGame.getScoreForUser(userId, gameId);
     }
 
-    @Override
-    public int getLatestRoundForGame(int gameId) throws GameDoesNotExistException {
+    @GetMapping("/getLatestRoundForGame/{gameId}")
+    public int getLatestRoundForGame(@PathVariable int gameId) throws GameDoesNotExistException {
         return manageGame.getLatestRoundForGame(gameId);
     }
 
-    @Override
-    public Round getOngoingRoundForGame(int gameId) throws RoundDoesNotExistException {
+    @GetMapping("/getOngoingRoundForGame/{gameId}")
+    public Round getOngoingRoundForGame(@PathVariable int gameId) throws RoundDoesNotExistException {
         return manageGame.getOngoingRoundForGame(gameId);
     }
 }

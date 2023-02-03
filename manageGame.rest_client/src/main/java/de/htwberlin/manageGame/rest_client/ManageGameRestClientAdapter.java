@@ -1,15 +1,12 @@
 package de.htwberlin.manageGame.rest_client;
 
 import de.htwberlin.manageGame.export.*;
-import de.htwberlin.manageGame.rest_server.ManageGameRest;
 import de.htwberlin.manageVocab.export.CategoryNotFoundException;
 import de.htwberlin.manageVocab.export.TranslationNotFoundException;
 import de.htwberlin.manageVocab.export.VocabListNotFoundException;
 import de.htwberlin.manageVocab.export.VocabNotFoundException;
-import de.htwberlin.userManager.export.User;
 import de.htwberlin.userManager.export.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Service
-public class ManageGameRestClient implements ManageGameRest {
+public class ManageGameRestClientAdapter implements ManageGameRest {
 
     final String URI = "http://localhost:8080/manageGame";
 

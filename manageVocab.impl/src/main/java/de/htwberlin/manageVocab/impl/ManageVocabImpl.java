@@ -46,7 +46,7 @@ public class ManageVocabImpl implements ManageVocab {
         final String TITLE_REGEX = "[{]{3}(.*?)[}]{3}";
         final String WORD_REGEX = "[{]{1}(.*?)[}]{1}";
 
-        String textFile = Files.readString(Path.of(file.getAbsolutePath()));
+        String textFile = String.valueOf(file);
         String[] lines = textFile.split("\n");
         String titleLine = lines[0];
         Pattern titlePattern = Pattern.compile(TITLE_REGEX);

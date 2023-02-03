@@ -2,70 +2,69 @@ package de.htwberlin.userManager.rest_server;
 
 import de.htwberlin.userManager.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/manageUser")
-public class ManageUserRestAdapter implements ManageUserRest {
+public class ManageUserRestAdapter {
 
     @Autowired
     private ManageUser manageUser;
 
-    @Override
-    public User registerUser(String userName, String password) throws UserAlreadyExistsException {
+    @PostMapping("/registerUser/{userName}/{password}")
+    public User registerUser(@PathVariable("userName") String userName, @PathVariable("password") String password) throws UserAlreadyExistsException {
         return manageUser.registerUser(userName, password);
     }
 
-    @Override
-    public User loginUser(String userName, String password) throws UserNotFoundException, WrongPasswordException {
+    @PostMapping("/loginUser/{userName}/{password}")
+    public User loginUser(@PathVariable("userName") String userName, @PathVariable("password") String password) throws UserNotFoundException, WrongPasswordException {
         return manageUser.loginUser(userName, password);
     }
 
-    @Override
-    public void logoutUser(int userId) throws UserNotFoundException {
+    @PostMapping("/logoutUser/{userId}")
+    public void logoutUser(@PathVariable int userId) throws UserNotFoundException {
         manageUser.logoutUser(userId);
     }
 
-    @Override
-    public void deleteUser(int userId) throws UserNotFoundException {
+    @PostMapping("/deleteUser/{userId}")
+    public void deleteUser(@PathVariable int userId) throws UserNotFoundException {
         manageUser.deleteUser(userId);
     }
 
-    @Override
-    public User updateUserName(int userId, String userName) throws UserNotFoundException, UserAlreadyExistsException {
+    @PostMapping("/updateUserName/{userId}/{userName}")
+    public User updateUserName(@PathVariable("userId") int userId, @PathVariable("userName") String userName) throws UserNotFoundException, UserAlreadyExistsException {
         return manageUser.updateUserName(userId, userName);
     }
 
-    @Override
-    public User updatePassword(int userId, String newPassword) throws UserNotFoundException {
+    @PostMapping("/updatePassword/{userId}/{newPassword}")
+    public User updatePassword(@PathVariable("userId") int userId, @PathVariable("newPassword") String newPassword) throws UserNotFoundException {
         return manageUser.updatePassword(userId, newPassword);
     }
 
-    @Override
-    public User getByName(String userName) throws UserNotFoundException {
+    @GetMapping("/getByName/{userName}")
+    public User getByName(@PathVariable String userName) throws UserNotFoundException {
         return manageUser.getByName(userName);
     }
 
-    @Override
-    public User getById(int userId) throws UserNotFoundException {
+    @GetMapping("/getById/{userId}")
+    public User getById(@PathVariable int userId) throws UserNotFoundException {
         return manageUser.getById(userId);
     }
 
-    @Override
+    @GetMapping("/getAllUsers")
     public List<User> getAllUsers() throws UserNotFoundException {
         return manageUser.getAllUsers();
     }
 
-    @Override
-    public List<User> getOpponents(int currentUserId) throws UserNotFoundException {
+    @GetMapping("/getOpponents/{currentUserId}")
+    public List<User> getOpponents(@PathVariable int currentUserId) throws UserNotFoundException {
         return manageUser.getOpponents(currentUserId);
     }
 
-    @Override
-    public boolean userExists(String userName) {
+    @GetMapping("/userExists/{userName}")
+    public boolean userExists(@PathVariable String userName) {
         return manageUser.userExists(userName);
     }
 }

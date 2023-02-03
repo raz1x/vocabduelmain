@@ -2,45 +2,52 @@ package de.htwberlin.manageVocab.rest_server;
 
 import de.htwberlin.manageVocab.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/manageVocab")
-public class ManageVocabRestAdapter implements ManageVocabRest {
+public class ManageVocabRestAdapter {
 
     @Autowired
     private ManageVocab manageVocab;
 
-    @Override
+    @GetMapping("/getAllCategories")
     public List<Category> getAllCategories() throws CategoryNotFoundException {
         return manageVocab.getAllCategories();
     }
 
-    @Override
-    public Category getCategory(int categoryId) throws CategoryNotFoundException {
+    @GetMapping("/getCategory/{categoryId}")
+    public Category getCategory(@PathVariable int categoryId) throws CategoryNotFoundException {
         return manageVocab.getCategory(categoryId);
     }
 
-    @Override
-    public List<Translation> getPossibleTranslationsFromVocabId(int vocabId, int numberOfTranslations) throws VocabNotFoundException, TranslationNotFoundException {
+    @PostMapping(value = "/parseVocabList", consumes = "text/plain", produces = "text/plain")
+    public void parseVocabList(@RequestBody String file) throws IOException, VocabDAOException {
+        File vocabList = new File(file);
+        manageVocab.parseVocabList(vocabList);
+    }
+
+    @GetMapping("/getPossibleTranslationsFromVocabId/{vocabId}/{numberOfTranslations}")
+    public List<Translation> getPossibleTranslationsFromVocabId(@PathVariable("vocabId") int vocabId, @PathVariable("numberOfTranslations") int numberOfTranslations) throws VocabNotFoundException, TranslationNotFoundException {
         return manageVocab.getPossibleTranslationsFromVocabId(vocabId, numberOfTranslations);
     }
 
-    @Override
-    public VocabList getRandomVocabListFromCategory(int categoryId) throws CategoryNotFoundException, VocabListNotFoundException {
+    @GetMapping("/getRandomVocabListFromCategory/{categoryId}")
+    public VocabList getRandomVocabListFromCategory(@PathVariable int categoryId) throws CategoryNotFoundException, VocabListNotFoundException {
         return manageVocab.getRandomVocabListFromCategory(categoryId);
     }
 
-    @Override
-    public Vocab getRandomVocabFromVocabList(int vocabListId) throws VocabListNotFoundException, VocabNotFoundException {
+    @GetMapping("/getRandomVocabFromVocabList/{vocabListId}")
+    public Vocab getRandomVocabFromVocabList(@PathVariable int vocabListId) throws VocabListNotFoundException, VocabNotFoundException {
         return manageVocab.getRandomVocabFromVocabList(vocabListId);
     }
 
-    @Override
-    public Translation getTranslationFromVocabId(int vocabId) throws VocabNotFoundException, TranslationNotFoundException {
+    @GetMapping("/getTranslationFromVocabId/{vocabId}")
+    public Translation getTranslationFromVocabId(@PathVariable int vocabId) throws VocabNotFoundException, TranslationNotFoundException {
         return manageVocab.getTranslationFromVocabId(vocabId);
     }
 }

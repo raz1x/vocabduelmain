@@ -1,7 +1,7 @@
 package de.htwberlin;
 
 import de.htwberlin.manageGame.export.*;
-import de.htwberlin.manageGame.rest_client.ManageGameRestClient;
+import de.htwberlin.manageGame.rest_client.ManageGameRestClientAdapter;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class VocabUIControllerImpl implements VocabUIController {
     private ManageUser manageUser;
 
     @Autowired
-    private ManageGameRestClient manageGameRestClient;
+    private ManageGameRestClientAdapter manageGameRestClient;
 
     @Autowired
     private ManageGame manageGame;

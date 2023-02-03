@@ -1,4 +1,4 @@
-package de.htwberlin.manageGame.rest_server;
+package de.htwberlin.manageGame.rest_client;
 
 import de.htwberlin.manageGame.export.*;
 import de.htwberlin.manageVocab.export.CategoryNotFoundException;
