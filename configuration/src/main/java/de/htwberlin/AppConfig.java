@@ -54,11 +54,6 @@ public class AppConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
-    @Bean
     public HttpClient httpClient() {
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(30 * 1000).build();
         return HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();

@@ -1,10 +1,11 @@
 package de.htwberlin;
 
 import de.htwberlin.manageGame.export.*;
-import de.htwberlin.manageGame.rest_client.ManageGameRestClientAdapter;
+import de.htwberlin.manageGame.rest_client.ManageGameRestServiceClientAdapter;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -20,9 +21,6 @@ public class VocabUIControllerImpl implements VocabUIController {
     private ManageUser manageUser;
 
     @Autowired
-    private ManageGameRestClientAdapter manageGameRestClient;
-
-    @Autowired
     private ManageGame manageGame;
 
     @Autowired
@@ -33,7 +31,7 @@ public class VocabUIControllerImpl implements VocabUIController {
     @Override
     public void run() {
         try {
-            manageGameRestClient.getAllOngoingGamesForUser(1);
+            List<Game> games = manageGame.getAllOngoingGamesForUser(1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
