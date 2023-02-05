@@ -151,4 +151,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(gameApiError, new HttpHeaders(), gameApiError.getStatus());
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.INTERNAL_SERVER_ERROR, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
+
 }
