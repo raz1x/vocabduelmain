@@ -23,6 +23,8 @@
         <module>manageGame.rest_client</module>
         <module>manageVocab.rest_server</module>
         <module>userManager.rest_server</module>
+        <module>manageVocab.rest_client</module>
+        <module>userManager.rest_client</module>
     </modules>
 
     <dependencies>

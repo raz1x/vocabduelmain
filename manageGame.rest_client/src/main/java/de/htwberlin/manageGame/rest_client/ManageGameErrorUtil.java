@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 
-public class ErrorUtils {
+public class ManageGameErrorUtil {
 
     public static GameApiError parseError(Response<?> response) throws IOException {
         Converter<ResponseBody, GameApiError> converter = ManageGameRestServiceClientAdapter.rf
@@ -31,7 +31,25 @@ public class ErrorUtils {
     public static Exception parseException(GameApiError error) {
         Exception exp = null;
         try {
-            Class<?> exceptionClass = Class.forName("de.htwberlin.manageGame.export." + error.getExceptionClass());
+            String packageName = switch(error.getExceptionClass()) {
+                case "UserDoesNotExistException":
+                case "GameDoesNotExistException":
+                case "GameQuestionDoesNotExistException":
+                case "RoundDoesNotExistException":
+                case "RoundResultDoesNotExistException":
+                case "GameAnswerDoesNotExistException":
+                    yield "manageGame.export.";
+                case "UserNotFoundException":
+                    yield "userManager.export.";
+                case "CategoryNotFoundException":
+                case "TranslationNotFoundException":
+                case "VocabListNotFoundException":
+                case "VocabNotFoundException":
+                    yield "manageVocab.export.";
+                default:
+                    yield "";
+            };
+            Class<?> exceptionClass = Class.forName("de.htwberlin." + packageName + error.getExceptionClass());
             Constructor<?> constructor = exceptionClass.getConstructor(String.class);
             exp = switch (exceptionClass.getSimpleName()) {
                 case "UserDoesNotExistException" ->

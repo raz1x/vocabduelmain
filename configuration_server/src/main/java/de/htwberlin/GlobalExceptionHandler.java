@@ -1,6 +1,11 @@
 package de.htwberlin;
 
 import de.htwberlin.manageGame.export.*;
+import de.htwberlin.manageVocab.export.*;
+import de.htwberlin.userManager.export.UserAlreadyExistsException;
+import de.htwberlin.userManager.export.UserApiError;
+import de.htwberlin.userManager.export.UserNotFoundException;
+import de.htwberlin.userManager.export.WrongPasswordException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +58,75 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(gameApiError, new HttpHeaders(), gameApiError.getStatus());
     }
 
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ResponseEntity<Object> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.CONFLICT, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
 
+    @ExceptionHandler(CategoryNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ResponseEntity<Object> handleCategoryNotFoundException(CategoryNotFoundException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.NOT_FOUND, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
 
+    @ExceptionHandler(TranslationNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ResponseEntity<Object> handleTranslationNotFoundException(TranslationNotFoundException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.NOT_FOUND, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
+
+    @ExceptionHandler(VocabListAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ResponseEntity<Object> handleVocabListAlreadyExistsException(VocabListAlreadyExistsException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.CONFLICT, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
+
+    @ExceptionHandler(VocabListNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ResponseEntity<Object> handleVocabListNotFoundException(VocabListNotFoundException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.NOT_FOUND, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
+
+    @ExceptionHandler(VocabNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ResponseEntity<Object> handleVocabNotFoundException(VocabNotFoundException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.NOT_FOUND, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
+        UserApiError userApiError = new UserApiError(HttpStatus.CONFLICT, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(userApiError, new HttpHeaders(), userApiError.getStatus());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException e) {
+        UserApiError userApiError = new UserApiError(HttpStatus.NOT_FOUND, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(userApiError, new HttpHeaders(), userApiError.getStatus());
+    }
+
+    @ExceptionHandler(WrongPasswordException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ResponseEntity<Object> handleWrongPasswordException(WrongPasswordException e) {
+        UserApiError userApiError = new UserApiError(HttpStatus.UNAUTHORIZED, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(userApiError, new HttpHeaders(), userApiError.getStatus());
+    }
 }

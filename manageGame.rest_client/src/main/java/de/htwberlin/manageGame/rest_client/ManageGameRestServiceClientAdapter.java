@@ -17,14 +17,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import java.io.IOException;
 import java.util.List;
 
-@Service("manageGameRestServiceClientAdapter")
+@Service
 public class ManageGameRestServiceClientAdapter implements ManageGame {
 
     private static final String URL = "http://localhost:8080/manageGame/";
     static Retrofit rf = new Retrofit.Builder()
             .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build();
 
     @Override
@@ -35,8 +35,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
                 if(exp instanceof UserDoesNotExistException) {
                     throw (UserDoesNotExistException) exp;
                 } else if(exp instanceof UserNotFoundException) {
@@ -59,8 +59,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
@@ -81,8 +81,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
@@ -103,8 +103,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
@@ -124,8 +124,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
@@ -151,8 +151,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
@@ -184,8 +184,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
@@ -207,8 +207,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
@@ -229,8 +229,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof CategoryNotFoundException) {
                     throw (CategoryNotFoundException) exp;
@@ -260,8 +260,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameQuestionDoesNotExistException) {
                     throw (GameQuestionDoesNotExistException) exp;
@@ -287,8 +287,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
@@ -314,8 +314,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameAnswerDoesNotExistException) {
                     throw (GameAnswerDoesNotExistException) exp;
@@ -337,8 +337,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameAnswerDoesNotExistException) {
                     throw (GameAnswerDoesNotExistException) exp;
@@ -361,8 +361,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
@@ -390,8 +390,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
@@ -413,8 +413,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
         try {
             response = call.execute();
             if (!response.isSuccessful()) {
-                GameApiError gameApiError = ErrorUtils.parseError(response);
-                Exception exp = ErrorUtils.parseException(gameApiError);
+                GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
+                Exception exp = ManageGameErrorUtil.parseException(gameApiError);
 
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;

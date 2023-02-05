@@ -31,10 +31,14 @@ public class VocabUIControllerImpl implements VocabUIController {
     @Override
     public void run() {
         try {
-            List<Game> games = manageGame.getAllOngoingGamesForUser(1);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            List<User> users = manageUser.getOpponents(1);
+            for (User user : users) {
+                System.out.println(user.getUserId());
+            }
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
         }
+        showMainMenu();
     }
 
     @Override

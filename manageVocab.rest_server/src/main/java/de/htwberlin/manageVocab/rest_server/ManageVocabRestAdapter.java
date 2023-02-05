@@ -27,8 +27,7 @@ public class ManageVocabRestAdapter {
 
     @PostMapping(value = "/parseVocabList", consumes = "text/plain", produces = "text/plain")
     public void parseVocabList(@RequestBody String file) throws IOException, VocabDAOException {
-        File vocabList = new File(file);
-        manageVocab.parseVocabList(vocabList);
+        manageVocab.parseVocabList(new File(String.valueOf(file)));
     }
 
     @GetMapping("/getPossibleTranslationsFromVocabId/{vocabId}/{numberOfTranslations}")

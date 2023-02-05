@@ -38,21 +38,6 @@ public class AppConfig {
         ui.run();
     }
 
-    @Bean("entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setPersistenceUnitName("vocabDuelPU");
-
-        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        emf.setJpaVendorAdapter(vendorAdapter);
-        return emf;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        return new JpaTransactionManager();
-    }
-
     @Bean
     public HttpClient httpClient() {
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(30 * 1000).build();
