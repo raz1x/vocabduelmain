@@ -5,7 +5,8 @@ import de.htwberlin.manageGame.rest_client.ManageGameRestServiceClientAdapter;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 
 import java.io.File;
@@ -25,6 +26,9 @@ public class VocabUIControllerImpl implements VocabUIController {
 
     @Autowired
     private ManageVocab manageVocab;
+
+    @Autowired
+    ResourceLoader resourceLoader;
 
     private User currentUser;
 
@@ -179,7 +183,14 @@ public class VocabUIControllerImpl implements VocabUIController {
     public void showImportVocabList() {
         int choice = 0;
 
-        File folder = new File("textFiles");
+        System.out.println(getClass().getSimpleName());
+        Resource resource = resourceLoader.getResource("classpath:textFiles");
+        File folder = null;
+        try {
+            folder = resource.getFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         File[] listOfFiles = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
