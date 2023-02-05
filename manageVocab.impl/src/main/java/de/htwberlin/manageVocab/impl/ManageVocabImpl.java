@@ -92,12 +92,12 @@ public class ManageVocabImpl implements ManageVocab {
             while (translationMatcher.find()) {
                 translationMatches.add(translationMatcher.group(1));
             }
-            Set<Translation> translations = new HashSet<>();
+            Set<Translation> translations = new HashSet<Translation>();
             for (String translation : translationMatches) {
                 Translation newTranslation = new Translation(translation);
                 translations.add(newTranslation);
             }
-            Set<Vocab> vocabs = new HashSet<>();
+            Set<Vocab> vocabs = new HashSet<Vocab>();
             for (String vocab : vocabMatches) {
                 Vocab newVocab = new Vocab(savedVocabList, vocab);
                 newVocab.setTranslations(translations);
@@ -128,7 +128,6 @@ public class ManageVocabImpl implements ManageVocab {
         } catch (VocabDAOException e) {
             throw new RuntimeException(e.getMessage());
         }
-        Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations;
         try {
            translations = vocabDAO.getOtherTranslationsForVocabId(vocab);

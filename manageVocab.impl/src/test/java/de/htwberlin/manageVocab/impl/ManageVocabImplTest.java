@@ -46,7 +46,7 @@ public class ManageVocabImplTest {
 
     //TODO: geht nicht
     @Test
-    void getAllCategoriesCategoryNotFound() throws CategoryNotFoundException {
+    void getAllCategoriesCategoryNotFound() {
         // 1. Arrange
         // 2. Act
         Assertions.assertThrows(CategoryNotFoundException.class, ()-> manageVocab.getAllCategories());

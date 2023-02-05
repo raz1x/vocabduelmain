@@ -17,8 +17,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
     private static final String URL = "http://localhost:8080/manageUser/";
     static Retrofit rf = new Retrofit.Builder()
             .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build();
 
     @Override

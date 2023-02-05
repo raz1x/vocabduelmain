@@ -7,9 +7,11 @@ import de.htwberlin.manageVocab.export.VocabListNotFoundException;
 import de.htwberlin.manageVocab.export.VocabNotFoundException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/manageGame")
@@ -73,9 +75,9 @@ public class ManageGameRestAdapter {
         return manageGame.getGameQuestionsForRound(gameId, roundId);
     }
 
-    @GetMapping("/getGameAnswersForGameQuestion/{gameQuestionId}")
-    public List<GameAnswer> getGameAnswersForGameQuestion(@PathVariable int gameQuestionId) throws GameAnswerDoesNotExistException {
-        return manageGame.getGameAnswersForGameQuestion(gameQuestionId);
+    @GetMapping(value = "/getGameAnswersForGameQuestion/{gameQuestionId}", produces = "application/json")
+    public ResponseEntity<List<GameAnswer>> getGameAnswersForGameQuestion(@PathVariable int gameQuestionId) throws GameAnswerDoesNotExistException {
+        return ResponseEntity.of(Optional.of(manageGame.getGameAnswersForGameQuestion(gameQuestionId)));
     }
 
     @PostMapping("/lockInAnswer/{gameAnswerId}/{userId}/{isCorrect}")

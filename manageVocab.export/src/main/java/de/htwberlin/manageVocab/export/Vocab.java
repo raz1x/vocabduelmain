@@ -2,7 +2,9 @@ package de.htwberlin.manageVocab.export;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -33,7 +35,7 @@ public class Vocab {
     @JoinTable(name = "Vocab_Translation",
             joinColumns = @JoinColumn(name = "vocabId"),
             inverseJoinColumns = @JoinColumn(name = "translationId"))
-    private Set<Translation> translations = new HashSet<>();
+    private Set<Translation> translations = new HashSet<Translation>();
 
     /**
      * Default constructor for Vocab.

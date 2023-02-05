@@ -2,7 +2,9 @@ package de.htwberlin.manageVocab.export;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -58,13 +60,5 @@ public class Translation {
 
     public void setTranslation(String translation) {
         this.translation = translation;
-    }
-
-    public Set<Vocab> getVocabs() {
-        return vocabs;
-    }
-
-    public void setVocabs(Set<Vocab> vocabs) {
-        this.vocabs = vocabs;
     }
 }

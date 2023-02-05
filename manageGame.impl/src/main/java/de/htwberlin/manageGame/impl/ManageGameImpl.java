@@ -174,13 +174,19 @@ public class ManageGameImpl implements ManageGame {
 
     @Override
     public List<GameQuestion> getGameQuestionsForRound(int gameId, int roundNumber) throws RoundDoesNotExistException, GameDoesNotExistException, GameQuestionDoesNotExistException {
-        return gameDAO.getGameQuestionsForRound(gameId, roundNumber);
+        List<GameQuestion> gameQuestions = gameDAO.getGameQuestionsForRound(gameId, roundNumber);
+        for (GameQuestion gameQuestion : gameQuestions) {
+            System.out.println(gameQuestion.getVocab().getTranslations().iterator().next());
+        }
+        return gameQuestions;
     }
-
     @Override
     public List<GameAnswer> getGameAnswersForGameQuestion(int gameQuestionId) throws GameAnswerDoesNotExistException {
         List <GameAnswer> gameAnswers = gameDAO.getGameAnswersForGameQuestion(gameQuestionId);
         Collections.shuffle(gameAnswers);
+        for (GameAnswer gameAnswer : gameAnswers) {
+            System.out.println(gameAnswer.getGameQuestion().getVocab().getTranslations().iterator().next());
+        }
         return gameAnswers;
     }
 
