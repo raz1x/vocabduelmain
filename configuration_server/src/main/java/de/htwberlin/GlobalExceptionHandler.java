@@ -2,10 +2,7 @@ package de.htwberlin;
 
 import de.htwberlin.manageGame.export.*;
 import de.htwberlin.manageVocab.export.*;
-import de.htwberlin.userManager.export.UserAlreadyExistsException;
-import de.htwberlin.userManager.export.UserApiError;
-import de.htwberlin.userManager.export.UserNotFoundException;
-import de.htwberlin.userManager.export.WrongPasswordException;
+import de.htwberlin.userManager.export.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,4 +126,29 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         UserApiError userApiError = new UserApiError(HttpStatus.UNAUTHORIZED, e.getClass().getSimpleName(), e.getMessage());
         return new ResponseEntity<Object>(userApiError, new HttpHeaders(), userApiError.getStatus());
     }
+
+    @ExceptionHandler(VocabDAOException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ResponseEntity<Object> handleVocabDAOException(VocabDAOException e) {
+        VocabApiError vocabApiError = new VocabApiError(HttpStatus.INTERNAL_SERVER_ERROR, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
+
+    @ExceptionHandler(UserDAOPersistenceException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ResponseEntity<Object> handleUserDAOPersistenceException(UserDAOPersistenceException e) {
+        UserApiError userApiError = new UserApiError(HttpStatus.INTERNAL_SERVER_ERROR, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(userApiError, new HttpHeaders(), userApiError.getStatus());
+    }
+
+    @ExceptionHandler(GameDAOPersistenceException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ResponseEntity<Object> handleGameDAOPersistenceException(GameDAOPersistenceException e) {
+        GameApiError gameApiError = new GameApiError(HttpStatus.INTERNAL_SERVER_ERROR, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(gameApiError, new HttpHeaders(), gameApiError.getStatus());
+    }
+
 }

@@ -37,6 +37,8 @@ public class ManageVocabErrorUtil {
                         (TranslationNotFoundException) constructor.newInstance(error.getMessage());
                 case "VocabListNotFoundException" ->
                         (VocabListNotFoundException) constructor.newInstance(error.getMessage());
+                case "VocabDAOException" ->
+                        (VocabDAOException) constructor.newInstance(error.getMessage());
                 default -> (Exception) constructor.newInstance(error.getMessage());
             };
         } catch (Exception e) {
