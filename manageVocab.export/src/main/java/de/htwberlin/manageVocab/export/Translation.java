@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Translation")
+@NamedQuery(name = "Translation.getOtherTranslations", query = "SELECT t FROM Translation t JOIN t.vocabs v WHERE t NOT IN(:translation) AND v.vocabList = :vocabList")
 public class Translation {
     /**
      * Id of the translation.
@@ -29,7 +30,9 @@ public class Translation {
     @ManyToMany(mappedBy = "translations")
     private Set<Vocab> vocabs = new HashSet<>();
 
-
+    @Version
+    @Column(name = "version")
+    private int version;
     /**
      * Default constructor for Translation.
      */
@@ -60,5 +63,13 @@ public class Translation {
 
     public void setTranslation(String translation) {
         this.translation = translation;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

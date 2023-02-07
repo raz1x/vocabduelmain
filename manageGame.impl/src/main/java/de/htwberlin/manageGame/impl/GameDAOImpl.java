@@ -2,10 +2,8 @@ package de.htwberlin.manageGame.impl;
 
 import de.htwberlin.manageGame.export.*;
 import de.htwberlin.userManager.export.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Type;
@@ -22,6 +20,8 @@ public class GameDAOImpl implements GameDAO {
         try {
             em.persist(game);
             return game;
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not save game with id " + game.getGameId());
         }
@@ -31,6 +31,8 @@ public class GameDAOImpl implements GameDAO {
     public Game updateGame(Game game) throws GameDAOPersistenceException {
         try {
             return em.merge(game);
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not update game with id " + game.getGameId());
         }
@@ -39,17 +41,20 @@ public class GameDAOImpl implements GameDAO {
     @Override
     public Game getGame(int gameId) throws GameDoesNotExistException {
         try {
-            return em.find(Game.class, gameId);
-        } catch (Exception e) {
+            return em.find(Game.class, gameId, LockModeType.OPTIMISTIC);
+        } catch (OptimisticLockException e) {
+            throw e;
+        } catch (Exception ex) {
             throw new GameDoesNotExistException("Could not find game with id " + gameId);
         }
     }
 
     @Override
     public List<Game> getOngoingGamesForUser(User user) throws GameDoesNotExistException {
-        TypedQuery<Game> query = em.createQuery("SELECT g FROM Game g WHERE g.currentUser = :userId AND g.isOngoing = :isOngoing", Game.class)
+        TypedQuery<Game> query = em.createNamedQuery("Game.getOngoingGamesForUser", Game.class)
                 .setParameter("userId", user.getUserId())
-                .setParameter("isOngoing", true);
+                .setParameter("isOngoing", true)
+                .setLockMode(LockModeType.OPTIMISTIC);
         if (query.getResultList().size() == 0) {
             throw new GameDoesNotExistException("Could not find any ongoing games for user with id " + user.getUserId());
         }
@@ -61,6 +66,8 @@ public class GameDAOImpl implements GameDAO {
         try {
             em.persist(gameAnswer);
             return gameAnswer;
+        } catch (OptimisticLockException e) {
+                throw e;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not save game answer with id " + gameAnswer.getGameAnswerId());
         }
@@ -70,7 +77,7 @@ public class GameDAOImpl implements GameDAO {
     @Override
     public GameAnswer getGameAnswer(int gameAnswerId) throws GameAnswerDoesNotExistException {
         GameAnswer gameAnswer;
-        gameAnswer = em.find(GameAnswer.class, gameAnswerId);
+        gameAnswer = em.find(GameAnswer.class, gameAnswerId, LockModeType.OPTIMISTIC);
         if (gameAnswer == null) {
             throw new GameAnswerDoesNotExistException("Could not find game answer with id " + gameAnswerId);
         }
@@ -80,8 +87,9 @@ public class GameDAOImpl implements GameDAO {
     @Override
     public List<GameAnswer> getGameAnswersForGameQuestion(int gameQuestionId) throws GameAnswerDoesNotExistException {
         List<GameAnswer> gameAnswers;
-        TypedQuery<GameAnswer> query = em.createQuery("SELECT ga FROM GameAnswer ga WHERE ga.gameQuestion.gameQuestionId = :gameQuestionId", GameAnswer.class)
-                .setParameter("gameQuestionId", gameQuestionId);
+        TypedQuery<GameAnswer> query = em.createNamedQuery("GameAnswer.getByGameQuestionId", GameAnswer.class)
+                .setParameter("gameQuestionId", gameQuestionId)
+                .setLockMode(LockModeType.OPTIMISTIC);
         if (query.getResultList().size() == 0) {
             throw new GameAnswerDoesNotExistException("Could not find any game answers for game question with id " + gameQuestionId);
         }
@@ -93,6 +101,8 @@ public class GameDAOImpl implements GameDAO {
         try {
             em.persist(gameQuestion);
             return gameQuestion;
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not save game question with id " + gameQuestion.getGameQuestionId());
         }
@@ -101,7 +111,7 @@ public class GameDAOImpl implements GameDAO {
     @Override
     public GameQuestion getGameQuestion(int gameQuestionId) throws GameQuestionDoesNotExistException {
         GameQuestion gameQuestion;
-        gameQuestion = em.find(GameQuestion.class, gameQuestionId);
+        gameQuestion = em.find(GameQuestion.class, gameQuestionId, LockModeType.OPTIMISTIC);
         if (gameQuestion == null) {
             throw new GameQuestionDoesNotExistException("Could not find game question with id " + gameQuestionId);
         }
@@ -116,15 +126,19 @@ public class GameDAOImpl implements GameDAO {
         }
         Round round;
         try {
-            round = em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.roundNumber = :roundNumber", Round.class)
+            round = em.createNamedQuery("Round.getRoundByGameAndRoundNumber", Round.class)
                     .setParameter("game", game)
                     .setParameter("roundNumber", roundNumber)
+                    .setLockMode(LockModeType.OPTIMISTIC)
                     .getSingleResult();
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new RoundDoesNotExistException("Could not find round with number " + roundNumber + " for game with id " + gameId);
         }
-        TypedQuery<GameQuestion> gameQuestionQuery = em.createQuery("SELECT gq FROM GameQuestion gq WHERE gq.round = :round", GameQuestion.class)
-                .setParameter("round", round);
+        TypedQuery<GameQuestion> gameQuestionQuery = em.createNamedQuery("GameQuestion.getByRound", GameQuestion.class)
+                .setParameter("round", round)
+                .setLockMode(LockModeType.OPTIMISTIC);
         if (gameQuestionQuery.getResultList().size() == 0) {
             throw new GameQuestionDoesNotExistException("Could not find any game questions for round with number " + roundNumber + " for game with id " + gameId);
         }
@@ -136,6 +150,8 @@ public class GameDAOImpl implements GameDAO {
         try {
             em.persist(round);
             return round;
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not save round with id " + round.getRoundId());
         }
@@ -145,6 +161,8 @@ public class GameDAOImpl implements GameDAO {
     public Round updateRound(Round round) throws GameDAOPersistenceException {
         try {
             return em.merge(round);
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not update round with id " + round.getRoundId());
         }
@@ -154,10 +172,13 @@ public class GameDAOImpl implements GameDAO {
     public Round getRound(int gameId, int roundNumber) throws RoundDoesNotExistException {
         try {
             Game game = em.find(Game.class, gameId);
-            return em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.roundNumber = :roundNumber", Round.class)
+            return em.createNamedQuery("Round.getRoundByGameAndRoundNumber", Round.class)
                     .setParameter("gameId", game)
                     .setParameter("roundNumber", roundNumber)
+                    .setLockMode(LockModeType.OPTIMISTIC)
                     .getSingleResult();
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new RoundDoesNotExistException("Could not find round number " + roundNumber + " for game with id " + gameId);
         }
@@ -166,7 +187,9 @@ public class GameDAOImpl implements GameDAO {
     @Override
     public Round getRoundById(int roundId) throws RoundDoesNotExistException {
         try {
-            return em.find(Round.class, roundId);
+            return em.find(Round.class, roundId, LockModeType.OPTIMISTIC);
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new RoundDoesNotExistException("Could not find round with id " + roundId);
         }
@@ -176,9 +199,12 @@ public class GameDAOImpl implements GameDAO {
     public int getNumberOfRounds(int gameId) throws GameDoesNotExistException {
         try {
             Game game = em.find(Game.class, gameId);
-            return em.createQuery("SELECT COUNT(r) FROM Round r WHERE r.game = :game", Long.class)
+            return em.createNamedQuery("Round.getNumberOfRounds", Long.class)
                     .setParameter("game", game)
+                    .setLockMode(LockModeType.OPTIMISTIC)
                     .getSingleResult().intValue();
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new GameDoesNotExistException("Could not find game with id " + gameId);
         }
@@ -188,9 +214,12 @@ public class GameDAOImpl implements GameDAO {
     public Round getOngoingRound(int gameId) throws RoundDoesNotExistException {
         try {
             Game game = em.find(Game.class, gameId);
-            return em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.isOngoing = true", Round.class)
+            return em.createNamedQuery("Round.getOngoingRound", Round.class)
                     .setParameter("game", game)
+                    .setLockMode(LockModeType.OPTIMISTIC)
                     .getSingleResult();
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new RoundDoesNotExistException("Could not find ongoing round for game with id " + gameId);
         }
@@ -201,6 +230,8 @@ public class GameDAOImpl implements GameDAO {
         try {
             em.persist(roundResult);
             return roundResult;
+        } catch (OptimisticLockException e) {
+            throw e;
         } catch (Exception e) {
             throw new GameDAOPersistenceException("Could not save round result with id " + roundResult.getRoundResultId());
         }
@@ -208,10 +239,10 @@ public class GameDAOImpl implements GameDAO {
 
     @Override
     public List<RoundResult> getCorrectRoundResults(Game game, User user) throws RoundResultDoesNotExistException {
-         TypedQuery<RoundResult> roundResults = em.createQuery("SELECT rr FROM RoundResult rr JOIN rr.chosenAnswer ga " +
-                        "JOIN ga.gameQuestion gq JOIN gq.game g WHERE g.gameId = :gameId AND rr.user = :user AND rr.isCorrect = true", RoundResult.class)
+         TypedQuery<RoundResult> roundResults = em.createNamedQuery("RoundResult.selectCorrectRoundResults", RoundResult.class)
                 .setParameter("gameId", game.getGameId())
-                .setParameter("user", user);
+                .setParameter("user", user)
+                 .setLockMode(LockModeType.OPTIMISTIC);
          if (roundResults.getResultList().size() == 0) {
              throw new RoundResultDoesNotExistException("Could not find any correct round results for game with id " + game.getGameId() + " and user with id " + user.getUserId());
          }

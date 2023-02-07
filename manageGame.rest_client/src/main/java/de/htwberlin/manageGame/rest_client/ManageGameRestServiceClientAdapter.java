@@ -7,6 +7,7 @@ import de.htwberlin.manageVocab.export.VocabListNotFoundException;
 import de.htwberlin.manageVocab.export.VocabNotFoundException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
+import jakarta.persistence.OptimisticLockException;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (UserDoesNotExistException) exp;
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -73,6 +76,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 Exception exp = ManageGameErrorUtil.parseException(gameApiError);
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -95,6 +100,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 Exception exp = ManageGameErrorUtil.parseException(gameApiError);
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -117,6 +124,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 Exception exp = ManageGameErrorUtil.parseException(gameApiError);
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -143,6 +152,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (UserDoesNotExistException) exp;
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -176,6 +187,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (VocabListNotFoundException) exp;
                 } else if(exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -199,6 +212,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
 
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -222,6 +237,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
 
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -252,6 +269,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (TranslationNotFoundException) exp;
                 } else if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -279,6 +298,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (VocabNotFoundException) exp;
                 } else if(exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -306,6 +327,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (RoundDoesNotExistException) exp;
                 } else if(exp instanceof GameQuestionDoesNotExistException) {
                     throw (GameQuestionDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -329,6 +352,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
 
                 if(exp instanceof GameAnswerDoesNotExistException) {
                     throw (GameAnswerDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -354,6 +379,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (GameAnswerDoesNotExistException) exp;
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -382,6 +409,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                     throw (RoundResultDoesNotExistException) exp;
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -405,6 +434,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -428,6 +459,8 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
 
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }

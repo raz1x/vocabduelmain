@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "GameQuestion")
+@NamedQuery(name = "GameQuestion.getByRound", query = "SELECT gq FROM GameQuestion gq WHERE gq.round = :round")
 public class GameQuestion {
     /**
      * ID of the question.
@@ -39,6 +40,10 @@ public class GameQuestion {
      */
     @Column(name = "questionNumber")
     private int questionNumber;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     /**
      * Default constructor for GameQuestion.
@@ -99,5 +104,13 @@ public class GameQuestion {
 
     public void setQuestionNumber(int index) {
         this.questionNumber = index;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

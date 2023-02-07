@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "RoundResult")
+@NamedQuery(name = "RoundResult.selectCorrectRoundResults", query = "SELECT rr FROM RoundResult rr JOIN rr.chosenAnswer ga JOIN ga.gameQuestion gq JOIN gq.round r JOIN r.game g WHERE g.gameId = :gameId AND rr.user = :user AND rr.isCorrect = true")
 public class RoundResult {
     /**
      * The ID of the round result.
@@ -31,6 +32,10 @@ public class RoundResult {
      */
     @Column(name = "isCorrect")
     private boolean isCorrect;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     /**
      * Default constructor for RoundResult.
@@ -80,5 +85,13 @@ public class RoundResult {
 
     public void setCorrect(boolean isCorrect) {
         this.isCorrect = isCorrect;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

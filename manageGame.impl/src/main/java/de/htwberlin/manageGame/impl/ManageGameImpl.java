@@ -7,6 +7,7 @@ import de.htwberlin.userManager.export.User;
 
 import de.htwberlin.userManager.export.UserDAOPersistenceException;
 import de.htwberlin.userManager.export.UserNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service("manageGameImpl")
-@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
+@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = {OptimisticLockException.class, RuntimeException.class})
 public class ManageGameImpl implements ManageGame {
 
     @Autowired
@@ -106,10 +107,9 @@ public class ManageGameImpl implements ManageGame {
     }
 
     @Override
-    public Round updateRound(Round round) {
+    public Round updateRound(Round round) throws RoundDoesNotExistException {
         try {
-            gameDAO.updateRound(round);
-            return round;
+            return gameDAO.updateRound(round);
         } catch (GameDAOPersistenceException e) {
             throw new RuntimeException(e.getMessage());
         }

@@ -4,6 +4,7 @@ import de.htwberlin.userManager.export.UserAlreadyExistsException;
 import de.htwberlin.userManager.export.UserApiError;
 import de.htwberlin.userManager.export.UserNotFoundException;
 import de.htwberlin.userManager.export.WrongPasswordException;
+import jakarta.persistence.OptimisticLockException;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
@@ -31,6 +32,8 @@ public class ManageUserErrorUtil {
         Exception exp = null;
         if (Objects.equals(error.getExceptionClass(), "RuntimeException")) {
             return new RuntimeException(error.getMessage());
+        } else if (Objects.equals(error.getExceptionClass(), "OptimisticLockException")) {
+            return new OptimisticLockException(error.getMessage());
         }
         try {
             Class<?> exceptionClass = Class.forName("de.htwberlin.userManager.export." + error.getExceptionClass());

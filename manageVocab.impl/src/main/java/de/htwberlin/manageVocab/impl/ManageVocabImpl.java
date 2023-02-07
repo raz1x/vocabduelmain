@@ -1,6 +1,7 @@
 package de.htwberlin.manageVocab.impl;
 
 import de.htwberlin.manageVocab.export.*;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
+@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = {OptimisticLockException.class, RuntimeException.class})
 public class ManageVocabImpl implements ManageVocab {
 
     @Autowired

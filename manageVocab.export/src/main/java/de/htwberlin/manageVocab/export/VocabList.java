@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "VocabList")
+@NamedQuery(name = "VocabList.getVocabListByCategory", query = "SELECT v FROM VocabList v WHERE v.category = :category")
 public class VocabList {
     /**
      * Id of the vocabList.
@@ -36,6 +37,10 @@ public class VocabList {
      */
     @Column(name = "languageB")
     private String languageB;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     /**
      * Default constructor for VocabList.
@@ -96,5 +101,13 @@ public class VocabList {
 
     public void setLanguageB(String languageB) {
         this.languageB = languageB;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

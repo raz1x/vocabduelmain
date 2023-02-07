@@ -381,11 +381,6 @@ public class VocabUIControllerImpl implements VocabUIController {
         } catch (RoundDoesNotExistException e) {
             view.showError("Could not update round!");
         }
-        try {
-            game = manageGame.updateGame(game);
-        } catch (GameDoesNotExistException e) {
-            view.showError("Could not update game!");
-        }
         // if both players have answered, finish the round
         if (round.isPlayer1Answered() && round.isPlayer2Answered()) {
             try {

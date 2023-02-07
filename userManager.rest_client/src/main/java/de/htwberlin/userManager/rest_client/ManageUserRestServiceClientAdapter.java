@@ -1,6 +1,7 @@
 package de.htwberlin.userManager.rest_client;
 
 import de.htwberlin.userManager.export.*;
+import jakarta.persistence.OptimisticLockException;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserAlreadyExistsException) {
                     throw (UserAlreadyExistsException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -67,6 +70,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                     throw (UserNotFoundException) exp;
                 } else if (exp instanceof WrongPasswordException) {
                     throw (WrongPasswordException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -89,6 +94,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -110,6 +117,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -133,6 +142,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                     throw (UserNotFoundException) exp;
                 } else if (exp instanceof UserAlreadyExistsException) {
                     throw (UserAlreadyExistsException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -155,6 +166,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -177,6 +190,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -199,6 +214,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -221,6 +238,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -243,6 +262,8 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }

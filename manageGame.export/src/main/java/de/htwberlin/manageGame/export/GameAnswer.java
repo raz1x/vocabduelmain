@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "GameAnswer")
+@NamedQuery(name = "GameAnswer.getByGameQuestionId", query= "SELECT ga FROM GameAnswer ga WHERE ga.gameQuestion.gameQuestionId = :gameQuestionId")
 public class GameAnswer {
     /**
      * The ID of the answer.
@@ -70,5 +71,13 @@ public class GameAnswer {
 
     public void setTranslation(Translation translation) {
         this.translation = translation;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

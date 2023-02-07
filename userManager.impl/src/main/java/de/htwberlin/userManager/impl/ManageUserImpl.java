@@ -2,6 +2,7 @@ package de.htwberlin.userManager.impl;
 
 import de.htwberlin.userManager.export.*;
 
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
+@Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = {OptimisticLockException.class, RuntimeException.class})
 public class ManageUserImpl implements ManageUser {
 
     @Autowired

@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Vocab")
+@NamedQuery(name = "Vocab.getVocabsForVocabList", query = "SELECT v FROM Vocab v WHERE v.vocabList = :vocabList")
 public class Vocab {
     /**
      * Id of the vocab.
@@ -36,6 +37,10 @@ public class Vocab {
             joinColumns = @JoinColumn(name = "vocabId"),
             inverseJoinColumns = @JoinColumn(name = "translationId"))
     private Set<Translation> translations = new HashSet<Translation>();
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     /**
      * Default constructor for Vocab.
@@ -84,5 +89,13 @@ public class Vocab {
 
     public void setTranslations(Set<Translation> translations) {
         this.translations = translations;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

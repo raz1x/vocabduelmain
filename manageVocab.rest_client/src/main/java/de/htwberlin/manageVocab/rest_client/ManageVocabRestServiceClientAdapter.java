@@ -1,6 +1,7 @@
 package de.htwberlin.manageVocab.rest_client;
 
 import de.htwberlin.manageVocab.export.*;
+import jakarta.persistence.OptimisticLockException;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,8 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 Exception exp = ManageVocabErrorUtil.parseException(vocabApiError);
                 if (exp instanceof CategoryNotFoundException) {
                     throw (CategoryNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -67,6 +70,8 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 Exception exp = ManageVocabErrorUtil.parseException(vocabApiError);
                 if (exp instanceof CategoryNotFoundException) {
                     throw (CategoryNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -90,6 +95,8 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 Exception exp = ManageVocabErrorUtil.parseException(vocabApiError);
                 if (exp instanceof VocabDAOException) {
                     throw (VocabDAOException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -113,6 +120,8 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                     throw (VocabNotFoundException) exp;
                 } else if (exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -137,6 +146,8 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                     throw (CategoryNotFoundException) exp;
                 } else if (exp instanceof VocabListNotFoundException) {
                     throw (VocabListNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -161,6 +172,8 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                     throw (VocabListNotFoundException) exp;
                 } else if (exp instanceof VocabNotFoundException) {
                     throw (VocabNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }
@@ -185,6 +198,8 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                     throw (VocabNotFoundException) exp;
                 } else if (exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
+                } else if (exp instanceof OptimisticLockException) {
+                    throw (OptimisticLockException) exp;
                 } else {
                     throw (RuntimeException) exp;
                 }

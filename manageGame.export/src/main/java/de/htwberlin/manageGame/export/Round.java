@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Round")
+@NamedQuery(name = "Round.getOngoingRound", query = "SELECT r FROM Round r WHERE r.game = :game AND r.isOngoing = true")
+@NamedQuery(name = "Round.getNumberOfRounds", query = "SELECT COUNT(r) FROM Round r WHERE r.game = :game")
+@NamedQuery(name = "Round.getRoundByGameAndRoundNumber", query = "SELECT r FROM Round r WHERE r.game = :game AND r.roundNumber = :roundNumber")
 public class Round {
     /**
      * ID of the round.
@@ -42,6 +45,10 @@ public class Round {
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     /**
      * Default constructor for Round.
@@ -116,6 +123,14 @@ public class Round {
 
     public void setPlayer2Answered(boolean player2Answered) {
         this.player2Answered = player2Answered;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override

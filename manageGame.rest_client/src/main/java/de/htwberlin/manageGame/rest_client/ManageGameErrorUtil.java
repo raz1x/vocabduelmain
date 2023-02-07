@@ -6,6 +6,7 @@ import de.htwberlin.manageVocab.export.TranslationNotFoundException;
 import de.htwberlin.manageVocab.export.VocabListNotFoundException;
 import de.htwberlin.manageVocab.export.VocabNotFoundException;
 import de.htwberlin.userManager.export.UserNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
@@ -33,6 +34,8 @@ public class ManageGameErrorUtil {
         Exception exp = null;
         if (Objects.equals(error.getExceptionClass(), "RuntimeException")) {
             return new RuntimeException(error.getMessage());
+        } else if (Objects.equals(error.getExceptionClass(), "OptimisticLockException")) {
+            return new OptimisticLockException(error.getMessage());
         }
         try {
             String packageName = switch(error.getExceptionClass()) {

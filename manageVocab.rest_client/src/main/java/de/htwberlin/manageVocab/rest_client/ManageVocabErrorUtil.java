@@ -1,6 +1,7 @@
 package de.htwberlin.manageVocab.rest_client;
 
 import de.htwberlin.manageVocab.export.*;
+import jakarta.persistence.OptimisticLockException;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
@@ -28,6 +29,8 @@ public class ManageVocabErrorUtil {
         Exception exp = null;
         if (Objects.equals(error.getExceptionClass(), "RuntimeException")) {
             return new RuntimeException(error.getMessage());
+        } else if (Objects.equals(error.getExceptionClass(), "OptimisticLockException")) {
+            return new OptimisticLockException(error.getMessage());
         }
         try {
             Class<?> exceptionClass = Class.forName("de.htwberlin.manageVocab.export." + error.getExceptionClass());

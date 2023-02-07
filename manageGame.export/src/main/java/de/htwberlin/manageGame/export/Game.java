@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Game")
+@NamedQuery(name = "Game.getOngoingGamesForUser", query = "SELECT g FROM Game g WHERE g.currentUser = :userId AND g.isOngoing = :isOngoing")
 public class Game {
     /**
      * The ID of the game.
@@ -120,5 +121,13 @@ public class Game {
         } else {
             return user1Id;
         }
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Category")
+@NamedQuery(name = "Category.getAllCategories", query = "SELECT c FROM Category c")
+@NamedQuery(name = "Category.getCategoryByName", query = "SELECT c FROM Category c WHERE c.categoryName = :categoryName")
 public class Category {
     /**
      * Id of the category.
@@ -17,6 +19,10 @@ public class Category {
      */
     @Column(name = "categoryName")
     private String categoryName;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     /**
      * Default constructor for Category.
@@ -47,5 +53,13 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

@@ -3,6 +3,7 @@ package de.htwberlin;
 import de.htwberlin.manageGame.export.*;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -157,6 +158,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
         VocabApiError vocabApiError = new VocabApiError(HttpStatus.INTERNAL_SERVER_ERROR, e.getClass().getSimpleName(), e.getMessage());
         return new ResponseEntity<Object>(vocabApiError, new HttpHeaders(), vocabApiError.getStatus());
+    }
+
+    @ExceptionHandler(OptimisticLockException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ResponseEntity<Object> handleOptimisticLockException(OptimisticLockException e) {
+        GameApiError gameApiError = new GameApiError(HttpStatus.CONFLICT, e.getClass().getSimpleName(), e.getMessage());
+        return new ResponseEntity<Object>(gameApiError, new HttpHeaders(), gameApiError.getStatus());
     }
 
 }

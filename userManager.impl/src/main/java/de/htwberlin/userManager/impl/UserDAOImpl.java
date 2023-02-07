@@ -15,7 +15,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void saveUser(User user) throws UserDAOPersistenceException {
         try {
-            em.persist(user, );
+            em.persist(user);
+        } catch (OptimisticLockException e ) {
+            throw e;
         } catch (PersistenceException e) {
             throw new UserDAOPersistenceException("Could not save user with id " + user.getUserId());
         }
@@ -25,6 +27,8 @@ public class UserDAOImpl implements UserDAO {
     public void deleteUser(User user) throws UserDAOPersistenceException {
         try {
             em.remove(user);
+        } catch (OptimisticLockException e ) {
+            throw e;
         } catch (PersistenceException e) {
             throw new UserDAOPersistenceException("Could not delete user with id " + user.getUserId());
         }
@@ -34,6 +38,8 @@ public class UserDAOImpl implements UserDAO {
     public void updateUser(User user) throws PersistenceException, UserDAOPersistenceException {
         try {
             em.merge(user);
+        } catch (OptimisticLockException e ) {
+            throw e;
         } catch (PersistenceException e) {
             throw new UserDAOPersistenceException("Could not update user with id " + user.getUserId());
         }
@@ -42,11 +48,14 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUser(int userId) throws UserNotFoundException, UserDAOPersistenceException {
         try {
-            User user = em.find(User.class, userId);
+            User user = em.find(User.class, userId, LockModeType.OPTIMISTIC);
             if (user == null) {
                 throw new UserNotFoundException("Could not find user with id " + userId);
             }
             return user;
+
+        } catch (OptimisticLockException e ) {
+            throw e;
         } catch (PersistenceException e) {
             throw new UserDAOPersistenceException("Persistence Exception while getting User with id " + userId);
         }
@@ -54,9 +63,9 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByName(String username) throws UserNotFoundException {
-        // TODO: Replace with NamedQuery
-        Query query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
-                .setParameter("username", username);
+        TypedQuery<User> query = em.createNamedQuery("User.getUserByName", User.class)
+                .setParameter("username", username)
+                .setLockMode(LockModeType.OPTIMISTIC);
         if (query.getResultList().size() > 0) {
             return (User) query.getResultList().get(0);
         } else {
@@ -66,8 +75,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> getAllUsers() throws UserNotFoundException {
-        // TODO: Replace with NamedQuery
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
+        TypedQuery<User> query = em.createNamedQuery("User.getAllUsers", User.class).setLockMode(LockModeType.OPTIMISTIC);
         if (query.getResultList().size() > 0) {
             return query.getResultList();
         } else {
@@ -77,9 +85,9 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public List<User> getOpponents(int currentUserId) throws UserNotFoundException {
-        // TODO: Replace with NamedQuery
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.userId != :userId", User.class)
-                .setParameter("userId", currentUserId);
+        TypedQuery<User> query = em.createNamedQuery("User.getOtherUsers", User.class)
+                .setParameter("userId", currentUserId)
+                .setLockMode(LockModeType.OPTIMISTIC);
         if (query.getResultList().size() > 0) {
             return query.getResultList();
         } else {
@@ -91,10 +99,12 @@ public class UserDAOImpl implements UserDAO {
     public boolean checkUserNameAndPassword(String username, String password) throws UserNotFoundException {
         User user;
         try {
-            // TODO: Replace with NamedQuery
-            user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+            user = em.createNamedQuery("User.getUserByName", User.class)
                     .setParameter("username", username)
+                    .setLockMode(LockModeType.OPTIMISTIC)
                     .getSingleResult();
+        } catch (OptimisticLockException e ) {
+            throw e;
         } catch (Exception e) {
             throw new UserNotFoundException("Could not find user with username " + username);
         }

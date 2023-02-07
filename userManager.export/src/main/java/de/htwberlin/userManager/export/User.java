@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 @Entity(name = "User")
 @Table(name = "Users")
+@NamedQuery(name = "User.getUserByName", query = "SELECT u FROM User u WHERE u.username = :username")
+@NamedQuery(name = "User.getAllUsers", query = "SELECT u FROM User u")
+@NamedQuery(name = "User.getOtherUsers", query = "SELECT u FROM User u WHERE u.userId != :userId")
 public class User {
     /**
      * Id of the user.
@@ -29,6 +32,10 @@ public class User {
      */
     @Column(name = "loggedIn")
     private boolean loggedIn;
+
+    @Version
+    @Column(name = "version")
+    private int version;
 
     /**
      * Default constructor for User.
@@ -77,5 +84,13 @@ public class User {
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
