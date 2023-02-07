@@ -27,6 +27,10 @@ public class GameAnswer {
     @JoinColumn(name = "translationId")
     private Translation translation;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     /**
      * Default constructor for GameAnswer.
      */

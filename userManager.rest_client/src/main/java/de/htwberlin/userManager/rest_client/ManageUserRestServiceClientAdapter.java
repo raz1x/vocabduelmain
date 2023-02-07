@@ -1,6 +1,8 @@
 package de.htwberlin.userManager.rest_client;
 
 import de.htwberlin.userManager.export.*;
+import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -10,13 +12,21 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ManageUserRestServiceClientAdapter implements ManageUser {
 
+    private static final OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
+
     private static final String URL = "http://localhost:8080/manageUser/";
     static Retrofit rf = new Retrofit.Builder()
             .baseUrl(URL)
+            .client(okHttpClient)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
@@ -34,7 +44,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserAlreadyExistsException) {
                     throw (UserAlreadyExistsException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -58,7 +68,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 } else if (exp instanceof WrongPasswordException) {
                     throw (WrongPasswordException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -80,7 +90,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -101,7 +111,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -124,7 +134,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 } else if (exp instanceof UserAlreadyExistsException) {
                     throw (UserAlreadyExistsException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -146,7 +156,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -168,7 +178,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -190,7 +200,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -212,7 +222,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -234,7 +244,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
                 if (exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -253,7 +263,7 @@ public class ManageUserRestServiceClientAdapter implements ManageUser {
             if(!response.isSuccessful()) {
                 UserApiError userApiError = ManageUserErrorUtil.parseError(response);
                 Exception exp = ManageUserErrorUtil.parseException(userApiError);
-                throw new RuntimeException(exp);
+                throw (RuntimeException) exp;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

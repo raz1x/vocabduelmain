@@ -119,7 +119,7 @@ public class ManageGameImpl implements ManageGame {
     public void endRound(int roundId) throws RoundDoesNotExistException {
         try {
             Round round = gameDAO.getRoundById(roundId);
-            round.setOnGoing(false);
+            round.setIsOngoing(false);
             gameDAO.updateRound(round);
         } catch (GameDAOPersistenceException e) {
             throw new RuntimeException(e.getMessage());

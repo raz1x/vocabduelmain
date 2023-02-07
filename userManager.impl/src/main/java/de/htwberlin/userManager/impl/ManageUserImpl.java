@@ -5,12 +5,13 @@ import de.htwberlin.userManager.export.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+@Service
 @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW, rollbackFor = Throwable.class)
 public class ManageUserImpl implements ManageUser {
 
@@ -24,7 +25,6 @@ public class ManageUserImpl implements ManageUser {
             user = userDAO.getUserByName(userName);
         } catch (UserNotFoundException e) {
             user = new User(userName, password);
-            System.out.println("User " + userName + " registered!");
             try {
                 userDAO.saveUser(user);
             } catch (UserDAOPersistenceException ex) {
@@ -60,7 +60,6 @@ public class ManageUserImpl implements ManageUser {
         } catch (UserDAOPersistenceException e) {
             throw new RuntimeException(e.getMessage());
         }
-        System.out.println("User " + userId + " logged out.");
     }
 
     @Override
@@ -72,7 +71,6 @@ public class ManageUserImpl implements ManageUser {
         } catch (UserDAOPersistenceException e) {
             throw new RuntimeException(e.getMessage());
         }
-        System.out.println("User " + userId + " deleted.");
     }
 
     @Override
@@ -86,13 +84,12 @@ public class ManageUserImpl implements ManageUser {
         try {
             userDAO.getUserByName(newUserName);
         } catch (UserNotFoundException e){
-            user.setUserName(newUserName);
+            user.setUsername(newUserName);
             try {
                 userDAO.updateUser(user);
             } catch (UserDAOPersistenceException ex) {
                 throw new RuntimeException(e.getMessage());
             }
-            System.out.println("User " + userId + " changed username to " + newUserName);
         }
         return user;
     }
@@ -107,7 +104,6 @@ public class ManageUserImpl implements ManageUser {
         } catch (UserDAOPersistenceException e) {
             throw new RuntimeException(e.getMessage());
         }
-        System.out.println("Successfully changed password of user " + userId);
         return user;
     }
 

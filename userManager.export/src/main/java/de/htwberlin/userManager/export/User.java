@@ -38,11 +38,11 @@ public class User {
 
     /**
      * Constructor for User.
-     * @param userName Username of the user.
+     * @param username Username of the user.
      * @param password Password of the user.
      */
-    public User(String userName, String password) {
-        this.username = userName;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
         this.loggedIn = true;
     }
@@ -55,12 +55,12 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserName(String userName) {
-        this.username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

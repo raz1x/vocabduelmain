@@ -1,5 +1,6 @@
 package de.htwberlin;
 
+import okhttp3.OkHttpClient;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import java.util.concurrent.TimeUnit;
+
 
 @Configuration
 @EnableTransactionManagement
@@ -28,20 +31,11 @@ public class AppConfig {
 
     private static ApplicationContext applicationContext;
 
-    @Autowired
-    HttpClient httpClient;
-
     public static void main(String[] args) throws Exception {
         applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
 
         VocabUIController ui = (VocabUIController) applicationContext.getBean("vocabUIControllerImpl");
         ui.run();
-    }
-
-    @Bean
-    public HttpClient httpClient() {
-        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(30 * 1000).build();
-        return HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
     }
 
 }

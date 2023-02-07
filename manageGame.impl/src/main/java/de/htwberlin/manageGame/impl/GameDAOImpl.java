@@ -188,7 +188,7 @@ public class GameDAOImpl implements GameDAO {
     public Round getOngoingRound(int gameId) throws RoundDoesNotExistException {
         try {
             Game game = em.find(Game.class, gameId);
-            return em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.isOnGoing = true", Round.class)
+            return em.createQuery("SELECT r FROM Round r WHERE r.game = :game AND r.isOngoing = true", Round.class)
                     .setParameter("game", game)
                     .getSingleResult();
         } catch (Exception e) {

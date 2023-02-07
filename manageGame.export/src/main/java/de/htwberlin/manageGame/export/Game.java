@@ -42,6 +42,10 @@ public class Game {
     @Column(name = "isOngoing")
     private boolean isOngoing;
 
+    @Version
+    @Column(name = "version")
+    private int version;
+
     /**
      * Default constructor for Game.
      */

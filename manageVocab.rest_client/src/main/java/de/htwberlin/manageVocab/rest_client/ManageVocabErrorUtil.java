@@ -8,6 +8,7 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.util.Objects;
 
 public class ManageVocabErrorUtil {
 
@@ -25,6 +26,9 @@ public class ManageVocabErrorUtil {
 
     public static Exception parseException(VocabApiError error) {
         Exception exp = null;
+        if (Objects.equals(error.getExceptionClass(), "RuntimeException")) {
+            return new RuntimeException(error.getMessage());
+        }
         try {
             Class<?> exceptionClass = Class.forName("de.htwberlin.manageVocab.export." + error.getExceptionClass());
             Constructor<?> constructor = exceptionClass.getConstructor(String.class);

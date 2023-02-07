@@ -15,7 +15,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void saveUser(User user) throws UserDAOPersistenceException {
         try {
-            em.persist(user);
+            em.persist(user, );
         } catch (PersistenceException e) {
             throw new UserDAOPersistenceException("Could not save user with id " + user.getUserId());
         }

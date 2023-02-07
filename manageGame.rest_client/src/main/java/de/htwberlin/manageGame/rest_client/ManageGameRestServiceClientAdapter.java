@@ -7,6 +7,8 @@ import de.htwberlin.manageVocab.export.VocabListNotFoundException;
 import de.htwberlin.manageVocab.export.VocabNotFoundException;
 import de.htwberlin.userManager.export.UserNotFoundException;
 
+import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -16,13 +18,21 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ManageGameRestServiceClientAdapter implements ManageGame {
 
+    private static final OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
+
     private static final String URL = "http://localhost:8080/manageGame/";
     static Retrofit rf = new Retrofit.Builder()
             .baseUrl(URL)
+            .client(okHttpClient)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
@@ -42,7 +52,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -64,7 +74,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -86,7 +96,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -108,7 +118,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -134,7 +144,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -167,7 +177,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -190,7 +200,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -213,7 +223,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -243,7 +253,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -270,7 +280,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -297,7 +307,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof GameQuestionDoesNotExistException) {
                     throw (GameQuestionDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -320,7 +330,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof GameAnswerDoesNotExistException) {
                     throw (GameAnswerDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -345,7 +355,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -373,7 +383,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -396,7 +406,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -419,7 +429,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
                 if(exp instanceof RoundDoesNotExistException) {
                     throw (RoundDoesNotExistException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {

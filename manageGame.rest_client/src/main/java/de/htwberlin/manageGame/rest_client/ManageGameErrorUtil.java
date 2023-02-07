@@ -13,6 +13,7 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.util.Objects;
 
 public class ManageGameErrorUtil {
 
@@ -30,6 +31,9 @@ public class ManageGameErrorUtil {
 
     public static Exception parseException(GameApiError error) {
         Exception exp = null;
+        if (Objects.equals(error.getExceptionClass(), "RuntimeException")) {
+            return new RuntimeException(error.getMessage());
+        }
         try {
             String packageName = switch(error.getExceptionClass()) {
                 case "UserDoesNotExistException":

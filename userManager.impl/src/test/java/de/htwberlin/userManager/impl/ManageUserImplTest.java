@@ -93,10 +93,10 @@ public class ManageUserImplTest {
         // 2. Act
         User testUser = manageUser.updateUserName(1, "test2");
         // 3. Assert
-        Assertions.assertEquals("test2", testUser.getUserName());
+        Assertions.assertEquals("test2", testUser.getUsername());
         verify(userDAO, times(1)).getUser(1);
         verify(userDAO, times(1)).getUserByName("test2");
-        verify(spyUser, times(1)).setUserName("test2");
+        verify(spyUser, times(1)).setUsername("test2");
     }
 
     @Test

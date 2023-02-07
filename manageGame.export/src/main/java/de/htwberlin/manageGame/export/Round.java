@@ -29,7 +29,7 @@ public class Round {
      * If the round is ongoing.
      */
     @Column(name = "isOngoing")
-    private boolean isOnGoing;
+    private boolean isOngoing;
 
     @Column(name = "player1Answered")
     private boolean player1Answered;
@@ -58,7 +58,7 @@ public class Round {
     public Round(Game game, int roundNumber, Category category) {
         this.game = game;
         this.roundNumber = roundNumber;
-        this.isOnGoing = true;
+        this.isOngoing = true;
         this.category = category;
     }
 
@@ -94,12 +94,12 @@ public class Round {
         this.category = category;
     }
 
-    public boolean isOnGoing() {
-        return isOnGoing;
+    public boolean getIsOngoing() {
+        return isOngoing;
     }
 
-    public void setOnGoing(boolean isOnGoing) {
-        this.isOnGoing = isOnGoing;
+    public void setIsOngoing(boolean isOngoing) {
+        this.isOngoing = isOngoing;
     }
 
     public boolean isPlayer1Answered() {
@@ -123,7 +123,7 @@ public class Round {
         return "Round{" +
                 "roundId=" + roundId +
                 ", roundNumber=" + roundNumber +
-                ", isOnGoing=" + isOnGoing +
+                ", isOnGoing=" + isOngoing +
                 ", player1Answered=" + player1Answered +
                 ", player2Answered=" + player2Answered +
                 '}';

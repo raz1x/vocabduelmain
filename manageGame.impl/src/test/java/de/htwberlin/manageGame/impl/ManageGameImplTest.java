@@ -243,7 +243,7 @@ public class ManageGameImplTest {
         manageGame.endRound(1);
         // 3. Assert
         verify(gameDAO, times(1)).updateRound(spyround);
-        verify(spyround, times(1)).setOnGoing(false);
+        verify(spyround, times(1)).setIsOngoing(false);
     }
 
     @Test

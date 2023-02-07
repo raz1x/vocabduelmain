@@ -4,7 +4,6 @@ import de.htwberlin.manageGame.export.Game;
 
 public interface VocabUIController {
 
-
     /**
      * Starts the application.
      */
@@ -74,18 +73,6 @@ public interface VocabUIController {
      * @param game The game the round belongs to.
      */
     public void playRoundUI(Game game);
-
-    /**
-     * Reads the user input as integer
-     * @return The user input as integer
-     */
-    public int readUserSelection();
-
-    /**
-     * Reads the user input as string.
-     * @return The user input as string.
-     */
-    public String readUserInput();
 
     /**
      * Shows the results of a game.

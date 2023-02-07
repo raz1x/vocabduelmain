@@ -11,6 +11,7 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.util.Objects;
 
 public class ManageUserErrorUtil {
 
@@ -28,6 +29,9 @@ public class ManageUserErrorUtil {
 
     public static Exception parseException(UserApiError error) {
         Exception exp = null;
+        if (Objects.equals(error.getExceptionClass(), "RuntimeException")) {
+            return new RuntimeException(error.getMessage());
+        }
         try {
             Class<?> exceptionClass = Class.forName("de.htwberlin.userManager.export." + error.getExceptionClass());
             Constructor<?> constructor = exceptionClass.getConstructor(String.class);

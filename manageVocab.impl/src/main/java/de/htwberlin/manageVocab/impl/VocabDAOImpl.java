@@ -50,7 +50,7 @@ public class VocabDAOImpl implements VocabDAO {
         Set<Translation> vocabTranslations = vocab.getTranslations();
         List<Translation> translations;
         try {
-            translations = em.createQuery("SELECT t FROM Translation t JOIN t.vocabs v WHERE t != :translation AND v.vocabList = :vocabList", Translation.class)
+            translations = em.createQuery("SELECT t FROM Translation t JOIN t.vocabs v WHERE t NOT IN(:translation) AND v.vocabList = :vocabList", Translation.class)
                     .setParameter("translation", vocabTranslations)
                     .setParameter("vocabList", vocab.getVocabList())
                     .getResultList();

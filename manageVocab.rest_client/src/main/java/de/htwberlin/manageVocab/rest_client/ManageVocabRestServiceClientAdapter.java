@@ -1,6 +1,8 @@
 package de.htwberlin.manageVocab.rest_client;
 
 import de.htwberlin.manageVocab.export.*;
+import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -12,13 +14,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ManageVocabRestServiceClientAdapter implements ManageVocab {
 
+    private static final OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
+
     private static final String URL = "http://localhost:8080/manageVocab/";
     static Retrofit rf = new Retrofit.Builder()
             .baseUrl(URL)
+            .client(okHttpClient)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
@@ -36,7 +46,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 if (exp instanceof CategoryNotFoundException) {
                     throw (CategoryNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -58,7 +68,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 if (exp instanceof CategoryNotFoundException) {
                     throw (CategoryNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -81,7 +91,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 if (exp instanceof VocabDAOException) {
                     throw (VocabDAOException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -104,7 +114,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 } else if (exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -128,7 +138,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 } else if (exp instanceof VocabListNotFoundException) {
                     throw (VocabListNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -152,7 +162,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 } else if (exp instanceof VocabNotFoundException) {
                     throw (VocabNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
@@ -176,7 +186,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
                 } else if (exp instanceof TranslationNotFoundException) {
                     throw (TranslationNotFoundException) exp;
                 } else {
-                    throw new RuntimeException(exp);
+                    throw (RuntimeException) exp;
                 }
             }
         } catch (IOException e) {
