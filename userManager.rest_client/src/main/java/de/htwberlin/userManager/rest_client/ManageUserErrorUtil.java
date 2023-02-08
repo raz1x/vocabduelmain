@@ -34,6 +34,8 @@ public class ManageUserErrorUtil {
             return new RuntimeException(error.getMessage());
         } else if (Objects.equals(error.getExceptionClass(), "OptimisticLockException")) {
             return new OptimisticLockException(error.getMessage());
+        } else if (Objects.equals(error.getExceptionClass(), "ObjectOptimisticLockingFailureException")) {
+            return new OptimisticLockException(error.getMessage());
         }
         try {
             Class<?> exceptionClass = Class.forName("de.htwberlin.userManager.export." + error.getExceptionClass());

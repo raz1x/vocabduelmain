@@ -4,6 +4,7 @@ import de.htwberlin.manageGame.export.*;
 import de.htwberlin.manageGame.rest_client.ManageGameRestServiceClientAdapter;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -52,6 +53,9 @@ public class VocabUIControllerImpl implements VocabUIController {
         } catch (WrongPasswordException e) {
             view.showError("Wrong password!");
             return;
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while logging in. Please try again.");
+            return;
         }
         showManagerMenu();
     }
@@ -67,6 +71,9 @@ public class VocabUIControllerImpl implements VocabUIController {
             currentUser = manageUser.registerUser(username, password);
         } catch (UserAlreadyExistsException e) {
             view.showError("User already exists!");
+            return;
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while registering. Please try again.");
             return;
         }
         showManagerMenu();
@@ -96,19 +103,23 @@ public class VocabUIControllerImpl implements VocabUIController {
         String[] menuItems = {"Manage Vocabulary", "Manage Games", "Manage Users", "Logout", "Exit"};
         do {
             try {
-            view.showMenu(menuItems);
-            choice = view.readUserSelection();
-            switch (choice) {
-                case 1 -> manageVocabMenu();
-                case 2 -> manageGameMenu();
-                case 3 -> manageUserMenu();
-                case 4 -> {
-                    manageUser.logoutUser(currentUser.getUserId());
-                    showMainMenu();
+                view.showMenu(menuItems);
+                choice = view.readUserSelection();
+                try {
+                    switch (choice) {
+                        case 1 -> manageVocabMenu();
+                        case 2 -> manageGameMenu();
+                        case 3 -> manageUserMenu();
+                        case 4 -> {
+                            manageUser.logoutUser(currentUser.getUserId());
+                            showMainMenu();
+                        }
+                        case 5 -> view.showMessage("Goodbye!");
+                        default -> view.showMessage("Invalid choice!");
+                    }
+                } catch (OptimisticLockException e) {
+                    view.showError("There was an error while logging out. Please try again.");
                 }
-                case 5 -> view.showMessage("Goodbye!");
-                default -> view.showMessage("Invalid choice!");
-            }
             } catch (UserNotFoundException e) {
                 view.showError("User not found!");
             }
@@ -139,6 +150,8 @@ public class VocabUIControllerImpl implements VocabUIController {
             manageUser.deleteUser(user.getUserId());
         } catch (UserNotFoundException e) {
             view.showError("User not found!");
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while deleting the user. Please try again.");
         }
     }
 
@@ -188,6 +201,8 @@ public class VocabUIControllerImpl implements VocabUIController {
             manageVocab.parseVocabList(file);
         } catch (IOException | VocabDAOException e) {
             view.showError("Could not import file!");
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while importing the file. Please try again.");
         }
     }
 
@@ -214,6 +229,9 @@ public class VocabUIControllerImpl implements VocabUIController {
         } catch (UserNotFoundException e) {
             view.showError("No opponents found!");
             return;
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while creating the game. Please try again.");
+            return;
         }
         if (opponents.size() == 0) {
             view.showError("Not enough users found to create a game!");
@@ -236,6 +254,8 @@ public class VocabUIControllerImpl implements VocabUIController {
             showCreateRound(game);
         } catch (UserDoesNotExistException | UserNotFoundException e) {
             view.showError("User not found!");
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while creating the game. Please try again.");
         }
     }
 
@@ -247,6 +267,9 @@ public class VocabUIControllerImpl implements VocabUIController {
             categories = manageVocab.getAllCategories();
         } catch (CategoryNotFoundException e) {
             view.showError("Could not find any Categories!");
+            return;
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while creating the round. Please try again.");
             return;
         }
         view.showMessage("Please choose a category: ");
@@ -265,6 +288,9 @@ public class VocabUIControllerImpl implements VocabUIController {
             } catch (GameDoesNotExistException | CategoryNotFoundException | VocabNotFoundException |
                      GameQuestionDoesNotExistException | VocabListNotFoundException | TranslationNotFoundException e) {
                 view.showError("Could not create round!");
+                return;
+            } catch (OptimisticLockException e) {
+                view.showError("There was an error while creating the round. Please try again.");
                 return;
             }
         }
@@ -291,6 +317,9 @@ public class VocabUIControllerImpl implements VocabUIController {
             }
         } catch (UserNotFoundException e) {
             view.showError("Could not find opponent for the game!");
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while showing your games. Please try again.");
+            return;
         }
         while(true) {
             view.showMessage("Please choose a game: ");
@@ -312,6 +341,9 @@ public class VocabUIControllerImpl implements VocabUIController {
             round = manageGame.getOngoingRoundForGame(game.getGameId());
         } catch (RoundDoesNotExistException e) {
             view.showError("Round not found!");
+            return;
+        } catch (OptimisticLockException e) {
+            view.showError("Error while playing round. Please try again.");
             return;
         }
         List<GameQuestion> gameQuestion;
@@ -359,6 +391,9 @@ public class VocabUIControllerImpl implements VocabUIController {
                 }
             } catch (GameAnswerDoesNotExistException e) {
                 view.showError("Could not find game answers for this question!");
+            } catch (OptimisticLockException e) {
+                view.showError("There was an error while locking in your answer. Please try again.");
+                return;
             }
         }
         // if the user started the round, set him as player1
@@ -369,6 +404,9 @@ public class VocabUIControllerImpl implements VocabUIController {
                 game = manageGame.updateGame(game);
             } catch (GameDoesNotExistException e) {
                 view.showError("Could not update game!");
+                return;
+            } catch (OptimisticLockException e) {
+                view.showError("There was an error while updating the game. Please try again.");
                 return;
             }
             view.showMessage("Please wait for the other player to finish!");
@@ -387,6 +425,9 @@ public class VocabUIControllerImpl implements VocabUIController {
                 manageGame.endRound(round.getRoundId());
             } catch (RoundDoesNotExistException e) {
                 view.showError("Could not end round!");
+            } catch (OptimisticLockException e) {
+                view.showError("There was an error while ending the round. Please try again.");
+                return;
             }
             if (round.getRoundNumber() == 2) {
                 try {
@@ -402,6 +443,8 @@ public class VocabUIControllerImpl implements VocabUIController {
                     showCreateRound(game);
                 } catch (GameDoesNotExistException e) {
                     view.showError("Could not update game!");
+                } catch (OptimisticLockException e) {
+                    view.showError("There was an error while updating the game. Please try again.");
                 }
             }
         }
@@ -436,6 +479,8 @@ public class VocabUIControllerImpl implements VocabUIController {
             view.showError("User not found!");
         } catch (RoundResultDoesNotExistException e) {
             view.showError("No results found!");
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while getting the results. Please try again.");
         }
     }
 
