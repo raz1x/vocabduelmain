@@ -10,7 +10,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -46,8 +51,9 @@ public class ManageVocabImplTest {
 
     //TODO: geht nicht
     @Test
-    void getAllCategoriesCategoryNotFound() {
+    void getAllCategoriesCategoryNotFound() throws VocabDAOException, CategoryNotFoundException {
         // 1. Arrange
+        when(vocabDAO.getAllCategories()).thenThrow(CategoryNotFoundException.class);
         // 2. Act
         Assertions.assertThrows(CategoryNotFoundException.class, ()-> manageVocab.getAllCategories());
         // 3. Assert
@@ -66,10 +72,12 @@ public class ManageVocabImplTest {
     }
 
     @Test
-    void parseVocabList() throws VocabDAOException, IOException, CategoryNotFoundException {
+    void parseVocabList() throws VocabDAOException, IOException, CategoryNotFoundException, URISyntaxException {
         // 1. Arrange
         File file = new File("../textFiles/animals_farm_zoo.txt");
         // 2. Act
+        String result = String.valueOf(file);
+        System.out.println(result);
         manageVocab.parseVocabList(file);
         // 3. Assert
         verify(vocabDAO, times(1)).getCategoryByName(any());
@@ -115,6 +123,7 @@ public class ManageVocabImplTest {
         VocabList vocabList = new VocabList(new Category("test"), "testList", "testA", "testB");
         List<Vocab> expected = new ArrayList<>();
         expected.add(new Vocab(vocabList, "testVocab"));
+        when(vocabDAO.getVocabList(1)).thenReturn(vocabList);
         when(vocabDAO.getVocabsForVocabList(vocabList)).thenReturn(expected);
         // 2. Act
         Vocab result = manageVocab.getRandomVocabFromVocabList(1);

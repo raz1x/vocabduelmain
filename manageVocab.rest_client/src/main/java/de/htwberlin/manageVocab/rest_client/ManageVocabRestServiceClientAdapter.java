@@ -83,7 +83,7 @@ public class ManageVocabRestServiceClientAdapter implements ManageVocab {
     }
 
     @Override
-    public void parseVocabList(File file) throws IOException, VocabDAOException {
+    public void parseVocabList(File file) throws VocabDAOException, IOException {
         ManageVocabRestService restService = rf.create(ManageVocabRestService.class);
         Call<String> call = restService.parseVocabList(Files.readString(file.toPath()));
         Response<String> response = null;

@@ -15,7 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 
@@ -287,7 +289,11 @@ public class ManageGameImplTest {
     public void getGameQuestionsForRound() throws RoundDoesNotExistException, GameDoesNotExistException, GameQuestionDoesNotExistException {
         // 1. Arrange
         List<GameQuestion> gameQuestions = new ArrayList<>();
-        gameQuestions.add(new GameQuestion(round, new Vocab(new VocabList(category, "testList", "test", "test"), "test"), new Translation("test"), 1));
+        Set<Translation> translations = new HashSet<>();
+        translations.add(new Translation("test"));
+        Vocab vocab = new Vocab(new VocabList(category, "testList", "test", "test"), "test");
+        vocab.setTranslations(translations);
+        gameQuestions.add(new GameQuestion(round, vocab, new Translation("test"), 1));
         when(gameDAO.getGameQuestionsForRound(anyInt(), anyInt())).thenReturn(gameQuestions);
         // 2. Act
         List<GameQuestion> testGameQuestions = manageGame.getGameQuestionsForRound(1, 1);
@@ -302,7 +308,11 @@ public class ManageGameImplTest {
     public void getGameAnswersForGameQuestion() throws GameAnswerDoesNotExistException {
         // 1. Arrange
         List<GameAnswer> gameAnswers = new ArrayList<>();
-        GameAnswer gameAnswer = new GameAnswer(new GameQuestion(round, new Vocab(new VocabList(category, "testList", "test", "test"), "test"), new Translation("test"), 1), new Translation("test"));
+        Set<Translation> translations = new HashSet<>();
+        translations.add(new Translation("test"));
+        Vocab vocab = new Vocab(new VocabList(category, "testList", "test", "test"), "test");
+        vocab.setTranslations(translations);
+        GameAnswer gameAnswer = new GameAnswer(new GameQuestion(round, vocab, new Translation("test"), 1), new Translation("test"));
         gameAnswers.add(gameAnswer);
         when(gameDAO.getGameAnswersForGameQuestion(anyInt())).thenReturn(gameAnswers);
         // 2. Act

@@ -25,8 +25,9 @@ public interface ManageVocab {
      * Parses a text file into a vocab list and saves it to the database
      * @param file The text file.
      * @throws VocabDAOException If there was a persistence error while saving the vocab list.
+     * @throws IOException If there was an error while reading the file.
      */
-    public void parseVocabList(File file) throws VocabDAOException;
+    public void parseVocabList(File file) throws VocabDAOException, IOException;
 
     /**
      * Gets a list of possible translations for a vocab
