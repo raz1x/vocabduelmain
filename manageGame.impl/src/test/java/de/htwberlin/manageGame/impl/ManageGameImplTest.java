@@ -43,7 +43,7 @@ public class ManageGameImplTest {
     private static User user;
 
     @BeforeAll
-    public static void init() throws UserDAOPersistenceException, UserNotFoundException, GameDAOPersistenceException {
+    public static void init() {
         user1 = new User("testuser1", "testpassword1");
         user1.setUserId(1);
         user2 = new User("testuser2", "testpassword2");
@@ -61,19 +61,19 @@ public class ManageGameImplTest {
     }
 
     @AfterAll
-    public static void tearDown() throws UserDAOPersistenceException, GameDAOPersistenceException {
+    public static void tearDown() {
     }
 
     @BeforeEach
-    public void setUp() throws UserDAOPersistenceException, UserNotFoundException {
+    public void setUp() {
     }
 
     @AfterEach
-    public void destroy() throws UserDAOPersistenceException, UserNotFoundException {
+    public void destroy() {
     }
 
     @Test
-    public void testCreateGame() throws UserNotFoundException, UserDoesNotExistException, GameDAOPersistenceException, UserDAOPersistenceException {
+    public void testCreateGame() throws UserNotFoundException, GameDAOPersistenceException {
         // 1. Arrange
         when(manageUser.getById(1)).thenReturn(user1);
         when(manageUser.getById(2)).thenReturn(user2);
@@ -90,7 +90,7 @@ public class ManageGameImplTest {
 
     }
     @Test
-    public void testCreateGameUserNotFound() throws UserNotFoundException, UserDAOPersistenceException {
+    public void testCreateGameUserNotFound() throws UserNotFoundException {
         // 1. Arrange
         when(manageUser.getById(1)).thenThrow(UserNotFoundException.class);
         // 2. Act & Assert
@@ -134,7 +134,7 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void testUpdateGameGameDoesNotExist() throws GameDoesNotExistException, GameDAOPersistenceException {
+    public void testUpdateGameGameDoesNotExist() throws GameDAOPersistenceException {
         // 1. Arrange
         // 2. Act
         Assertions.assertThrows(GameDoesNotExistException.class, ()-> manageGame.updateGame(game));
@@ -166,7 +166,7 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void getAllOngoingGamesForUser() throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException, UserDAOPersistenceException {
+    public void getAllOngoingGamesForUser() throws GameDoesNotExistException, UserNotFoundException {
         // 1. Arrange
         when(manageUser.getById(user1.getUserId())).thenReturn(user1);
         when(gameDAO.getOngoingGamesForUser(user1)).thenReturn(games);        // 2. Act
@@ -178,7 +178,7 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void getAllOngoingGamesForUserGamesDoNotExist() throws UserNotFoundException, UserDAOPersistenceException, GameDoesNotExistException, UserDoesNotExistException {
+    public void getAllOngoingGamesForUserGamesDoNotExist() throws UserNotFoundException, GameDoesNotExistException {
         // 1. Arrange
         when(manageUser.getById(user1.getUserId())).thenReturn(user1);
         List<Game> emptyList = new ArrayList<>();
@@ -191,7 +191,7 @@ public class ManageGameImplTest {
 
     //TODO: geht nicht
     @Test
-    public void getAllOngoingGamesForUserUserDoesNotExist() throws UserNotFoundException, UserDAOPersistenceException {
+    public void getAllOngoingGamesForUserUserNotFound() throws UserNotFoundException {
         // 1. Arrange
         when(manageUser.getById(user1.getUserId())).thenThrow(UserNotFoundException.class);
         // 2. Act
@@ -314,7 +314,7 @@ public class ManageGameImplTest {
 
 
     @Test
-    public void lockInAnswer() throws GameAnswerDoesNotExistException, UserNotFoundException, UserDAOPersistenceException, UserDoesNotExistException, GameDAOPersistenceException {
+    public void lockInAnswer() throws GameAnswerDoesNotExistException, UserNotFoundException, GameDAOPersistenceException {
         // 1. Arrange
         GameAnswer gameAnswer = new GameAnswer(new GameQuestion(round, new Vocab(new VocabList(category, "testList", "test", "test"), "test"), new Translation("test"), 1), new Translation("test"));
         when(gameDAO.getGameAnswer(1)).thenReturn(gameAnswer);
@@ -326,7 +326,7 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void getScoreForUser() throws UserDoesNotExistException, GameDoesNotExistException, UserNotFoundException, UserDAOPersistenceException, RoundResultDoesNotExistException {
+    public void getScoreForUser() throws GameDoesNotExistException, UserNotFoundException, RoundResultDoesNotExistException {
         // 1. Arrange
         GameAnswer gameAnswer = new GameAnswer(new GameQuestion(round, new Vocab(new VocabList(category, "testList", "test", "test"), "test"), new Translation("test"), 1), new Translation("test"));
         List<RoundResult> roundResults = new ArrayList<>();

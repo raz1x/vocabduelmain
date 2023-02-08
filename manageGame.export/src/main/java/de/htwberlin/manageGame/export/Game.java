@@ -115,6 +115,7 @@ public class Game {
         this.userStartingRound = userStartingRound;
     }
 
+    // Returns the userId of the other user of a game.
     public int getOtherUser(int userId) {
         if (userId == this.user1Id) {
             return user2Id;

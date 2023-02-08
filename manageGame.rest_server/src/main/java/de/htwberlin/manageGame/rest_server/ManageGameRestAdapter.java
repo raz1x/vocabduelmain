@@ -21,7 +21,7 @@ public class ManageGameRestAdapter {
     private ManageGame manageGame;
 
     @GetMapping("/createGame/{user1Id}/{user2Id}")
-    public Game createGame(@PathVariable("user1Id") int user1Id, @PathVariable("user2Id") int user2Id) throws UserDoesNotExistException, UserNotFoundException {
+    public Game createGame(@PathVariable("user1Id") int user1Id, @PathVariable("user2Id") int user2Id) throws UserNotFoundException {
         return manageGame.createGame(user1Id, user2Id);
     }
 
@@ -41,7 +41,7 @@ public class ManageGameRestAdapter {
     }
 
     @GetMapping("/getAllOngoingGamesForUser/{userId}")
-    public List<Game> getAllOngoingGamesForUser(@PathVariable int userId) throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException {
+    public List<Game> getAllOngoingGamesForUser(@PathVariable int userId) throws GameDoesNotExistException, UserNotFoundException {
         return manageGame.getAllOngoingGamesForUser(userId);
     }
 
@@ -86,7 +86,7 @@ public class ManageGameRestAdapter {
     }
 
     @GetMapping("/getScoreForUser/{userId}/{gameId}")
-    public int getScoreForUser(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) throws GameDoesNotExistException, UserDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException {
+    public int getScoreForUser(@PathVariable("userId") int userId, @PathVariable("gameId") int gameId) throws GameDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException {
         return manageGame.getScoreForUser(userId, gameId);
     }
 

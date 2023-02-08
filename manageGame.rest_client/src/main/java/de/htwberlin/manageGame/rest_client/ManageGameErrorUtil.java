@@ -41,7 +41,6 @@ public class ManageGameErrorUtil {
         }
         try {
             String packageName = switch(error.getExceptionClass()) {
-                case "UserDoesNotExistException":
                 case "GameDoesNotExistException":
                 case "GameQuestionDoesNotExistException":
                 case "RoundDoesNotExistException":
@@ -61,8 +60,6 @@ public class ManageGameErrorUtil {
             Class<?> exceptionClass = Class.forName("de.htwberlin." + packageName + error.getExceptionClass());
             Constructor<?> constructor = exceptionClass.getConstructor(String.class);
             exp = switch (exceptionClass.getSimpleName()) {
-                case "UserDoesNotExistException" ->
-                        (UserDoesNotExistException) constructor.newInstance(error.getMessage());
                 case "UserNotFoundException" ->
                         (UserNotFoundException) constructor.newInstance(error.getMessage());
                 case "GameDoesNotExistException" ->

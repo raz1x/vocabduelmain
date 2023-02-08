@@ -252,7 +252,7 @@ public class VocabUIControllerImpl implements VocabUIController {
             }
             Game game = manageGame.createGame(currentUser.getUserId(), opponent.getUserId());
             showCreateRound(game);
-        } catch (UserDoesNotExistException | UserNotFoundException e) {
+        } catch (UserNotFoundException e) {
             view.showError("User not found!");
         } catch (OptimisticLockException e) {
             view.showError("There was an error while creating the game. Please try again.");
@@ -306,7 +306,7 @@ public class VocabUIControllerImpl implements VocabUIController {
         } catch (GameDoesNotExistException e) {
             view.showError("No games found!");
             return;
-        } catch (UserDoesNotExistException | UserNotFoundException e) {
+        } catch (UserNotFoundException e) {
             view.showError("User not found!");
             return;
         }
@@ -475,7 +475,7 @@ public class VocabUIControllerImpl implements VocabUIController {
             }
         } catch (GameDoesNotExistException e) {
             view.showError("No games found!");
-        } catch (UserNotFoundException | UserDoesNotExistException e) {
+        } catch (UserNotFoundException e) {
             view.showError("User not found!");
         } catch (RoundResultDoesNotExistException e) {
             view.showError("No results found!");

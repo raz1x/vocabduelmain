@@ -39,7 +39,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
             .build();
 
     @Override
-    public Game createGame(int user1Id, int user2Id) throws UserDoesNotExistException, UserNotFoundException {
+    public Game createGame(int user1Id, int user2Id) throws UserNotFoundException {
         ManageGameRestService restService = rf.create(ManageGameRestService.class);
         Call<Game> call = restService.createGame(user1Id, user2Id);
         Response<Game> response = null;
@@ -48,9 +48,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
             if (!response.isSuccessful()) {
                 GameApiError gameApiError = ManageGameErrorUtil.parseError(response);
                 Exception exp = ManageGameErrorUtil.parseException(gameApiError);
-                if(exp instanceof UserDoesNotExistException) {
-                    throw (UserDoesNotExistException) exp;
-                } else if(exp instanceof UserNotFoundException) {
+                if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else if (exp instanceof OptimisticLockException) {
                     throw (OptimisticLockException) exp;
@@ -136,7 +134,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
     }
 
     @Override
-    public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException {
+    public List<Game> getAllOngoingGamesForUser(int userId) throws GameDoesNotExistException, UserNotFoundException {
         ManageGameRestService restService = rf.create(ManageGameRestService.class);
         Call<List<Game>> call = restService.getAllOngoingGamesForUser(userId);
         Response<List<Game>> response = null;
@@ -148,8 +146,6 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
-                } else if(exp instanceof UserDoesNotExistException) {
-                    throw (UserDoesNotExistException) exp;
                 } else if(exp instanceof UserNotFoundException) {
                     throw (UserNotFoundException) exp;
                 } else if (exp instanceof OptimisticLockException) {
@@ -391,7 +387,7 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
     }
 
     @Override
-    public int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, UserDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException {
+    public int getScoreForUser(int userId, int gameId) throws GameDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException {
         ManageGameRestService restService = rf.create(ManageGameRestService.class);
         Call<Integer> call = restService.getScoreForUser(userId, gameId);
         Response<Integer> response = null;
@@ -403,8 +399,6 @@ public class ManageGameRestServiceClientAdapter implements ManageGame {
 
                 if(exp instanceof GameDoesNotExistException) {
                     throw (GameDoesNotExistException) exp;
-                } else if(exp instanceof UserDoesNotExistException) {
-                    throw (UserDoesNotExistException) exp;
                 } else if(exp instanceof RoundResultDoesNotExistException) {
                     throw (RoundResultDoesNotExistException) exp;
                 } else if(exp instanceof UserNotFoundException) {

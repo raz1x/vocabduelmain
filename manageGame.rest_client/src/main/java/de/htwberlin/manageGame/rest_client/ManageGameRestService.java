@@ -14,7 +14,7 @@ import java.util.List;
 public interface ManageGameRestService {
 
     @GET("createGame/{user1Id}/{user2Id}")
-    Call<Game> createGame(@Path("user1Id") int user1Id, @Path("user2Id") int user2Id) throws UserDoesNotExistException, UserNotFoundException;
+    Call<Game> createGame(@Path("user1Id") int user1Id, @Path("user2Id") int user2Id) throws UserNotFoundException;
 
     @GET("getGame/{gameId}")
     Call<Game> getGame(@Path("gameId") int gameId) throws GameDoesNotExistException;
@@ -26,7 +26,7 @@ public interface ManageGameRestService {
     Call<Void> endGame(@Path("gameId") int gameId) throws GameDoesNotExistException;
 
     @GET("getAllOngoingGamesForUser/{userId}")
-    Call<List<Game>> getAllOngoingGamesForUser(@Path("userId") int userId) throws GameDoesNotExistException, UserDoesNotExistException, UserNotFoundException;
+    Call<List<Game>> getAllOngoingGamesForUser(@Path("userId") int userId) throws GameDoesNotExistException, UserNotFoundException;
 
     @POST("createRound/{gameId}/{round}/{categoryId}")
     Call<Round> createRound(@Path("gameId") int gameId, @Path("round") int round, @Path("categoryId") int categoryId) throws GameDoesNotExistException, CategoryNotFoundException, VocabNotFoundException, GameQuestionDoesNotExistException, VocabListNotFoundException, TranslationNotFoundException;
@@ -53,7 +53,7 @@ public interface ManageGameRestService {
     Call<Void> lockInAnswer(@Path("gameAnswerId") int gameAnswerId, @Path("userId") int userId, @Path("isCorrect") boolean isCorrect) throws GameAnswerDoesNotExistException, UserNotFoundException;
 
     @GET("getScoreForUser/{userId}/{gameId}")
-    Call<Integer> getScoreForUser(@Path("userId") int userId, @Path("gameId") int gameId) throws GameDoesNotExistException, UserDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException;
+    Call<Integer> getScoreForUser(@Path("userId") int userId, @Path("gameId") int gameId) throws GameDoesNotExistException, RoundResultDoesNotExistException, UserNotFoundException;
 
     @GET("getLatestRoundForGame/{gameId}")
     Call<Integer> getLatestRoundForGame(@Path("gameId") int gameId) throws GameDoesNotExistException;

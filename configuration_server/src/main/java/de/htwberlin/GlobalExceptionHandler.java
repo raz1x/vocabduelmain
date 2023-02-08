@@ -48,14 +48,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(gameApiError, new HttpHeaders(), gameApiError.getStatus());
     }
 
-    @ExceptionHandler(UserDoesNotExistException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ResponseBody
-    public ResponseEntity<Object> handleUserDoesNotExistException(UserDoesNotExistException e) {
-        GameApiError gameApiError = new GameApiError(HttpStatus.NOT_FOUND, e.getClass().getSimpleName(), e.getMessage());
-        return new ResponseEntity<Object>(gameApiError, new HttpHeaders(), gameApiError.getStatus());
-    }
-
     @ExceptionHandler(CategoryAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody

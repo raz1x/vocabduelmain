@@ -44,7 +44,7 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void parseVocabList(File file) throws IOException {
+    public void parseVocabList(File file) {
         final String TITLE_REGEX = "[{]{3}(.*?)[}]{3}";
         final String WORD_REGEX = "[{]{1}(.*?)[}]{1}";
 
