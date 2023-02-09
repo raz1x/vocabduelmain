@@ -89,8 +89,21 @@ public class ManageGameImplTest {
         verify(manageUser, times(1)).getById(1);
         verify(manageUser, times(1)).getById(2);
         verify(gameDAO, times(1)).saveGame(game);
-
     }
+
+    @Test
+    public void testCreateGamePersistenceException() throws UserNotFoundException, GameDAOPersistenceException {
+        // 1. Arrange
+        when(manageUser.getById(1)).thenReturn(user1);
+        when(manageUser.getById(2)).thenReturn(user2);
+        when(gameDAO.saveGame(game)).thenThrow(GameDAOPersistenceException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.createGame(1, 2));
+        // 3. Assert
+        verify(manageUser, times(1)).getById(1);
+        verify(manageUser, times(1)).getById(2);
+    }
+
     @Test
     public void testCreateGameUserNotFound() throws UserNotFoundException {
         // 1. Arrange
@@ -136,6 +149,16 @@ public class ManageGameImplTest {
     }
 
     @Test
+    public void testUpdateGamePersistenceException() throws GameDAOPersistenceException {
+        // 1. Arrange
+        when(gameDAO.updateGame(game)).thenThrow(GameDAOPersistenceException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.updateGame(game));
+        // 3. Assert
+        verify(gameDAO, times(1)).updateGame(game);
+    }
+
+    @Test
     public void testUpdateGameGameDoesNotExist() throws GameDAOPersistenceException {
         // 1. Arrange
         // 2. Act
@@ -151,6 +174,18 @@ public class ManageGameImplTest {
         when(gameDAO.getGame(1)).thenReturn(game);
         // 2. Act
         manageGame.endGame(1);
+        // 3. Assert
+        verify(gameDAO, times(1)).updateGame(game);
+        verify(gameDAO, times(1)).getGame(1);
+    }
+
+    @Test
+    public void testEndGamePersistenceException() throws GameDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        when(gameDAO.getGame(1)).thenReturn(game);
+        when(gameDAO.updateGame(game)).thenThrow(GameDAOPersistenceException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.endGame(1));
         // 3. Assert
         verify(gameDAO, times(1)).updateGame(game);
         verify(gameDAO, times(1)).getGame(1);
@@ -191,7 +226,6 @@ public class ManageGameImplTest {
         verify(manageUser, times(1)).getById(user1.getUserId());
     }
 
-    //TODO: geht nicht
     @Test
     public void getAllOngoingGamesForUserUserNotFound() throws UserNotFoundException {
         // 1. Arrange
@@ -202,7 +236,7 @@ public class ManageGameImplTest {
         verify(manageUser, times(1)).getById(user1.getUserId());
     }
 
-    // TODO: geht nicht, weil manageGame hier aufgerufen wird und kein Mock ist -> Andernfalls Integration Test
+    // geht nicht, weil trotz spy manageGameImpl hier aufgerufen wird und kein Mock ist
     @Test
     public void createRound() throws Exception {
         // 1. Arrange
@@ -212,7 +246,7 @@ public class ManageGameImplTest {
         when(gameDAO.getGame(game.getGameId())).thenReturn(game);
         when(manageVocab.getCategory(1)).thenReturn(category);
         //when(manageGameSpy.generateQuestions(1, 1, round)).thenReturn(gameQuestions);
-        lenient().doReturn(gameQuestions).when(manageGame).generateQuestions(anyInt(), anyInt(), any(Round.class));
+        lenient().doReturn(gameQuestions).when(manageGameSpy).generateQuestions(anyInt(), anyInt(), any(Round.class));
         // 2. Act
         manageGame.createRound(game.getGameId(), 1, 1);
         // 3. Assert
@@ -237,12 +271,36 @@ public class ManageGameImplTest {
     }
 
     @Test
+    public void updateRoundPersistenceException() throws GameDAOPersistenceException, RoundDoesNotExistException {
+        // 1. Arrange
+        Round round = new Round(game, 1, category);
+        when(gameDAO.updateRound(round)).thenThrow(GameDAOPersistenceException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.updateRound(round));
+        // 3. Assert
+        verify(gameDAO, times(1)).updateRound(round);
+    }
+
+    @Test
     public void endRound() throws RoundDoesNotExistException, GameDAOPersistenceException {
         // 1. Arrange
         Round spyround = spy(round);
         when(gameDAO.getRoundById(anyInt())).thenReturn(spyround);
         // 2. Act
         manageGame.endRound(1);
+        // 3. Assert
+        verify(gameDAO, times(1)).updateRound(spyround);
+        verify(spyround, times(1)).setIsOngoing(false);
+    }
+
+    @Test
+    public void endRoundPersistenceException() throws RoundDoesNotExistException, GameDAOPersistenceException {
+        // 1. Arrange
+        Round spyround = spy(round);
+        when(gameDAO.getRoundById(anyInt())).thenReturn(spyround);
+        doThrow(GameDAOPersistenceException.class).when(gameDAO).updateRound(spyround);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.endRound(1));
         // 3. Assert
         verify(gameDAO, times(1)).updateRound(spyround);
         verify(spyround, times(1)).setIsOngoing(false);
@@ -265,7 +323,39 @@ public class ManageGameImplTest {
     }
 
     @Test
-    public void generateAnswers() throws GameQuestionDoesNotExistException, VocabDAOException, TranslationNotFoundException, VocabNotFoundException, GameDAOPersistenceException {
+    public void generateQuestionsPersistenceExceptionWhileSavingGameQuestion() throws GameDAOPersistenceException, VocabNotFoundException, VocabListNotFoundException, CategoryNotFoundException {
+        // 1. Arrange
+        VocabList vocabList = new VocabList(category, "testList", "test", "test");
+        vocabList.setVocabListId(1);
+        Vocab vocab = new Vocab(vocabList, "test");
+        doReturn(vocabList).when(manageVocab).getRandomVocabListFromCategory(anyInt());
+        when(manageVocab.getRandomVocabFromVocabList(1)).thenReturn(vocab);
+        doThrow(GameDAOPersistenceException.class).when(gameDAO).saveGameQuestion(any(GameQuestion.class));
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.generateQuestions(1, 1, round));
+        // 3. Assert
+        verify(gameDAO, times(1)).saveGameQuestion(any(GameQuestion.class));
+        verify(manageVocab, times(1)).getRandomVocabFromVocabList(1);
+    }
+
+    @Test
+    public void generateQuestionsPersistenceExceptionWhileSavingGameAnswer() throws GameDAOPersistenceException, VocabNotFoundException, VocabListNotFoundException, CategoryNotFoundException {
+        // 1. Arrange
+        VocabList vocabList = new VocabList(category, "testList", "test", "test");
+        vocabList.setVocabListId(1);
+        Vocab vocab = new Vocab(vocabList, "test");
+        doReturn(vocabList).when(manageVocab).getRandomVocabListFromCategory(anyInt());
+        when(manageVocab.getRandomVocabFromVocabList(1)).thenReturn(vocab);
+        doThrow(GameDAOPersistenceException.class).when(gameDAO).saveGameAnswer(any(GameAnswer.class));
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.generateQuestions(1, 1, round));
+        // 3. Assert
+        verify(gameDAO, times(1)).saveGameQuestion(any(GameQuestion.class));
+        verify(manageVocab, times(1)).getRandomVocabFromVocabList(1);
+    }
+
+    @Test
+    public void generateAnswers() throws GameQuestionDoesNotExistException, TranslationNotFoundException, VocabNotFoundException, GameDAOPersistenceException {
         // 1. Arrange
         VocabList vocabList = new VocabList(category, "testList", "test", "test");
         Vocab vocab = new Vocab(vocabList, "test");
@@ -283,6 +373,26 @@ public class ManageGameImplTest {
         verify(gameDAO, times(3)).saveGameAnswer(any(GameAnswer.class));
         assert (gameAnswers.size() == 3);
         assert (gameAnswers.get(0).getTranslation().getTranslation().equals("test1"));
+    }
+
+    @Test
+    public void generateAnswersPersistenceException() throws GameQuestionDoesNotExistException, TranslationNotFoundException, VocabNotFoundException, GameDAOPersistenceException {
+        // 1. Arrange
+        VocabList vocabList = new VocabList(category, "testList", "test", "test");
+        Vocab vocab = new Vocab(vocabList, "test");
+        List<Translation> translations = new ArrayList<>();
+        translations.add(new Translation("test1"));
+        translations.add(new Translation("test2"));
+        translations.add(new Translation("test3"));
+        Translation translation = new Translation("test");
+        GameQuestion gameQuestion = new GameQuestion(round, vocab, translation, 1);
+        when(gameDAO.getGameQuestion(anyInt())).thenReturn(gameQuestion);
+        doReturn(translations).when(manageVocab).getPossibleTranslationsFromVocabId(anyInt(), anyInt());
+        doThrow(GameDAOPersistenceException.class).when(gameDAO).saveGameAnswer(any(GameAnswer.class));
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.generateAnswers(1));
+        // 3. Assert
+        verify(gameDAO, times(1)).saveGameAnswer(any(GameAnswer.class));
     }
 
     @Test
@@ -331,6 +441,19 @@ public class ManageGameImplTest {
         when(manageUser.getById(1)).thenReturn(user);
         // 2. Act
         manageGame.lockInAnswer(1, 1, false);
+        // 3. Assert
+        verify(gameDAO, times(1)).saveRoundResult(any(RoundResult.class));
+    }
+
+    @Test
+    public void lockInAnswerPersistenceException() throws GameAnswerDoesNotExistException, UserNotFoundException, GameDAOPersistenceException {
+        // 1. Arrange
+        GameAnswer gameAnswer = new GameAnswer(new GameQuestion(round, new Vocab(new VocabList(category, "testList", "test", "test"), "test"), new Translation("test"), 1), new Translation("test"));
+        when(gameDAO.getGameAnswer(1)).thenReturn(gameAnswer);
+        when(manageUser.getById(1)).thenReturn(user);
+        doThrow(GameDAOPersistenceException.class).when(gameDAO).saveRoundResult(any(RoundResult.class));
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, () -> manageGame.lockInAnswer(1, 1, false));
         // 3. Assert
         verify(gameDAO, times(1)).saveRoundResult(any(RoundResult.class));
     }

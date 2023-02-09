@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -49,14 +50,14 @@ public class ManageVocabImplTest {
         verify(vocabDAO, times(1)).getAllCategories();
     }
 
-    //TODO: geht nicht
     @Test
-    void getAllCategoriesCategoryNotFound() throws VocabDAOException, CategoryNotFoundException {
+    void getAllCategoriesPersistenceException() throws CategoryNotFoundException, VocabDAOException {
         // 1. Arrange
-        when(vocabDAO.getAllCategories()).thenThrow(CategoryNotFoundException.class);
+        doThrow(VocabDAOException.class).when(vocabDAO).getAllCategories();
         // 2. Act
-        Assertions.assertThrows(CategoryNotFoundException.class, ()-> manageVocab.getAllCategories());
+        Assertions.assertThrows(RuntimeException.class, ()-> manageVocab.getAllCategories());
         // 3. Assert
+        verify(vocabDAO, times(1)).getAllCategories();
     }
 
     @Test
@@ -68,6 +69,16 @@ public class ManageVocabImplTest {
         Category category = manageVocab.getCategory(1);
         // 3. Assert
         assertEquals(expected, category);
+        verify(vocabDAO, times(1)).getCategory(1);
+    }
+
+    @Test
+    void getCategoryPersistenceException() throws CategoryNotFoundException, VocabDAOException {
+        // 1. Arrange
+        doThrow(VocabDAOException.class).when(vocabDAO).getCategory(1);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageVocab.getCategory(1));
+        // 3. Assert
         verify(vocabDAO, times(1)).getCategory(1);
     }
 
@@ -102,6 +113,31 @@ public class ManageVocabImplTest {
     }
 
     @Test
+    void getPossibleTranslationsFromVocabIdPersistenceExceptionWhileGettingVocab() throws TranslationNotFoundException, VocabNotFoundException, VocabDAOException {
+        // 1. Arrange
+        when(vocabDAO.getVocab(1)).thenThrow(VocabDAOException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageVocab.getPossibleTranslationsFromVocabId(1, 1));
+        // 3. Assert
+        verify(vocabDAO, times(1)).getVocab(1);
+    }
+
+    @Test
+    void getPossibleTranslationsFromVocabIdPersistenceExceptionWhileGettingTranslations() throws TranslationNotFoundException, VocabNotFoundException, VocabDAOException {
+        // 1. Arrange
+        Category category = new Category("test");
+        Vocab vocab = new Vocab(new VocabList(category, "testList", "testA", "testB"), "testVocab");
+        when(vocabDAO.getVocab(1)).thenReturn(vocab);
+        when(vocabDAO.getOtherTranslationsForVocabId(vocab)).thenThrow(VocabDAOException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageVocab.getPossibleTranslationsFromVocabId(1, 1));
+        // 3. Assert
+        verify(vocabDAO, times(1)).getVocab(1);
+        verify(vocabDAO, times(1)).getOtherTranslationsForVocabId(vocab);
+    }
+
+
+    @Test
     void getRandomVocabListFromCategory() throws VocabListNotFoundException, CategoryNotFoundException, VocabDAOException {
         // 1. Arrange
         Category category = new Category("test");
@@ -113,6 +149,18 @@ public class ManageVocabImplTest {
         VocabList result = manageVocab.getRandomVocabListFromCategory(1);
         // 3. Assert
         assertEquals(expected.get(0), result);
+        verify(vocabDAO, times(1)).getCategory(1);
+        verify(vocabDAO, times(1)).getVocabListsForCategory(category);
+    }
+
+    @Test
+    void getRandomVocabListFromCategoryPersistenceException() throws VocabListNotFoundException, CategoryNotFoundException, VocabDAOException {
+        // 1. Arrange
+        Category category = new Category("test");
+        when(vocabDAO.getCategory(1)).thenReturn(category);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageVocab.getRandomVocabListFromCategory(1));
+        // 3. Assert
         verify(vocabDAO, times(1)).getCategory(1);
         verify(vocabDAO, times(1)).getVocabListsForCategory(category);
     }
@@ -133,6 +181,18 @@ public class ManageVocabImplTest {
     }
 
     @Test
+    void getRandomVocabFromVocabListPersistenceError() throws VocabNotFoundException, VocabListNotFoundException, VocabDAOException {
+        // 1. Arrange
+        VocabList vocabList = new VocabList(new Category("test"), "testList", "testA", "testB");
+        when(vocabDAO.getVocabList(1)).thenReturn(vocabList);
+        when(vocabDAO.getVocabsForVocabList(vocabList)).thenThrow(VocabDAOException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageVocab.getRandomVocabFromVocabList(1));
+        // 3. Assert
+        verify(vocabDAO, times(1)).getVocabsForVocabList(vocabList);
+    }
+
+    @Test
     void getTranslationFromVocabId() throws VocabDAOException, VocabNotFoundException, TranslationNotFoundException {
         // 1. Arrange
         Translation expected = new Translation("test");
@@ -145,6 +205,21 @@ public class ManageVocabImplTest {
         Translation result = manageVocab.getTranslationFromVocabId(1);
         // 3. Assert
         assertEquals(expected, result);
+        verify(vocabDAO, times(1)).getVocab(1);
+    }
+
+    @Test
+    void getTranslationFromVocabIdPersistenceException() throws VocabDAOException, VocabNotFoundException, TranslationNotFoundException {
+        // 1. Arrange
+        Translation expected = new Translation("test");
+        Set<Translation> translations = new HashSet<>();
+        translations.add(expected);
+        Vocab vocab = new Vocab(new VocabList(new Category("test"), "testList", "testA", "testB"), "testVocab");
+        vocab.setTranslations(translations);
+        when(vocabDAO.getVocab(1)).thenThrow(VocabDAOException.class);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageVocab.getTranslationFromVocabId(1));
+        // 3. Assert
         verify(vocabDAO, times(1)).getVocab(1);
     }
 }

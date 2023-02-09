@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +33,18 @@ public class ManageUserImplTest {
         // 3. Assert
         verify(userDAO, times(1)).getUserByName("test");
         verify(userDAO, times(1)).saveUser(any());
+    }
+
+    @Test
+    void registerUserPersistenceException() throws UserNotFoundException, UserAlreadyExistsException, UserDAOPersistenceException {
+        // 1. Arrange
+        when(userDAO.getUserByName("test")).thenThrow(UserNotFoundException.class);
+        doThrow(UserDAOPersistenceException.class).when(userDAO).saveUser(any());
+        // 2. Act
+        assertThrows(RuntimeException.class, ()-> manageUser.registerUser("test", "test"));
+        // 3. Assert
+        verify(userDAO, times(1)).getUserByName("test");
+        verify(userDAO, times(1)).saveUser(any(User.class));
     }
 
     @Test
@@ -72,7 +85,34 @@ public class ManageUserImplTest {
     }
 
     @Test
+    void logoutUserPersistenceException() throws UserNotFoundException, UserDAOPersistenceException {
+        // 1. Arrange
+        User user = new User("test", "test");
+        User spyUser = spy(user);
+        when(userDAO.getUser(1)).thenReturn(spyUser);
+        doThrow(UserDAOPersistenceException.class).when(userDAO).updateUser(any(User.class));
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageUser.logoutUser(1));
+        // 3. Assert
+        verify(spyUser, times(1)).setLoggedIn(false);
+        verify(userDAO, times(1)).getUser(1);
+        verify(userDAO, times(1)).updateUser(spyUser);
+    }
+
+    @Test
     void deleteUser() throws UserNotFoundException, UserDAOPersistenceException {
+        // 1. Arrange
+        User user = new User("test", "test");
+        when(userDAO.getUser(1)).thenReturn(user);
+        // 2. Act
+        manageUser.deleteUser(1);
+        // 3. Assert
+        verify(userDAO, times(1)).getUser(1);
+        verify(userDAO, times(1)).deleteUser(user);
+    }
+
+    @Test
+    void deleteUserRunTimeException() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
         User user = new User("test", "test");
         when(userDAO.getUser(1)).thenReturn(user);
@@ -100,6 +140,22 @@ public class ManageUserImplTest {
     }
 
     @Test
+    void updateUserNamePersistenceException() throws UserNotFoundException, UserAlreadyExistsException, UserDAOPersistenceException {
+        // 1. Arrange
+        User user = new User("test", "test");
+        User spyUser = spy(user);
+        when(userDAO.getUser(1)).thenReturn(spyUser);
+        when(userDAO.getUserByName("test2")).thenThrow(UserNotFoundException.class);
+        doThrow(UserDAOPersistenceException.class).when(userDAO).updateUser(any(User.class));
+        // 2. Act
+        assertThrows(RuntimeException.class, ()-> manageUser.updateUserName(1, "test2"));
+        // 3. Assert
+        verify(userDAO, times(1)).getUser(1);
+        verify(userDAO, times(1)).getUserByName("test2");
+        verify(spyUser, times(1)).setUsername("test2");
+    }
+
+    @Test
     void updatePassword() throws UserNotFoundException, UserDAOPersistenceException {
         // 1. Arrange
         User user = new User("test", "test");
@@ -109,6 +165,20 @@ public class ManageUserImplTest {
         User testUser = manageUser.updatePassword(1, "test2");
         // 3. Assert
         Assertions.assertEquals("test2", testUser.getPassword());
+        verify(userDAO, times(1)).getUser(1);
+        verify(spyUser, times(1)).setPassword("test2");
+    }
+
+    @Test
+    void updatePasswordPersistenceException() throws UserNotFoundException, UserDAOPersistenceException {
+        // 1. Arrange
+        User user = new User("test", "test");
+        User spyUser = spy(user);
+        when(userDAO.getUser(1)).thenReturn(spyUser);
+        doThrow(UserDAOPersistenceException.class).when(userDAO).updateUser(any(User.class));
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageUser.updatePassword(1, "test2"));
+        // 3. Assert
         verify(userDAO, times(1)).getUser(1);
         verify(spyUser, times(1)).setPassword("test2");
     }
@@ -138,6 +208,17 @@ public class ManageUserImplTest {
     }
 
     @Test
+    void getByIdPersistenceException() throws UserNotFoundException, UserDAOPersistenceException {
+        // 1. Arrange
+        User user = new User("test", "test");
+        doThrow(UserDAOPersistenceException.class).when(userDAO).getUser(1);
+        // 2. Act
+        Assertions.assertThrows(RuntimeException.class, ()-> manageUser.getById(1));
+        // 3. Assert
+        verify(userDAO, times(1)).getUser(1);
+    }
+
+    @Test
     void getAllUsers() throws UserNotFoundException {
         // 1. Arrange
         List<User> users = new ArrayList<>();
@@ -161,5 +242,27 @@ public class ManageUserImplTest {
         // 3. Assert
         Assertions.assertEquals(users, testUsers);
         verify(userDAO, times(1)).getOpponents(1);
+    }
+
+    @Test
+    void userExists() throws UserNotFoundException {
+        // 1. Arrange
+        User user = new User("test", "test");
+        when(userDAO.getUserByName("test")).thenReturn(user);
+        // 2. Act
+        boolean test = manageUser.userExists("test");
+        // 3. Assert
+        Assertions.assertTrue(test);
+    }
+
+    @Test
+    void userExistsUserNotFound() throws UserNotFoundException {
+        // 1. Arrange
+        User user = new User("test", "test");
+        doThrow(UserNotFoundException.class).when(userDAO).getUserByName("test");
+        // 2. Act
+        boolean test = manageUser.userExists("test");
+        // 3. Assert
+        Assertions.assertFalse(test);
     }
 }
