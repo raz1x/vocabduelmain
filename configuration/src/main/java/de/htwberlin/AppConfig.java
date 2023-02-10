@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 
 @Configuration
-@EnableTransactionManagement
 @ComponentScan("de.htwberlin")
 public class AppConfig {
 

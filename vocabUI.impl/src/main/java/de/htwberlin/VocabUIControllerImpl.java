@@ -1,7 +1,6 @@
 package de.htwberlin;
 
 import de.htwberlin.manageGame.export.*;
-import de.htwberlin.manageGame.rest_client.ManageGameRestServiceClientAdapter;
 import de.htwberlin.manageVocab.export.*;
 import de.htwberlin.userManager.export.*;
 import jakarta.persistence.OptimisticLockException;
@@ -12,9 +11,8 @@ import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.InputMismatchException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 @Controller
 public class VocabUIControllerImpl implements VocabUIController {
@@ -130,16 +128,44 @@ public class VocabUIControllerImpl implements VocabUIController {
     @Override
     public void manageUserMenu() {
         int choice = 0;
-        String[] menuItems = {"Create a new User", "Delete a User", "Return"};
+        String[] menuItems = {"Create a new User", "Delete a User", "Update Username", "Update Password", "Return"};
         do {
             view.showMenu(menuItems);
             choice = view.readUserSelection();
             switch (choice) {
                 case 1 -> showRegister();
                 case 2 -> showDeleteUser();
+                case 3 -> showUpdateUserName();
+                case 4 -> showUpdateUserPassword();
                 default -> view.showMessage("Invalid choice!");
             }
-        } while (choice != 3);
+        } while (choice != 5);
+    }
+
+    @Override
+    public void showUpdateUserPassword() {
+        try {
+            String password = view.readUserInput("Please enter the new password: ");
+            manageUser.updatePassword(currentUser.getUserId(), password);
+        } catch (UserNotFoundException e) {
+            view.showError("User not found!");
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while updating the user. Please try again.");
+        }
+    }
+
+    @Override
+    public void showUpdateUserName() {
+        try {
+            String username = view.readUserInput("Please enter the new username: ");
+            manageUser.updateUserName(currentUser.getUserId(), username);
+        } catch (UserNotFoundException e) {
+            view.showError("User not found!");
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while updating the user. Please try again.");
+        } catch (UserAlreadyExistsException e) {
+            view.showError("User already exists!");
+        }
     }
 
     @Override
@@ -359,6 +385,7 @@ public class VocabUIControllerImpl implements VocabUIController {
             view.showError("Could not find the game for this round!");
             return;
         }
+        List<RoundResult> roundResults = new ArrayList<>();
         // display all questions with their answers
         for (GameQuestion question : gameQuestion) {
             view.showMessage(question.getVocab().getVocab());
@@ -381,12 +408,10 @@ public class VocabUIControllerImpl implements VocabUIController {
                             isCorrect = false;
                             view.showMessage("Wrong!");
                         }
-                        manageGame.lockInAnswer(gameAnswer.getGameAnswerId(), currentUser.getUserId(), isCorrect);
+                        roundResults.add(new RoundResult(gameAnswer, currentUser, isCorrect));
                         break;
                     } catch (IndexOutOfBoundsException e) {
                         view.showError("Invalid choice!");
-                    } catch (UserNotFoundException e) {
-                        view.showError("User not found!");
                     }
                 }
             } catch (GameAnswerDoesNotExistException e) {
@@ -395,6 +420,21 @@ public class VocabUIControllerImpl implements VocabUIController {
                 view.showError("There was an error while locking in your answer. Please try again.");
                 return;
             }
+        }
+        // save all answers
+        try {
+            for (RoundResult result : roundResults) {
+                manageGame.lockInAnswer(result.getChosenAnswer().getGameAnswerId(), currentUser.getUserId(), result.isCorrect());
+            }
+        } catch (OptimisticLockException e) {
+            view.showError("There was an error while saving your answers. Please try again.");
+            return;
+        } catch (UserNotFoundException e) {
+            view.showError("User not found!");
+            return;
+        } catch (GameAnswerDoesNotExistException e) {
+            view.showError("Game answer not found!");
+            return;
         }
         // if the user started the round, set him as player1
         if (game.getUserStartingRound() == currentUser.getUserId()) {

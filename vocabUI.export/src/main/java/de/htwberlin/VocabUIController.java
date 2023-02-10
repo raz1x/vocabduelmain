@@ -35,6 +35,16 @@ public interface VocabUIController {
     public void manageUserMenu();
 
     /**
+     * Shows the update password menu.
+     */
+    public void showUpdateUserPassword();
+
+    /**
+     * Shows the update username menu.
+     */
+    public void showUpdateUserName();
+
+    /**
      * Shows the delete user UI.
      */
     public void showDeleteUser();
