@@ -10,13 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -83,12 +79,12 @@ public class ManageVocabImplTest {
     }
 
     @Test
-    void parseVocabList() throws VocabDAOException, IOException, CategoryNotFoundException, URISyntaxException {
+    void parseVocabList() throws VocabDAOException, CategoryNotFoundException, URISyntaxException, IOException {
         // 1. Arrange
-        File file = new File("../textFiles/animals_farm_zoo.txt");
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource("animals_farm_zoo.txt");
+        File file = new File(resource.toURI());
         // 2. Act
-        String result = String.valueOf(file);
-        System.out.println(result);
         manageVocab.parseVocabList(file);
         // 3. Assert
         verify(vocabDAO, times(1)).getCategoryByName(any());

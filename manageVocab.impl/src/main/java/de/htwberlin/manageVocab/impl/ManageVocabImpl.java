@@ -44,11 +44,14 @@ public class ManageVocabImpl implements ManageVocab {
     }
 
     @Override
-    public void parseVocabList(File file) {
+    public void parseVocabList(File file) throws IOException {
         final String TITLE_REGEX = "[{]{3}(.*?)[}]{3}";
         final String WORD_REGEX = "[{]{1}(.*?)[}]{1}";
 
         String textFile = String.valueOf(file);
+        if (textFile.endsWith(".txt")) {
+            textFile = Files.readString(Path.of(String.valueOf(file)));
+        }
         String[] lines = textFile.split("\n");
         String titleLine = lines[0];
         Pattern titlePattern = Pattern.compile(TITLE_REGEX);

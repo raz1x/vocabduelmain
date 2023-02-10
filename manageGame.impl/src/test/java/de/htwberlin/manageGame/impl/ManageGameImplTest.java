@@ -12,6 +12,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 @ExtendWith(MockitoExtension.class)
 public class ManageGameImplTest {
@@ -35,6 +38,10 @@ public class ManageGameImplTest {
 
     @InjectMocks
     private ManageGameImpl manageGame;
+
+    @InjectMocks
+    @Spy
+    private ManageGameImpl manageGameSpy;
 
     private static User user1;
     private static User user2;
@@ -240,20 +247,24 @@ public class ManageGameImplTest {
     @Test
     public void createRound() throws Exception {
         // 1. Arrange
-        ManageGameImpl manageGameSpy = spy(ManageGameImpl.class);
-        Round round = new Round(game, 1, category);
+        Vocab vocab = new Vocab(new VocabList(category, "test", "test", "test"), "test");
         List<GameQuestion> gameQuestions = new ArrayList<>();
+        gameQuestions.add(new GameQuestion(round, vocab, new Translation("test"), 1));
+        List<GameAnswer> gameAnswers = new ArrayList<>();
         when(gameDAO.getGame(game.getGameId())).thenReturn(game);
         when(manageVocab.getCategory(1)).thenReturn(category);
-        //when(manageGameSpy.generateQuestions(1, 1, round)).thenReturn(gameQuestions);
-        lenient().doReturn(gameQuestions).when(manageGameSpy).generateQuestions(anyInt(), anyInt(), any(Round.class));
+        doReturn(gameQuestions).when(manageGameSpy).generateQuestions(anyInt(), anyInt(), any());
+        doReturn(gameAnswers).when(manageGameSpy).generateAnswers(anyInt());
+        when(gameDAO.saveRound(any())).thenReturn(round);
         // 2. Act
-        manageGame.createRound(game.getGameId(), 1, 1);
+        Round result = manageGameSpy.createRound(game.getGameId(), 1, 1);
         // 3. Assert
         verify(gameDAO, times(1)).getGame(game.getGameId());
         verify(manageVocab, times(1)).getCategory(1);
-        verify(gameDAO, times(1)).updateGame(game);
-        verify(gameDAO, times(1)).saveRound(new Round(game, 1, category));
+        verify(manageGameSpy, times(1)).generateQuestions(anyInt(), anyInt(), any());
+        verify(manageGameSpy, times(1)).generateAnswers(anyInt());
+        assert (result.getRoundNumber() == 1);
+        assert (result.getCategory().getCategoryId() == 1);
     }
 
     @Test
